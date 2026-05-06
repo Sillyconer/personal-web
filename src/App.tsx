@@ -1,5 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
+import { InteractionFx } from './components/effects/InteractionFx';
 import { AppShell } from './components/layout/AppShell';
 import { AboutPage } from './pages/AboutPage';
 import { ContactPage } from './pages/ContactPage';
@@ -12,6 +13,7 @@ import { WorkPage } from './pages/WorkPage';
 function App() {
   return (
     <BrowserRouter>
+      <InteractionFx />
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/" element={<AppShell />}>

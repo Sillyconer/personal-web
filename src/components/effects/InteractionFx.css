@@ -1,0 +1,110 @@
+.interaction-fx {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  pointer-events: none;
+}
+
+.interaction-fx__trail,
+.interaction-fx__burst,
+.interaction-fx__burst-pixel,
+.interaction-fx__burst-ring {
+  position: fixed;
+}
+
+.interaction-fx__trail {
+  width: 1rem;
+  height: 1rem;
+  left: 0;
+  top: 0;
+  border-radius: 0.35rem;
+  border: 2px solid rgba(28, 35, 39, 0.24);
+  background: rgba(255, 246, 214, 0.72);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.35) inset,
+    0 0 18px rgba(62, 119, 162, 0.15);
+}
+
+.interaction-fx__trail--1 {
+  background: rgba(255, 229, 222, 0.72);
+}
+
+.interaction-fx__trail--2 {
+  background: rgba(222, 240, 236, 0.72);
+}
+
+.interaction-fx.is-interactive .interaction-fx__trail {
+  background: rgba(62, 119, 162, 0.78);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.3) inset,
+    0 0 24px rgba(62, 119, 162, 0.3);
+}
+
+.interaction-fx__burst {
+  width: 0;
+  height: 0;
+}
+
+.interaction-fx__burst-ring,
+.interaction-fx__burst-pixel {
+  left: 50%;
+  top: 50%;
+}
+
+.interaction-fx__burst-ring {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 999px;
+  border: 2px solid rgba(62, 119, 162, 0.55);
+  transform: translate(-50%, -50%);
+  animation: burstRing 0.72s ease-out forwards;
+}
+
+.interaction-fx__burst-pixel {
+  width: 0.52rem;
+  height: 0.52rem;
+  border-radius: 0.15rem;
+  background: var(--signal-yellow);
+  border: 1px solid rgba(28, 35, 39, 0.18);
+  transform: translate(-50%, -50%) rotate(var(--burst-angle));
+  animation: burstPixel 0.78s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.interaction-fx__burst-pixel:nth-child(odd) {
+  background: var(--signal-red);
+}
+
+.interaction-fx__burst-pixel:nth-child(3n) {
+  background: var(--signal-teal);
+}
+
+@keyframes burstRing {
+  from {
+    opacity: 0.65;
+    transform: translate(-50%, -50%) scale(0.25);
+  }
+
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(4.8);
+  }
+}
+
+@keyframes burstPixel {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(var(--burst-angle)) translateX(0) scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(var(--burst-angle)) translateX(var(--burst-distance)) scale(0.35);
+  }
+}
+
+@media (pointer: fine) {
+  html[data-pointer-fx='active'],
+  html[data-pointer-fx='active'] * {
+    cursor: none !important;
+  }
+}
