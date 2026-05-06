@@ -1,0 +1,139 @@
+/* ── Page transition: CRT channel-switch wipe ── */
+
+.page-transition {
+  position: relative;
+  width: 100%;
+}
+
+.page-transition__wipe {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(254, 243, 192, 0.12),
+    rgba(6, 6, 8, 0.96) 20%,
+    rgba(6, 6, 8, 0.99) 50%,
+    rgba(6, 6, 8, 0.96) 80%,
+    rgba(254, 243, 192, 0.12)
+  );
+  opacity: 0;
+}
+
+.page-transition__wipe.is-active {
+  animation: crtWipe 0.48s steps(6) forwards;
+}
+
+.page-transition__wipe::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 3px;
+  transform: translateY(-50%);
+  background: var(--signal-teal);
+  box-shadow: 0 0 16px var(--signal-teal), 0 0 40px var(--signal-teal);
+  opacity: 0;
+}
+
+.page-transition__wipe.is-active::before {
+  animation: crtScanline 0.48s ease-out forwards;
+}
+
+/* ── Noise/static texture during wipe ── */
+
+.page-transition__wipe::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent 0px,
+      transparent 1px,
+      rgba(254, 243, 192, 0.04) 1px,
+      rgba(254, 243, 192, 0.04) 2px
+    );
+  mix-blend-mode: screen;
+  opacity: 0;
+}
+
+.page-transition__wipe.is-active::after {
+  animation: crtNoise 0.48s steps(4) forwards;
+}
+
+@keyframes crtWipe {
+  0% {
+    opacity: 0;
+    clip-path: inset(48% 0 48% 0);
+  }
+
+  20% {
+    opacity: 1;
+    clip-path: inset(10% 0 10% 0);
+  }
+
+  50% {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+  }
+
+  80% {
+    opacity: 0.6;
+    clip-path: inset(0 0 0 0);
+  }
+
+  100% {
+    opacity: 0;
+    clip-path: inset(48% 0 48% 0);
+  }
+}
+
+@keyframes crtScanline {
+  0% {
+    opacity: 0;
+    top: 50%;
+  }
+
+  15% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.7;
+  }
+
+  100% {
+    opacity: 0;
+    top: 50%;
+  }
+}
+
+@keyframes crtNoise {
+  0% {
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 0.6;
+  }
+
+  80% {
+    opacity: 0.3;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-transition__wipe,
+  .page-transition__wipe::before,
+  .page-transition__wipe::after {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+}

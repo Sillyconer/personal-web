@@ -1,5 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
+import { CrtOverlay } from './components/effects/CrtOverlay';
 import { InteractionFx } from './components/effects/InteractionFx';
 import { AppShell } from './components/layout/AppShell';
 import { AboutPage } from './pages/AboutPage';
@@ -13,6 +14,7 @@ import { WorkPage } from './pages/WorkPage';
 function App() {
   return (
     <BrowserRouter>
+      <CrtOverlay />
       <InteractionFx />
       <Routes>
         <Route path="/login" element={<LoginPage />} />

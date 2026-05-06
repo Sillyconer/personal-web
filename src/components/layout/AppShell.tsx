@@ -1,6 +1,7 @@
 import { Outlet, NavLink } from 'react-router-dom';
 import { ArrowUpRight, Lock, LogOut, Mail, MapPinned, Sparkles, Star } from 'lucide-react';
 
+import { PageTransition } from '../effects/PageTransition';
 import { navigation } from '../../config/navigation';
 import { siteProfile } from '../../data/site';
 import { useAuthStore } from '../../store/useAuthStore';
@@ -114,7 +115,9 @@ export const AppShell = () => {
       </header>
 
       <main className="app-main">
-        <Outlet />
+        <PageTransition>
+          <Outlet />
+        </PageTransition>
       </main>
 
       <footer className="app-footer">
