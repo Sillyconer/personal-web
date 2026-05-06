@@ -1,89 +1,97 @@
 import { Link } from 'react-router-dom';
-import { NotebookTabs, ScanSearch } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 import { aboutPillars, clientFitPoints, experienceHighlights, siteProfile } from '../data/site';
-import { cardReveal, sectionReveal, staggerGroup, viewport } from '../utils/motion';
+import { cardReveal, pixelReveal, staggerGroup, viewport } from '../utils/motion';
 import './AboutPage.css';
-
-const aboutBadges = ['profile dossier', 'frontend atlas', 'creative systems'];
 
 export const AboutPage = () => {
   return (
-    <div className="page-stack about-page">
-      <motion.section className="page-hero about-hero surface-panel" initial="hidden" animate="show" variants={staggerGroup}>
-        <motion.div className="content-cluster" variants={sectionReveal}>
-          <div className="about-badges">
-            {aboutBadges.map((badge) => (
-              <span key={badge} className="status-chip">
-                {badge}
-              </span>
-            ))}
-          </div>
-          <p className="eyebrow">about</p>
-          <h1>Building frontend systems that feel considered, not assembled.</h1>
-          <p>
-            The work sits at the overlap of product thinking, reusable architecture, and visual direction. The aim is to make interfaces clearer, more memorable, and easier to grow over time.
-          </p>
+    <div className="page-stack about">
+      {/* ── Hero ── */}
+      <motion.section className="about__hero" initial="hidden" animate="show" variants={staggerGroup}>
+        <motion.div variants={pixelReveal}>
+          <p className="eyebrow">&gt; man dark</p>
+          <h1>building frontend systems that feel considered, not assembled.</h1>
         </motion.div>
 
-        <motion.div className="about-hero__meta surface-subpanel" variants={cardReveal}>
-          <div className="about-hero__meta-head">
-            <NotebookTabs size={18} />
-            <p className="eyebrow">current focus</p>
-          </div>
-          <p>{siteProfile.availability}</p>
-          <p>{siteProfile.location}</p>
+        <motion.div className="about__meta t-frame t-frame--sunken" variants={pixelReveal}>
+          <p><span className="text-teal">location:</span> {siteProfile.location}</p>
+          <p><span className="text-teal">status:</span> {siteProfile.availability}</p>
         </motion.div>
       </motion.section>
 
-      <motion.section className="cards-grid about-pillars-grid" initial="hidden" whileInView="show" viewport={viewport} variants={staggerGroup}>
-        {aboutPillars.map((pillar, index) => (
-          <motion.article key={pillar} className={`surface-panel about-pillar about-pillar--${index + 1}`} variants={cardReveal} whileHover={{ y: -6, rotate: index % 2 === 0 ? -1 : 1 }}>
-            <p>{pillar}</p>
-          </motion.article>
-        ))}
+      {/* ── Pillars ── */}
+      <motion.section
+        className="about__pillars"
+        initial="hidden"
+        whileInView="show"
+        viewport={viewport}
+        variants={staggerGroup}
+      >
+        <motion.p className="eyebrow" variants={pixelReveal}>&gt; cat principles.txt</motion.p>
+        <div className="about__pillar-grid">
+          {aboutPillars.map((pillar) => (
+            <motion.div key={pillar} className="t-frame" variants={cardReveal}>
+              <p>{pillar}</p>
+            </motion.div>
+          ))}
+        </div>
       </motion.section>
 
-      <motion.section className="about-story-grid" initial="hidden" whileInView="show" viewport={viewport} variants={staggerGroup}>
-        <motion.article className="surface-panel about-timeline" variants={cardReveal}>
-          <div className="section-copy content-cluster">
-            <p className="eyebrow">trajectory</p>
-            <h2>What the work is optimized for now</h2>
+      {/* ── Timeline ── */}
+      <motion.section
+        className="about__timeline t-frame t-frame--sunken"
+        initial="hidden"
+        whileInView="show"
+        viewport={viewport}
+        variants={staggerGroup}
+      >
+        <div className="t-header">
+          <div className="t-header__dots">
+            <span className="t-header__dot t-header__dot--r" />
+            <span className="t-header__dot t-header__dot--y" />
+            <span className="t-header__dot t-header__dot--g" />
           </div>
+          <span>history --highlights</span>
+        </div>
+        <div className="about__timeline-list">
+          {experienceHighlights.map((item) => (
+            <motion.div key={item.title} className="about__timeline-item" variants={cardReveal}>
+              <span className="text-teal">{item.label}</span>
+              <div>
+                <h3>{item.title}</h3>
+                <p className="muted">{item.description}</p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </motion.section>
 
-          <div className="timeline-list">
-            {experienceHighlights.map((item) => (
-              <article key={item.title} className="timeline-item">
-                <span className="timeline-label eyebrow">{item.label}</span>
-                <div>
-                  <h3>{item.title}</h3>
-                  <p>{item.description}</p>
-                </div>
-              </article>
-            ))}
-          </div>
-        </motion.article>
+      {/* ── Best fit ── */}
+      <motion.section
+        className="about__fit"
+        initial="hidden"
+        whileInView="show"
+        viewport={viewport}
+        variants={staggerGroup}
+      >
+        <motion.div variants={pixelReveal}>
+          <p className="eyebrow">&gt; where this approach adds value</p>
+          <h2>best fit</h2>
+        </motion.div>
 
-        <motion.article className="surface-panel about-fit-panel" variants={cardReveal}>
-          <div className="section-copy content-cluster">
-            <ScanSearch size={18} />
-            <p className="eyebrow">best fit</p>
-            <h2>Where this approach adds the most value</h2>
-          </div>
+        <div className="about__fit-grid">
+          {clientFitPoints.map((point) => (
+            <motion.div key={point} className="t-frame t-frame--raised" variants={cardReveal}>
+              <p>{point}</p>
+            </motion.div>
+          ))}
+        </div>
 
-          <div className="about-fit-list">
-            {clientFitPoints.map((point) => (
-              <article key={point} className="surface-faint about-fit-item">
-                {point}
-              </article>
-            ))}
-          </div>
-
-          <Link to="/contact" className="button-link">
-            Talk about a project
-          </Link>
-        </motion.article>
+        <motion.div variants={pixelReveal}>
+          <Link to="/contact" className="px-btn px-btn--primary">&gt; talk about a project</Link>
+        </motion.div>
       </motion.section>
     </div>
   );

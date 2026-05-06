@@ -1,51 +1,29 @@
-.login-page {
-  min-height: 70vh;
+.login {
+  min-height: 60vh;
   display: grid;
   place-items: center;
+  padding: var(--gap);
 }
 
-.login-card {
-  width: min(100%, 36rem);
-  border-radius: var(--radius-panel);
-  padding: 1.35rem;
+.login__card {
+  width: min(100%, 400px);
+  padding: 0;
+  overflow: hidden;
+}
+
+.login__body {
   display: grid;
-  gap: 1rem;
+  gap: 12px;
+  padding: var(--gap);
 }
 
-.login-stamp {
-  justify-self: start;
-  padding: 0.55rem 0.8rem;
-  border-radius: 999px;
-  border: 2px solid var(--line-strong);
-  background: linear-gradient(135deg, var(--signal-yellow), var(--aap-orange));
-  color: #141013;
-  box-shadow: 0.35rem 0.35rem 0 var(--shadow-color-soft);
-  font-family: var(--font-accent);
-  font-size: 0.68rem;
-  transform: rotate(-4deg);
-}
-
-.login-card label {
+.login__body label {
   display: grid;
-  gap: 0.45rem;
+  gap: 4px;
 }
 
-.login-card input,
-.login-card button {
-  width: 100%;
-}
-
-.login-card button {
-  background: linear-gradient(135deg, var(--signal-red), #B4202A);
-  color: var(--signal-ink);
-}
-
-.login-error {
-  color: var(--signal-red);
-}
-
-.login-hint {
-  color: var(--ink-soft);
-  border-radius: var(--radius-card);
-  padding: 0.95rem 1rem;
+.login__hint {
+  font-size: 12px;
+  padding: 8px 12px;
+  margin-top: 4px;
 }

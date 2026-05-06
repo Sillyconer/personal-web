@@ -1,364 +1,124 @@
-.home-page,
-.hero-panel,
-.hero-panel__copy,
-.hero-panel__aside,
-.hero-actions,
-.hero-sticker-row,
-.services-grid,
-.service-outcomes,
-.home-process-grid,
-.ecosystem-grid,
-.cta-panel,
-.feature-grid {
+/* ═══════════════════════════════════════════════════════
+   HOME — Terminal welcome screen
+   ═══════════════════════════════════════════════════════ */
+
+.home__hero {
   display: grid;
-  gap: var(--section-gap);
+  gap: var(--gap);
 }
 
-.hero-panel,
-.service-card,
-.process-panel,
-.ecosystem-panel,
-.cta-panel,
-.hero-window,
-.hero-note-card,
-.hero-sticker {
-  border-radius: var(--radius-panel);
+.home__boot {
+  display: grid;
+  gap: var(--gap-sm);
 }
 
-.hero-panel {
-  grid-template-columns: minmax(0, 1.1fr) minmax(300px, 0.9fr);
-  align-items: stretch;
+.home__title {
+  font-size: 32px;
+  line-height: 1.1;
+  max-width: 16ch;
 }
 
-.hero-panel__copy {
-  align-content: center;
-}
-
-.hero-panel__badge-row,
-.hero-window__chrome,
-.service-card__head,
-.ecosystem-card__head {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.hero-panel__badge-row {
-  flex-wrap: wrap;
-}
-
-.hero-panel__microtag {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.55rem 0.85rem;
-  border-radius: 999px;
-  border: 2px dashed var(--line-strong);
-  background: rgba(34, 28, 26, 0.55);
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  color: var(--ink-soft);
-}
-
-.hero-panel h1 {
-  max-width: 10ch;
-}
-
-.hero-lead {
+.home__lead {
+  font-size: 15px;
   max-width: 60ch;
-  font-size: 1.12rem;
-  color: var(--ink);
 }
 
-.hero-support,
-.hero-availability p,
-.hero-note-card p,
-.service-card p,
-.ecosystem-card p,
-.cta-panel p {
-  color: var(--ink-soft);
-}
-
-.hero-actions {
+.home__actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.8rem;
+  gap: var(--gap-sm);
 }
 
-.hero-availability {
-  width: min(100%, 34rem);
-  border-radius: 1.25rem;
-  padding: 1rem 1.15rem;
+.home__status {
+  display: grid;
+  gap: 4px;
+  padding: 12px 16px;
 }
 
-.hero-panel__aside {
-  align-content: start;
-}
+/* ── Stats ── */
 
-.hero-window {
-  padding: 0.85rem;
-  box-shadow: 0.85rem 0.85rem 0 var(--shadow-color-strong);
-}
-
-.hero-window__chrome {
-  margin-bottom: 0.9rem;
-}
-
-.hero-window__chrome span {
-  width: 0.9rem;
-  height: 0.9rem;
-  border-radius: 999px;
-  border: 2px solid var(--line-strong);
-  background: var(--paper-strong);
-}
-
-.hero-window__chrome span:nth-child(1) {
-  background: var(--signal-red);
-}
-
-.hero-window__chrome span:nth-child(2) {
-  background: var(--signal-yellow);
-}
-
-.hero-window__chrome span:nth-child(3) {
-  background: var(--signal-teal);
-}
-
-.hero-window__map {
-  position: relative;
-  min-height: 24rem;
-  border-radius: 1.2rem;
-  background: linear-gradient(145deg, rgba(36, 34, 52, 0.95), rgba(20, 16, 19, 0.92));
-  border: 2px solid var(--line);
+.home__stats {
+  padding: 0;
   overflow: hidden;
 }
 
-.hero-window__grid,
-.hero-window__compass {
-  position: absolute;
-}
-
-.hero-window__grid {
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(40, 92, 196, 0.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(40, 92, 196, 0.08) 1px, transparent 1px);
-  background-size: 44px 44px;
-}
-
-.hero-window__compass {
-  top: 1rem;
-  right: 1rem;
-  width: 3rem;
-  height: 3rem;
-  border-radius: 999px;
-  border: 2px solid var(--line-strong);
+.home__stats-grid {
   display: grid;
-  place-items: center;
-  background: rgba(34, 28, 26, 0.72);
-  color: var(--signal-teal);
-  animation: compassSpin 12s linear infinite;
+  gap: 0;
 }
 
-.hero-note-card {
-  position: absolute;
-  width: min(14rem, calc(100% - 2rem));
-  padding: 0.95rem;
-  border: 2px solid var(--line-strong);
-  background: rgba(34, 28, 26, 0.92);
-  box-shadow: 0.5rem 0.5rem 0 var(--shadow-color-strong);
+.home__stat {
+  display: flex;
+  gap: 8px;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
 }
 
-.hero-note-card strong {
-  display: block;
-  margin: 0.2rem 0 0.45rem;
+.home__stat:last-child {
+  border-bottom: none;
 }
 
-.hero-note-card--1 {
-  top: 2rem;
-  left: 1.15rem;
-  animation: noteFloat 6.5s ease-in-out infinite;
+/* ── Services ── */
+
+.home__services {
+  display: grid;
+  gap: var(--gap);
 }
 
-.hero-note-card--2 {
-  top: 8.3rem;
-  right: 1.4rem;
-  animation: noteFloat 7.8s ease-in-out infinite reverse;
+.home__services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--gap);
 }
 
-.hero-note-card--3 {
-  bottom: 1.6rem;
-  left: 2.3rem;
-  animation: noteFloat 7.2s ease-in-out infinite;
-}
-
-.hero-sticker-row {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-.hero-sticker {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0.75rem 0.85rem;
-  border: 2px solid var(--line-strong);
-  background: linear-gradient(135deg, rgba(34, 28, 26, 0.88), rgba(36, 34, 52, 0.92));
-  box-shadow: 0.35rem 0.35rem 0 var(--shadow-color-soft);
-  font-family: var(--font-accent);
-  font-size: 0.72rem;
-  text-transform: lowercase;
-}
-
-.service-card,
-.process-panel,
-.ecosystem-panel {
-  padding: 1.2rem;
+.home__service {
+  display: grid;
+  gap: var(--gap-sm);
   align-content: start;
 }
 
-.service-card {
-  min-height: 100%;
+.home__service-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.service-card--1 {
-  transform: rotate(-1.2deg);
-}
-
-.service-card--2 {
-  transform: rotate(0.9deg);
-}
-
-.service-card--3 {
-  transform: rotate(-0.6deg);
-}
-
-.service-card__head {
-  justify-content: space-between;
-}
-
-.service-card__index {
-  font-family: var(--font-accent);
-  color: var(--signal-red);
-}
-
-.service-outcomes {
+.home__service-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.6rem;
+  gap: 4px;
 }
 
-.home-process-grid {
-  grid-template-columns: minmax(0, 1.02fr) minmax(0, 0.98fr);
-}
+/* ── Work ── */
 
-.process-panel {
-  background:
-    linear-gradient(180deg, rgba(254, 243, 192, 0.03), transparent 32%),
-    linear-gradient(145deg, rgba(34, 28, 26, 0.96), rgba(20, 16, 19, 0.98));
-}
-
-.ecosystem-panel {
-  background:
-    linear-gradient(180deg, rgba(32, 214, 199, 0.04), transparent 32%),
-    linear-gradient(145deg, rgba(18, 32, 32, 0.96), rgba(20, 16, 19, 0.98));
-}
-
-.ecosystem-grid {
-  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-}
-
-.ecosystem-card {
+.home__work {
   display: grid;
-  gap: 0.65rem;
-  padding: 1rem;
-  border-radius: 1.25rem;
+  gap: var(--gap);
 }
 
-.ecosystem-card__head {
-  color: var(--signal-teal);
+.home__work-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: var(--gap);
 }
 
-.cta-panel {
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  padding: 1.35rem;
-}
+/* ── CTA ── */
 
-@keyframes noteFloat {
-  0%,
-  100% {
-    transform: translateY(0) rotate(-2deg);
-  }
-
-  50% {
-    transform: translateY(-7px) rotate(1deg);
-  }
-}
-
-@keyframes compassSpin {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (max-width: 980px) {
-  .hero-panel,
-  .home-process-grid,
-  .cta-panel {
-    grid-template-columns: 1fr;
-  }
-
-  .hero-panel h1 {
-    max-width: 12ch;
-  }
+.home__cta {
+  display: grid;
+  gap: var(--gap-sm);
+  padding: var(--gap-lg);
 }
 
 @media (max-width: 720px) {
-  .hero-window__map {
-    min-height: 20rem;
+  .home__title {
+    font-size: 24px;
   }
 
-  .hero-note-card {
-    position: relative;
-    width: 100%;
-    top: auto;
-    right: auto;
-    left: auto;
-    bottom: auto;
-    animation: none;
-  }
-
-  .hero-window__map {
-    display: grid;
-    gap: 0.8rem;
-    padding: 4rem 0.8rem 0.8rem;
-  }
-
-  .hero-window__compass {
-    top: 0.7rem;
-  }
-
-  .hero-sticker-row {
-    grid-template-columns: 1fr;
-  }
-
-  .service-card,
-  .process-panel,
-  .ecosystem-panel,
-  .cta-panel,
-  .hero-window {
-    padding: 1rem;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hero-window,
-  .hero-note-card,
-  .hero-sticker,
-  .hero-window__compass {
-    animation: none;
+  .home__work-head {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }

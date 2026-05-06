@@ -1,25 +1,24 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, ArrowUpRight, Network } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 import { ecosystemGraph } from '../../data/site';
 import type { EcosystemGraphNode } from '../../types/site';
-import { cardReveal, motionEase, sectionReveal, staggerGroup, viewport } from '../../utils/motion';
+import { cardReveal, pixelReveal, staggerGroup, viewport } from '../../utils/motion';
 import './EcosystemGraph.css';
 
-const accentClassMap: Record<EcosystemGraphNode['accent'], string> = {
-  blue: 'is-blue',
-  teal: 'is-teal',
-  red: 'is-red',
-  yellow: 'is-yellow',
+const accentMap: Record<EcosystemGraphNode['accent'], string> = {
+  blue: 'var(--signal-blue)',
+  teal: 'var(--signal-teal)',
+  red: 'var(--signal-red)',
+  yellow: 'var(--signal-yellow)',
 };
 
-const kindLabelMap: Record<EcosystemGraphNode['type'], string> = {
-  project: 'project node',
-  collab: 'collab mode',
-  discipline: 'discipline',
-  signal: 'signal layer',
+const kindMap: Record<EcosystemGraphNode['type'], string> = {
+  project: 'proj',
+  collab: 'collab',
+  discipline: 'disc',
+  signal: 'sig',
 };
 
 export const EcosystemGraph = () => {
@@ -51,35 +50,28 @@ export const EcosystemGraph = () => {
 
   return (
     <motion.section
-      className="ecosystem-graph surface-panel"
+      className="egraph t-frame"
       initial="hidden"
       whileInView="show"
       viewport={viewport}
       variants={staggerGroup}
     >
-      <motion.div className="ecosystem-graph__header" variants={sectionReveal}>
-        <div className="section-copy content-cluster">
-          <p className="eyebrow">relationship map</p>
-          <h2>Click around the project neighbourhood</h2>
-          <p>
-            A little retro, a little systems diagram. This shows how the flagship projects connect to collaboration modes,
-            disciplines, and the overall design signal.
-          </p>
-        </div>
-
-        <div className="ecosystem-graph__legend">
-          <span className="legend-chip is-red">project</span>
-          <span className="legend-chip is-yellow">collab</span>
-          <span className="legend-chip is-blue">discipline</span>
-          <span className="legend-chip is-teal">signal</span>
-        </div>
+      <motion.div variants={pixelReveal}>
+        <p className="eyebrow">&gt; graph --ecosystem</p>
+        <h2>project neighbourhood map</h2>
+        <p className="muted">click nodes to explore connections between projects, disciplines, and collaboration modes.</p>
       </motion.div>
 
-      <div className="ecosystem-graph__layout">
-        <motion.div className="ecosystem-graph__field surface-subpanel" variants={cardReveal}>
-          <div className="ecosystem-graph__grid" aria-hidden="true" />
+      <div className="egraph__legend flex-row">
+        <span className="px-tag px-tag--red">project</span>
+        <span className="px-tag px-tag--yellow">collab</span>
+        <span className="px-tag px-tag--blue">discipline</span>
+        <span className="px-tag px-tag--teal">signal</span>
+      </div>
 
-          <svg className="ecosystem-graph__lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+      <div className="egraph__layout">
+        <motion.div className="egraph__field" variants={cardReveal}>
+          <svg className="egraph__lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
             {ecosystemGraph.edges.map((edge) => {
               const from = ecosystemGraph.nodes.find((node) => node.id === edge.from);
               const to = ecosystemGraph.nodes.find((node) => node.id === edge.to);
@@ -93,11 +85,14 @@ export const EcosystemGraph = () => {
               return (
                 <line
                   key={`${edge.from}-${edge.to}`}
-                  className={isActive ? 'is-active' : ''}
+                  className={isActive ? 'egraph__line--active' : ''}
                   x1={from.x}
                   y1={from.y}
                   x2={to.x}
                   y2={to.y}
+                  stroke={isActive ? 'var(--signal-teal)' : 'var(--border)'}
+                  strokeWidth={isActive ? 0.5 : 0.25}
+                  strokeDasharray={isActive ? 'none' : '1.5 1'}
                 />
               );
             })}
@@ -107,38 +102,39 @@ export const EcosystemGraph = () => {
             const isActive = node.id === activeNode.id;
 
             return (
-              <motion.button
+              <button
                 key={node.id}
                 type="button"
-                className={`graph-node ${accentClassMap[node.accent]} ${isActive ? 'is-active' : ''}`}
-                style={{ left: `${node.x}%`, top: `${node.y}%` }}
+                className={`egraph__node ${isActive ? 'egraph__node--active' : ''}`}
+                style={{
+                  left: `${node.x}%`,
+                  top: `${node.y}%`,
+                  borderColor: isActive ? accentMap[node.accent] : undefined,
+                  boxShadow: isActive ? `0 0 8px ${accentMap[node.accent]}40` : undefined,
+                }}
                 onClick={() => setActiveNodeId(node.id)}
-                whileHover={{ y: -4, scale: 1.03, rotate: isActive ? 0 : -1, transition: { duration: 0.2, ease: motionEase } }}
-                whileTap={{ scale: 0.98 }}
               >
-                <span className="graph-node__kind">{kindLabelMap[node.type]}</span>
-                <strong>{node.label}</strong>
-              </motion.button>
+                <span className="egraph__node-kind">[{kindMap[node.type]}]</span>
+                <span>{node.label}</span>
+              </button>
             );
           })}
         </motion.div>
 
-        <motion.aside className="ecosystem-graph__detail surface-faint" variants={cardReveal}>
-          <div className="ecosystem-graph__detail-head">
-            <Network size={18} />
-            <p className="eyebrow">selected node</p>
-          </div>
+        <motion.aside className="egraph__detail t-frame t-frame--sunken" variants={cardReveal}>
+          <p className="eyebrow">selected: {activeNode.label}</p>
+          <p>{activeNode.description}</p>
 
-          <div className="content-cluster">
-            <h3>{activeNode.label}</h3>
-            <p>{activeNode.description}</p>
-          </div>
-
-          <div className="ecosystem-graph__connections">
-            <p className="eyebrow">connected to</p>
-            <div className="ecosystem-graph__connection-list">
+          <div className="egraph__connections">
+            <p className="eyebrow">connected to:</p>
+            <div className="flex-row">
               {connectedNodes.map((node) => (
-                <button key={node.id} type="button" className={`connection-chip ${accentClassMap[node.accent]}`} onClick={() => setActiveNodeId(node.id)}>
+                <button
+                  key={node.id}
+                  type="button"
+                  className="px-btn"
+                  onClick={() => setActiveNodeId(node.id)}
+                >
                   {node.label}
                 </button>
               ))}
@@ -147,14 +143,12 @@ export const EcosystemGraph = () => {
 
           {activeNode.href ? (
             activeNode.href.startsWith('/') ? (
-              <Link to={activeNode.href} className="inline-link">
-                Open linked page
-                <ArrowRight size={16} />
+              <Link to={activeNode.href} className="px-btn px-btn--accent">
+                &gt; open
               </Link>
             ) : (
-              <a href={activeNode.href} target="_blank" rel="noreferrer" className="inline-link">
-                Open linked page
-                <ArrowUpRight size={16} />
+              <a href={activeNode.href} target="_blank" rel="noreferrer" className="px-btn px-btn--accent">
+                &gt; open
               </a>
             )
           ) : null}

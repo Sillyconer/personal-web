@@ -10,56 +10,68 @@ interface PageTransitionProps {
 export const PageTransition = ({ children }: PageTransitionProps) => {
   const location = useLocation();
   const prevPathRef = useRef(location.pathname);
-  const wipeRef = useRef<HTMLDivElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<number | null>(null);
 
-  const triggerWipe = useCallback(() => {
-    const el = wipeRef.current;
+  const triggerTransition = useCallback(() => {
+    const overlay = overlayRef.current;
+    const content = contentRef.current;
 
-    if (!el) {
-      return;
-    }
+    if (!overlay || !content) return;
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reducedMotion) return;
 
-    if (reducedMotion) {
-      return;
-    }
-
-    /* Remove class to reset animation, then re-add */
-    el.classList.remove('is-active');
-    void el.offsetWidth;
-    el.classList.add('is-active');
-
+    /* Clear any pending timeouts */
     if (timeoutRef.current) {
       window.clearTimeout(timeoutRef.current);
     }
 
+    /* Phase 1: CRT shutdown — full blackout */
+    overlay.classList.remove('is-shutdown', 'is-boot');
+    content.classList.remove('is-decipher');
+    void overlay.offsetWidth;
+
+    overlay.classList.add('is-shutdown');
+
+    /* Phase 2: Boot + decipher — after shutdown completes */
     timeoutRef.current = window.setTimeout(() => {
-      el.classList.remove('is-active');
-      timeoutRef.current = null;
-    }, 500);
+      overlay.classList.remove('is-shutdown');
+      overlay.classList.add('is-boot');
+      content.classList.add('is-decipher');
+
+      /* Cleanup */
+      timeoutRef.current = window.setTimeout(() => {
+        overlay.classList.remove('is-boot');
+        content.classList.remove('is-decipher');
+        timeoutRef.current = null;
+      }, 700);
+    }, 350);
   }, []);
 
   useEffect(() => {
-    if (location.pathname === prevPathRef.current) {
-      return;
-    }
+    if (location.pathname === prevPathRef.current) return;
 
     prevPathRef.current = location.pathname;
-    triggerWipe();
+    triggerTransition();
 
     return () => {
       if (timeoutRef.current) {
         window.clearTimeout(timeoutRef.current);
       }
     };
-  }, [location.pathname, triggerWipe]);
+  }, [location.pathname, triggerTransition]);
 
   return (
-    <div className="page-transition">
-      <div ref={wipeRef} className="page-transition__wipe" aria-hidden="true" />
-      {children}
+    <div className="ptrans">
+      <div ref={overlayRef} className="ptrans__overlay" aria-hidden="true">
+        <div className="ptrans__scanline" />
+        <div className="ptrans__noise" />
+      </div>
+      <div ref={contentRef} className="ptrans__content">
+        {children}
+      </div>
     </div>
   );
 };

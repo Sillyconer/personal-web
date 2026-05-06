@@ -22,7 +22,7 @@ export const LoginPage = () => {
     const success = login({ username, password });
 
     if (!success) {
-      setError('Invalid owner credentials. Update the placeholder auth store before deployment.');
+      setError('access denied. invalid credentials.');
       return;
     }
 
@@ -30,34 +30,45 @@ export const LoginPage = () => {
   };
 
   return (
-    <div className="login-page">
-      <form className="login-card surface-panel" onSubmit={handleSubmit}>
-        <span className="login-stamp">private room only</span>
-        <p className="eyebrow">Studio access</p>
-        <h2>Login to the private studio</h2>
-        <p>
-          The public portfolio stays streamlined for visitors. This login keeps private embeds and future studio workflows behind a separate owner-only surface.
-        </p>
+    <div className="login">
+      <form className="login__card t-frame" onSubmit={handleSubmit}>
+        <div className="t-header">
+          <div className="t-header__dots">
+            <span className="t-header__dot t-header__dot--r" />
+            <span className="t-header__dot t-header__dot--y" />
+            <span className="t-header__dot t-header__dot--g" />
+          </div>
+          <span>login --studio</span>
+        </div>
 
-        <label>
-          Username
-          <input value={username} onChange={(event) => setUsername(event.target.value)} />
-        </label>
+        <div className="login__body">
+          <p className="eyebrow">&gt; authentication required</p>
+          <h2>studio access</h2>
 
-        <label>
-          Password
-          <input
-            type="password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-          />
-        </label>
+          <label>
+            <span className="muted">username:</span>
+            <input value={username} onChange={(event) => setUsername(event.target.value)} />
+          </label>
 
-        <button type="submit">Enter studio mode</button>
-        {error ? <p className="login-error">{error}</p> : null}
-        <p className="login-hint surface-faint">
-          Dev placeholder credentials: `{ownerCredentials.username}` / `{ownerCredentials.password}`
-        </p>
+          <label>
+            <span className="muted">password:</span>
+            <input
+              type="password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+            />
+          </label>
+
+          <button type="submit" className="px-btn px-btn--primary" style={{ width: '100%' }}>
+            &gt; authenticate
+          </button>
+
+          {error ? <p className="text-red">{error}</p> : null}
+
+          <p className="login__hint t-frame t-frame--sunken">
+            dev credentials: {ownerCredentials.username} / {ownerCredentials.password}
+          </p>
+        </div>
       </form>
     </div>
   );

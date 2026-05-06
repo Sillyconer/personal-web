@@ -2,7 +2,7 @@ import { LockKeyhole } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 import type { ProjectSection as ProjectSectionDefinition } from '../../types/site';
-import { cardReveal, motionEase, viewport } from '../../utils/motion';
+import { cardReveal, viewport } from '../../utils/motion';
 import { ProjectEmbed } from './ProjectEmbed';
 import './ProjectSection.css';
 
@@ -18,20 +18,17 @@ export const ProjectSection = ({ section, isAuthenticated, index }: ProjectSecti
   if (section.ownerOnly && !isAuthenticated) {
     return (
       <motion.section
-        className="project-section project-section--locked surface-panel"
+        className="psec psec--locked t-frame"
         initial="hidden"
         whileInView="show"
         viewport={viewport}
         variants={cardReveal}
-        whileHover={{ y: -6, rotate: -0.7, transition: { duration: 0.2, ease: motionEase } }}
       >
-        <div className="project-section__index">{sectionIndex}</div>
-        <LockKeyhole size={18} />
-        <div className="content-cluster">
-          <p className="eyebrow">owner surface</p>
-          <h3>{section.title}</h3>
-          <p>{section.description}</p>
-        </div>
+        <LockKeyhole size={14} />
+        <span className="text-red">[{sectionIndex}]</span>
+        <span className="eyebrow">owner surface</span>
+        <h3>{section.title}</h3>
+        <p className="muted">{section.description}</p>
       </motion.section>
     );
   }
@@ -39,13 +36,11 @@ export const ProjectSection = ({ section, isAuthenticated, index }: ProjectSecti
   if (section.type === 'embed') {
     return (
       <motion.div
-        className="project-embed-wrap"
         initial="hidden"
         whileInView="show"
         viewport={viewport}
         variants={cardReveal}
       >
-        <div className="project-section__index project-section__index--floating">{sectionIndex}</div>
         <ProjectEmbed
           title={section.title}
           description={section.description}
@@ -59,24 +54,20 @@ export const ProjectSection = ({ section, isAuthenticated, index }: ProjectSecti
 
   return (
     <motion.section
-      className="project-section surface-panel"
+      className="psec t-frame"
       initial="hidden"
       whileInView="show"
       viewport={viewport}
       variants={cardReveal}
-      whileHover={{ y: -6, rotate: -0.6, transition: { duration: 0.2, ease: motionEase } }}
     >
-      <div className="project-section__header content-cluster">
-        <div className="project-section__eyebrow-row">
-          <div className="project-section__index">{sectionIndex}</div>
-          <p className="eyebrow">section</p>
-        </div>
+      <div className="psec__head">
+        <span className="text-red">[{sectionIndex}]</span>
         <h3>{section.title}</h3>
-        <p>{section.description}</p>
       </div>
+      <p className="muted">{section.description}</p>
 
       {section.type === 'narrative' ? (
-        <div className="project-section__narrative content-cluster">
+        <div className="psec__narrative">
           {section.paragraphs.map((paragraph) => (
             <p key={paragraph}>{paragraph}</p>
           ))}
@@ -84,35 +75,35 @@ export const ProjectSection = ({ section, isAuthenticated, index }: ProjectSecti
       ) : null}
 
       {section.type === 'bullets' ? (
-        <div className="project-section__bullet-grid">
+        <div className="psec__items">
           {section.items.map((item) => (
-            <article key={item} className="project-section__bullet surface-faint">
-              {item}
-            </article>
+            <div key={item} className="psec__item">
+              <span className="text-teal">&gt;</span> {item}
+            </div>
           ))}
         </div>
       ) : null}
 
       {section.type === 'metrics' ? (
-        <div className="project-section__metrics">
+        <div className="psec__metrics">
           {section.metrics.map((metric) => (
-            <article key={metric.label} className="project-section__metric surface-faint">
-              <p className="eyebrow">{metric.label}</p>
+            <div key={metric.label} className="t-frame t-frame--sunken psec__metric">
+              <span className="eyebrow">{metric.label}</span>
               <h4>{metric.value}</h4>
-              {metric.detail ? <p>{metric.detail}</p> : null}
-            </article>
+              {metric.detail ? <p className="muted">{metric.detail}</p> : null}
+            </div>
           ))}
         </div>
       ) : null}
 
       {section.type === 'gallery' ? (
-        <div className="project-section__gallery">
+        <div className="psec__gallery">
           {section.items.map((item) => (
-            <article key={item.title} className="project-section__gallery-item surface-faint">
-              {item.eyebrow ? <p className="eyebrow">{item.eyebrow}</p> : null}
+            <div key={item.title} className="t-frame t-frame--raised">
+              {item.eyebrow ? <span className="eyebrow">{item.eyebrow}</span> : null}
               <h4>{item.title}</h4>
-              <p>{item.description}</p>
-            </article>
+              <p className="muted">{item.description}</p>
+            </div>
           ))}
         </div>
       ) : null}

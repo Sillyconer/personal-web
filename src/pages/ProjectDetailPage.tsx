@@ -1,10 +1,9 @@
 import { Link, Navigate, useParams } from 'react-router-dom';
-import { ArrowLeft, ArrowUpRight, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 import { ProjectSection } from '../components/projects/ProjectSection';
 import { useAuthStore } from '../store/useAuthStore';
-import { cardReveal, sectionReveal, staggerGroup, viewport } from '../utils/motion';
+import { cardReveal, pixelReveal, staggerGroup, viewport } from '../utils/motion';
 import { getProjectBySlug } from '../utils/projects';
 import { hasPrivateProjectSections } from '../utils/projects';
 import './ProjectDetailPage.css';
@@ -19,86 +18,79 @@ export const ProjectDetailPage = () => {
   }
 
   const visibleLinks = project.links.filter((link) => !link.ownerOnly || isAuthenticated);
-  const mapperEmbedNote =
-    project.slug === 'mapper'
-      ? 'Mapper currently points at a local development URL. Add an embed-safe deploy or dedicated embed route next.'
-      : null;
 
   return (
-    <div className="project-detail-page">
-      <motion.section className="surface-panel project-hero" initial="hidden" animate="show" variants={staggerGroup}>
-        <div className="project-hero__top">
-          <Link to="/work" className="inline-link">
-            <ArrowLeft size={16} />
-            Back to work
-          </Link>
-          <div className="chip-row project-chip-row">
-            <span className="project-pill status-chip">{project.status}</span>
-            <span className="project-pill status-chip">{project.type}</span>
-            {hasPrivateProjectSections(project) ? <span className="project-pill status-chip">owner surfaces</span> : null}
+    <div className="page-stack detail">
+      {/* ── Hero ── */}
+      <motion.section className="detail__hero" initial="hidden" animate="show" variants={staggerGroup}>
+        <motion.div className="detail__nav" variants={pixelReveal}>
+          <Link to="/work" className="px-btn">&lt;-- back to /work</Link>
+          <div className="flex-row">
+            <span className="px-tag px-tag--teal">{project.status}</span>
+            <span className="px-tag px-tag--yellow">{project.type}</span>
+            {hasPrivateProjectSections(project) ? <span className="px-tag px-tag--red">owner-only</span> : null}
           </div>
-        </div>
+        </motion.div>
 
-        <div className="project-hero__content">
-          <div className="content-cluster">
-            <p className="eyebrow">{project.year}</p>
-            <h1>{project.name}</h1>
-            <p>{project.description}</p>
-            <p className="project-outcome">{project.outcome}</p>
-            <div className="detail-list surface-faint">
-              <div>
-                <span className="eyebrow">Roles</span>
-                <p>{project.roles.join(' · ')}</p>
-              </div>
-              <div>
-                <span className="eyebrow">Services</span>
-                <p>{project.services.join(' · ')}</p>
-              </div>
-              <div>
-                <span className="eyebrow">Best for</span>
-                <p>{project.idealFor.join(' · ')}</p>
-              </div>
-            </div>
+        <motion.div variants={pixelReveal}>
+          <p className="eyebrow">&gt; cat projects/{project.slug}/readme</p>
+          <h1>{project.name}</h1>
+          <p>{project.description}</p>
+          <p className="muted">{project.outcome}</p>
+        </motion.div>
 
-            <div className="project-links">
-              {visibleLinks.map((link) => (
-                <a key={link.label} href={link.href} target={link.external ? '_blank' : undefined} rel={link.external ? 'noreferrer' : undefined} className="inline-link">
-                  {link.label}
-                  {link.external ? <ArrowUpRight size={16} /> : null}
-                </a>
-              ))}
+        <motion.div className="detail__meta grid-2" variants={pixelReveal}>
+          <div className="t-frame t-frame--sunken">
+            <div className="detail__info-grid">
+              <div><span className="text-teal">year:</span> {project.year}</div>
+              <div><span className="text-teal">roles:</span> {project.roles.join(', ')}</div>
+              <div><span className="text-teal">services:</span> {project.services.join(', ')}</div>
+              <div><span className="text-teal">ideal for:</span> {project.idealFor.join(', ')}</div>
             </div>
           </div>
-          <div className="surface-subpanel project-sidebar">
-            <Sparkles size={18} />
+
+          <div className="t-frame">
+            <p className="eyebrow">summary</p>
             <h3>{project.tagline}</h3>
-            <p>{project.summary}</p>
-            <div className="stack-list">
+            <p className="muted">{project.summary}</p>
+            <div className="detail__stack">
               {project.stack.map((item) => (
-                <span key={item}>{item}</span>
+                <span key={item} className="px-tag">{item}</span>
               ))}
             </div>
           </div>
-        </div>
+        </motion.div>
+
+        {visibleLinks.length > 0 ? (
+          <motion.div className="detail__links flex-row" variants={pixelReveal}>
+            {visibleLinks.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                target={link.external ? '_blank' : undefined}
+                rel={link.external ? 'noreferrer' : undefined}
+                className="px-btn"
+              >
+                {link.label}
+              </a>
+            ))}
+          </motion.div>
+        ) : null}
       </motion.section>
 
-      <motion.section className="metric-strip project-metrics" initial="hidden" whileInView="show" viewport={viewport} variants={staggerGroup}>
+      {/* ── Metrics ── */}
+      <motion.section className="detail__metrics" initial="hidden" whileInView="show" viewport={viewport} variants={staggerGroup}>
         {project.metrics.map((metric) => (
-          <motion.article key={metric.label} className="surface-panel stat-card" variants={cardReveal} whileHover={{ y: -6, rotate: -0.8 }}>
-            <p className="eyebrow">{metric.label}</p>
+          <motion.div key={metric.label} className="t-frame detail__metric" variants={cardReveal}>
+            <span className="eyebrow">{metric.label}</span>
             <h2>{metric.value}</h2>
             {metric.detail ? <p className="muted">{metric.detail}</p> : null}
-          </motion.article>
+          </motion.div>
         ))}
       </motion.section>
 
-      {mapperEmbedNote ? (
-        <motion.div className="surface-panel mapper-note" initial="hidden" whileInView="show" viewport={viewport} variants={sectionReveal}>
-          {mapperEmbedNote}
-        </motion.div>
-      ) : null}
-
-      <div className="project-section-stack">
+      {/* ── Sections ── */}
+      <div className="detail__sections">
         {project.sections.map((section, index) => (
           <ProjectSection key={section.id} section={section} isAuthenticated={isAuthenticated} index={index} />
         ))}

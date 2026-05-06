@@ -1,93 +1,98 @@
-import { Mail, MessageSquareMore, Rocket, Sticker } from 'lucide-react';
+import { Mail } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 import { clientFitPoints, contactChannels, engagementModes, siteProfile } from '../data/site';
-import { cardReveal, sectionReveal, staggerGroup, viewport } from '../utils/motion';
+import { cardReveal, pixelReveal, staggerGroup, viewport } from '../utils/motion';
 import './ContactPage.css';
 
 export const ContactPage = () => {
   return (
-    <div className="page-stack contact-page">
-      <motion.section className="page-hero contact-hero surface-panel" initial="hidden" animate="show" variants={staggerGroup}>
-        <motion.div className="content-cluster" variants={sectionReveal}>
-          <p className="eyebrow">contact</p>
-          <h1>Need a frontend partner for a product that deserves a stronger surface?</h1>
-          <p>
-            If the work needs better structure, clearer storytelling, or a more intentional visual system, get in touch. The strongest fit is product-facing interfaces that need both polish and scalability.
-          </p>
+    <div className="page-stack contact">
+      {/* ── Hero ── */}
+      <motion.section className="contact__hero" initial="hidden" animate="show" variants={staggerGroup}>
+        <motion.div variants={pixelReveal}>
+          <p className="eyebrow">&gt; contact --open</p>
+          <h1>need a frontend partner for a product that deserves a stronger surface?</h1>
         </motion.div>
 
-        <motion.div className="contact-hero__actions" variants={cardReveal}>
-          <a href={`mailto:${siteProfile.email}`} className="button-link">
-            <Mail size={16} />
-            Email {siteProfile.email}
+        <motion.div className="contact__actions" variants={pixelReveal}>
+          <a href={`mailto:${siteProfile.email}`} className="px-btn px-btn--primary">
+            <Mail size={14} /> {siteProfile.email}
           </a>
-          <span className="contact-hero__stamp"><Sticker size={16} /> guestbook open</span>
         </motion.div>
       </motion.section>
 
-      <motion.section className="cards-grid contact-channel-grid" initial="hidden" whileInView="show" viewport={viewport} variants={staggerGroup}>
-        {contactChannels.map((channel, index) =>
-          channel.external ? (
+      {/* ── Channels ── */}
+      <motion.section
+        className="contact__channels"
+        initial="hidden"
+        whileInView="show"
+        viewport={viewport}
+        variants={staggerGroup}
+      >
+        <motion.p className="eyebrow" variants={pixelReveal}>&gt; ls channels/</motion.p>
+        <div className="grid-auto">
+          {contactChannels.map((channel) => (
             <motion.a
               key={channel.label}
               href={channel.href}
-              target="_blank"
-              rel="noreferrer"
-              className={`surface-panel contact-card contact-card--${index + 1}`}
+              target={channel.external ? '_blank' : undefined}
+              rel={channel.external ? 'noreferrer' : undefined}
+              className="t-frame contact__channel"
               variants={cardReveal}
-              whileHover={{ y: -6, rotate: index % 2 === 0 ? -1 : 1 }}
             >
-              <p className="eyebrow">{channel.label}</p>
-              <h2>{channel.value}</h2>
-              <p>{channel.note}</p>
+              <span className="eyebrow">{channel.label}</span>
+              <h3>{channel.value}</h3>
+              <p className="muted">{channel.note}</p>
             </motion.a>
-          ) : (
-            <motion.a
-              key={channel.label}
-              href={channel.href}
-              className={`surface-panel contact-card contact-card--${index + 1}`}
-              variants={cardReveal}
-              whileHover={{ y: -6, rotate: index % 2 === 0 ? -1 : 1 }}
-            >
-              <p className="eyebrow">{channel.label}</p>
-              <h2>{channel.value}</h2>
-              <p>{channel.note}</p>
-            </motion.a>
-          ),
-        )}
+          ))}
+        </div>
       </motion.section>
 
-      <motion.section className="contact-grid" initial="hidden" whileInView="show" viewport={viewport} variants={staggerGroup}>
-        <motion.article className="surface-panel contact-panel" variants={cardReveal}>
-          <div className="section-copy content-cluster">
-            <MessageSquareMore size={18} />
-            <p className="eyebrow">good conversations start with</p>
-            <h2>A clear product problem and what success should feel like</h2>
+      {/* ── Engagement modes ── */}
+      <motion.section
+        className="contact__modes t-frame t-frame--sunken"
+        initial="hidden"
+        whileInView="show"
+        viewport={viewport}
+        variants={staggerGroup}
+      >
+        <div className="t-header">
+          <div className="t-header__dots">
+            <span className="t-header__dot t-header__dot--r" />
+            <span className="t-header__dot t-header__dot--y" />
+            <span className="t-header__dot t-header__dot--g" />
           </div>
-          <div className="contact-list">
-            {engagementModes.map((mode) => (
-              <article key={mode} className="surface-faint contact-list-item">
-                {mode}
-              </article>
-            ))}
-          </div>
-        </motion.article>
+          <span>engagement --modes</span>
+        </div>
+        <div className="contact__mode-list">
+          {engagementModes.map((mode) => (
+            <motion.div key={mode} className="contact__mode-item" variants={cardReveal}>
+              <span className="text-teal">&gt;</span> {mode}
+            </motion.div>
+          ))}
+        </div>
+      </motion.section>
 
-        <motion.article className="surface-panel contact-panel" variants={cardReveal}>
-          <div className="section-copy content-cluster">
-            <Rocket size={18} />
-            <p className="eyebrow">strongest fit</p>
-            <h2>Projects that benefit from structure and atmosphere together</h2>
-          </div>
-          <div className="contact-list">
-            {clientFitPoints.map((point) => (
-              <article key={point} className="surface-faint contact-list-item">
-                {point}
-              </article>
-            ))}
-          </div>
-        </motion.article>
+      {/* ── Best fit ── */}
+      <motion.section
+        className="contact__fit"
+        initial="hidden"
+        whileInView="show"
+        viewport={viewport}
+        variants={staggerGroup}
+      >
+        <motion.div variants={pixelReveal}>
+          <p className="eyebrow">&gt; strongest fit</p>
+          <h2>projects that benefit from structure and atmosphere together</h2>
+        </motion.div>
+        <div className="grid-auto">
+          {clientFitPoints.map((point) => (
+            <motion.div key={point} className="t-frame" variants={cardReveal}>
+              <p>{point}</p>
+            </motion.div>
+          ))}
+        </div>
       </motion.section>
     </div>
   );

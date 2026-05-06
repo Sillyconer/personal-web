@@ -1,184 +1,116 @@
-.github-widget {
-  border-radius: var(--radius-panel);
-  padding: 1.15rem;
-  display: grid;
-  gap: 1rem;
+.ghw {
+  padding: 0;
+  overflow: hidden;
 }
 
-.github-widget__chrome,
-.repo-meta,
-.readme-meta,
-.readme-card__head,
-.readme-card__head a {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
+.ghw__status {
+  margin-left: auto;
+  font-size: 10px;
+  color: var(--ink-faint);
 }
 
-.github-widget__chrome span {
-  width: 0.85rem;
-  height: 0.85rem;
-  border-radius: 999px;
-  border: 2px solid var(--line-strong);
-}
-
-.github-widget__chrome span:nth-child(1) {
-  background: var(--signal-red);
-}
-
-.github-widget__chrome span:nth-child(2) {
-  background: var(--signal-yellow);
-}
-
-.github-widget__chrome span:nth-child(3) {
-  background: var(--signal-teal);
-}
-
-.github-note {
-  border-radius: var(--radius-card);
-  padding: 0.95rem 1rem;
-  color: var(--ink-soft);
-}
-
-.github-error {
+.ghw__error {
+  padding: 8px 16px;
   margin: 0;
-  color: var(--signal-red);
 }
 
-.github-grid {
+.ghw__grid {
   display: grid;
-  grid-template-columns: 0.95fr 1.05fr;
-  gap: 1rem;
+  grid-template-columns: 0.45fr 0.55fr;
+  min-height: 400px;
 }
 
-.github-list {
+.ghw__list {
   display: grid;
-  gap: 0.7rem;
+  gap: 0;
+  align-content: start;
+  border-right: 2px solid var(--border);
 }
 
-.repo-item,
-.readme-card {
-  border-radius: var(--radius-card);
-  border: 2px solid var(--line-strong);
-  background: rgba(34, 28, 26, 0.72);
-  box-shadow: 0.3rem 0.3rem 0 var(--shadow-color-soft);
-}
-
-.repo-item {
-  padding: 0.95rem;
+.ghw__repo {
+  display: grid;
+  gap: 4px;
+  padding: 8px 12px;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+  background: transparent;
   color: var(--ink);
   text-align: left;
-  display: grid;
-  gap: 0.8rem;
-  transition: transform 180ms ease, box-shadow 180ms ease;
-}
-
-.repo-item__prompt,
-.readme-card__prompt {
-  font-family: var(--font-accent);
-  font-size: 0.66rem;
-  text-transform: lowercase;
-}
-
-.repo-item:hover {
-  transform: translate(-1px, -2px) rotate(-0.6deg);
-  box-shadow: 0.45rem 0.45rem 0 var(--shadow-color-strong);
-}
-
-.repo-item.is-active {
-  border-color: rgba(40, 92, 196, 0.55);
-  background: linear-gradient(145deg, rgba(36, 34, 52, 0.92), rgba(20, 16, 19, 0.95));
-}
-
-.repo-item p,
-.repo-empty,
-.repo-meta,
-.readme-meta,
-.readme-card pre {
-  color: var(--ink-soft);
-}
-
-.repo-meta,
-.readme-meta {
-  flex-wrap: wrap;
-}
-
-.readme-card {
-  padding: 1rem;
-  display: grid;
-  gap: 1rem;
-}
-
-.readme-card--terminal {
-  background: linear-gradient(145deg, #060608, #0e0c10 68%, #060608);
-  color: var(--terminal-green);
-  box-shadow: 0.4rem 0.4rem 0 rgba(6, 6, 8, 0.6);
-}
-
-.readme-card__head {
-  justify-content: space-between;
-}
-
-.readme-card--terminal .readme-card__head,
-.readme-card--terminal .readme-card__head a,
-.readme-card--terminal .readme-meta,
-.readme-card--terminal .readme-card__head .eyebrow {
-  color: var(--terminal-cyan);
-}
-
-.readme-card__screen {
-  position: relative;
-  overflow: hidden;
-  border-radius: 1rem;
-  border: 1px solid rgba(32, 214, 199, 0.14);
-  background: linear-gradient(180deg, rgba(6, 6, 8, 0.96), rgba(6, 6, 8, 0.99));
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
-}
-
-.readme-card__scanlines {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background-image:
-    linear-gradient(rgba(254, 243, 192, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(32, 214, 199, 0.03) 1px, transparent 1px);
-  background-size: 100% 4px, 8px 100%;
-  opacity: 0.55;
-  mix-blend-mode: screen;
-}
-
-.readme-card__prompt {
-  position: sticky;
-  top: 0;
-  z-index: 1;
-  padding: 0.8rem 0.95rem;
-  border-bottom: 1px solid rgba(32, 214, 199, 0.14);
-  background: rgba(6, 6, 8, 0.96);
-  color: var(--terminal-amber);
-}
-
-.readme-card pre {
-  margin: 0;
-  white-space: pre-wrap;
   font-family: var(--font-mono);
-  line-height: 1.55;
-  max-height: 28rem;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 80ms steps(2);
+}
+
+.ghw__repo:hover {
+  background: var(--crt-surface);
+}
+
+.ghw__repo--active {
+  background: var(--crt-panel);
+  border-left: 2px solid var(--signal-teal);
+}
+
+.ghw__repo-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: center;
+}
+
+.ghw__repo-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  color: var(--ink-faint);
+}
+
+.ghw__readme {
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+}
+
+.ghw__readme-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.ghw__readme-prompt {
+  padding: 6px 12px;
+  font-family: var(--font-accent);
+  font-size: 10px;
+  color: var(--signal-teal);
+  border-bottom: 1px solid var(--border);
+  background: var(--crt-black);
+}
+
+.ghw__readme-body {
+  margin: 0;
+  padding: 12px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  color: var(--ink-dim);
+  background: var(--crt-black);
   overflow: auto;
-  padding: 0.95rem;
+  max-height: 400px;
 }
 
-.readme-card--terminal pre {
-  color: var(--terminal-green);
-  text-shadow: 0 0 12px rgba(166, 252, 219, 0.06);
-}
-
-@media (max-width: 860px) {
-  .github-grid {
+@media (max-width: 720px) {
+  .ghw__grid {
     grid-template-columns: 1fr;
   }
 
-  .readme-card__head {
-    flex-direction: column;
-    align-items: flex-start;
+  .ghw__list {
+    border-right: none;
+    border-bottom: 2px solid var(--border);
+    max-height: 200px;
+    overflow: auto;
   }
 }

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { BookOpenText, Clock3, GitFork, Star } from 'lucide-react';
+import { GitFork, Star } from 'lucide-react';
 
 import { githubConfig } from '../../data/github';
 import './GitHubWidget.css';
@@ -57,7 +57,7 @@ export const GitHubWidget = () => {
         }
       } catch {
         setRepos([]);
-        setError('GitHub data could not be loaded. Update the configured username or try again later.');
+        setError('github api error. update username or retry.');
       } finally {
         setLoading(false);
       }
@@ -80,9 +80,9 @@ export const GitHubWidget = () => {
         );
 
         const text = await response.text();
-        setReadme(response.ok ? text.slice(0, 1600) : 'README preview unavailable for this repo.');
+        setReadme(response.ok ? text.slice(0, 1600) : 'readme unavailable.');
       } catch {
-        setReadme('README preview unavailable for this repo.');
+        setReadme('readme unavailable.');
       } finally {
         setReadmeLoading(false);
       }
@@ -91,89 +91,65 @@ export const GitHubWidget = () => {
     void loadReadme();
   }, [selectedRepo]);
 
-  const repoCountLabel = useMemo(() => {
-    if (loading) return 'Loading repos';
-    return `${repos.length} repositories loaded for ${githubConfig.username}`;
+  const statusText = useMemo(() => {
+    if (loading) return 'loading...';
+    return `${repos.length} repos loaded // ${githubConfig.username}`;
   }, [loading, repos.length]);
 
-  const formattedUpdatedAt = selectedRepo
-    ? new Intl.DateTimeFormat('en-GB', {
-        day: '2-digit',
-        month: 'short',
-        year: 'numeric',
-      }).format(new Date(selectedRepo.updated_at))
-    : null;
-
   return (
-    <section className="github-widget surface-panel">
-      <div className="github-widget__chrome" aria-hidden="true">
-        <span />
-        <span />
-        <span />
+    <section className="ghw t-frame t-frame--sunken">
+      <div className="t-header">
+        <div className="t-header__dots">
+          <span className="t-header__dot t-header__dot--r" />
+          <span className="t-header__dot t-header__dot--y" />
+          <span className="t-header__dot t-header__dot--g" />
+        </div>
+        <span>github --repos</span>
+        <span className="ghw__status">{isDemoFeed ? '[demo feed]' : statusText}</span>
       </div>
 
-      <div className="panel-head">
-        <span className="eyebrow">source previews</span>
-        <h2>Recent repositories and README context</h2>
-        <p>{isDemoFeed ? 'Connect your GitHub username in src/data/github.ts to replace the demo feed.' : repoCountLabel}</p>
-      </div>
+      {error ? <p className="ghw__error text-red">{error}</p> : null}
 
-      {isDemoFeed ? <p className="github-note surface-faint">Showing the configured demo account until a real GitHub username is connected.</p> : null}
-      {error ? <p className="github-error">{error}</p> : null}
-
-      <div className="github-grid">
-        <div className="github-list">
+      <div className="ghw__grid">
+        {/* Repo listing */}
+        <div className="ghw__list">
           {repos.map((repo) => (
             <button
               key={repo.id}
               type="button"
-              className={`repo-item ${selectedRepo?.id === repo.id ? 'is-active' : ''}`}
+              className={`ghw__repo ${selectedRepo?.id === repo.id ? 'ghw__repo--active' : ''}`}
               onClick={() => setSelectedRepo(repo)}
             >
-              <span className="repo-item__prompt">&gt; open repo entry</span>
-              <div>
-                <strong>{repo.name}</strong>
-                <p>{repo.description ?? 'No description yet.'}</p>
+              <div className="ghw__repo-head">
+                <span className="text-teal">{repo.name}</span>
+                <span className="ghw__repo-meta">
+                  <Star size={10} /> {repo.stargazers_count}
+                  <GitFork size={10} /> {repo.forks_count}
+                  {repo.language ? ` // ${repo.language}` : ''}
+                </span>
               </div>
-              <div className="repo-meta">
-                <span><Star size={14} /> {repo.stargazers_count}</span>
-                <span><GitFork size={14} /> {repo.forks_count}</span>
-                <span>{repo.language ?? 'Unknown'}</span>
-              </div>
+              <p className="muted">{repo.description ?? 'no description.'}</p>
             </button>
           ))}
-          {!loading && repos.length === 0 ? <p className="repo-empty">No repos available.</p> : null}
+          {!loading && repos.length === 0 ? <p className="muted">no repos found.</p> : null}
         </div>
 
-        <div className="readme-card readme-card--terminal">
-          <div className="readme-card__head">
-            <div>
-              <span className="eyebrow">README preview</span>
-              <h3>{selectedRepo?.name ?? 'Select a repo'}</h3>
-            </div>
+        {/* README preview */}
+        <div className="ghw__readme">
+          <div className="ghw__readme-head">
+            <span className="eyebrow">readme // {selectedRepo?.name ?? '...'}</span>
             {selectedRepo ? (
-              <a href={selectedRepo.html_url} target="_blank" rel="noreferrer">
-                <BookOpenText size={16} />
-                Open on GitHub
+              <a href={selectedRepo.html_url} target="_blank" rel="noreferrer" className="px-btn">
+                &gt; github
               </a>
             ) : null}
           </div>
-          {selectedRepo ? (
-            <div className="readme-meta">
-              <span>{selectedRepo.language ?? 'No language set'}</span>
-              {formattedUpdatedAt ? (
-                <span>
-                  <Clock3 size={14} />
-                  Updated {formattedUpdatedAt}
-                </span>
-              ) : null}
-            </div>
-          ) : null}
-          <div className="readme-card__screen">
-            <div className="readme-card__scanlines" aria-hidden="true" />
-            <div className="readme-card__prompt">guest@github:~$ cat README.md</div>
-            <pre>{readmeLoading ? 'Loading README...' : readme || 'Pick a repo to preview its README.'}</pre>
+          <div className="ghw__readme-prompt">
+            guest@github:~$ cat README.md
           </div>
+          <pre className="ghw__readme-body">
+            {readmeLoading ? 'loading...' : readme || 'select a repo to preview readme.'}
+          </pre>
         </div>
       </div>
     </section>

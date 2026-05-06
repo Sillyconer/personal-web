@@ -1,9 +1,8 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, ArrowUpRight, Star } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 import type { ProjectDefinition } from '../../types/site';
-import { cardReveal, motionEase, viewport } from '../../utils/motion';
+import { cardReveal, viewport } from '../../utils/motion';
 import { getProjectLink } from '../../utils/projects';
 import './ProjectCard.css';
 
@@ -12,67 +11,44 @@ export const ProjectCard = ({ project }: { project: ProjectDefinition }) => {
 
   return (
     <motion.article
-      className="project-card surface-panel"
+      className="pcard t-frame"
       initial="hidden"
       whileInView="show"
       viewport={viewport}
       variants={cardReveal}
-      whileHover={{ y: -8, rotate: -1.1, transition: { duration: 0.2, ease: motionEase } }}
     >
-      <div className="project-card__stamp" aria-hidden="true">
-        {project.featured ? <Star size={14} /> : null}
-        <span>{project.featured ? 'flagship' : 'archive'}</span>
-      </div>
-
-      <div className="project-card__top">
-        <div className="project-card__chips">
-          <span className="status-chip project-card__status">{project.status}</span>
-          <span className="status-chip">{project.type}</span>
-          <span className="status-chip">{project.year}</span>
+      <div className="pcard__head">
+        <div className="flex-row">
+          <span className="px-tag px-tag--teal">{project.status}</span>
+          <span className="px-tag">{project.type}</span>
+          <span className="px-tag">{project.year}</span>
         </div>
-        <div className="project-card__title-row">
+        <div className="pcard__title">
           <h3>{project.name}</h3>
-          <span className="project-card__slug">/{project.slug}</span>
-        </div>
-        <p className="project-card__tagline">{project.tagline}</p>
-        <p className="project-card__summary">{project.summary}</p>
-      </div>
-
-      <div className="project-card__meta-grid">
-        <div>
-          <p className="eyebrow">role</p>
-          <p>{project.roles.join(' / ')}</p>
-        </div>
-        <div>
-          <p className="eyebrow">outcome</p>
-          <p>{project.outcome}</p>
+          <span className="text-teal pcard__slug">/{project.slug}</span>
         </div>
       </div>
 
-      <div className="project-card__metrics">
-        {project.metrics.slice(0, 2).map((metric) => (
-          <article key={metric.label} className="project-card__metric surface-faint">
-            <p className="eyebrow">{metric.label}</p>
-            <strong>{metric.value}</strong>
-          </article>
-        ))}
+      <p className="muted">{project.summary}</p>
+
+      <div className="pcard__meta">
+        <span><span className="text-teal">role:</span> {project.roles.join(', ')}</span>
+        <span><span className="text-teal">outcome:</span> {project.outcome}</span>
       </div>
 
-      <div className="project-card__tags">
+      <div className="pcard__tags">
         {project.tags.map((tag) => (
-          <span key={tag}>{tag}</span>
+          <span key={tag} className="px-tag">{tag}</span>
         ))}
       </div>
 
-      <div className="project-card__actions">
-        <Link to={`/work/${project.slug}`} className="project-link project-link--primary">
-          View case study
-          <ArrowRight size={16} />
+      <div className="pcard__actions">
+        <Link to={`/work/${project.slug}`} className="px-btn px-btn--primary">
+          &gt; view case study
         </Link>
         {liveLink ? (
-          <a href={liveLink.href} target="_blank" rel="noreferrer" className="project-link alt">
-            <ArrowUpRight size={16} />
-            Live surface
+          <a href={liveLink.href} target="_blank" rel="noreferrer" className="px-btn">
+            &gt; live
           </a>
         ) : null}
       </div>

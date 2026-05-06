@@ -1,5 +1,3 @@
-import { ExternalLink, Lock } from 'lucide-react';
-
 import './ProjectEmbed.css';
 
 interface ProjectEmbedProps {
@@ -7,67 +5,42 @@ interface ProjectEmbedProps {
   description: string;
   url?: string;
   height?: number;
-  locked?: boolean;
   ctaLabel?: string;
 }
 
-export const ProjectEmbed = ({
-  title,
-  description,
-  url,
-  height = 680,
-  locked = false,
-  ctaLabel = 'Open full app',
-}: ProjectEmbedProps) => {
-  if (locked) {
-    return (
-      <div className="project-embed project-embed--locked surface-panel">
-        <Lock size={18} />
-        <div className="content-cluster">
-          <p className="eyebrow">Private surface</p>
-          <h3>{title}</h3>
-          <p>{description}</p>
-          <p className="embed-note">Owner login unlocks this private view.</p>
-        </div>
-      </div>
-    );
-  }
-
+export const ProjectEmbed = ({ title, description, url, height = 500, ctaLabel }: ProjectEmbedProps) => {
   return (
-    <section className="project-embed surface-panel">
-      <div className="project-embed__chrome" aria-hidden="true">
-        <span />
-        <span />
-        <span />
-        <p>live view / embedded surface</p>
-      </div>
-
-      <div className="project-embed__head">
-        <div className="content-cluster">
-          <p className="eyebrow">Live surface</p>
-          <h3>{title}</h3>
-          <p>{description}</p>
+    <div className="pembed t-frame">
+      <div className="t-header">
+        <div className="t-header__dots">
+          <span className="t-header__dot t-header__dot--r" />
+          <span className="t-header__dot t-header__dot--y" />
+          <span className="t-header__dot t-header__dot--g" />
         </div>
+        <span>{title.toLowerCase()}</span>
         {url ? (
-          <a href={url} target="_blank" rel="noreferrer" className="project-embed__launch">
-            <ExternalLink size={16} />
-            {ctaLabel}
+          <a href={url} target="_blank" rel="noreferrer" className="px-btn" style={{ marginLeft: 'auto' }}>
+            {ctaLabel ?? '> open'}
           </a>
         ) : null}
       </div>
 
-      {url ? (
-        <iframe
-          title={title}
-          src={url}
-          className="project-embed__frame"
-          style={{ height }}
-          loading="lazy"
-          referrerPolicy="no-referrer"
-        />
-      ) : (
-        <div className="project-embed__placeholder">Embed URL not configured yet.</div>
-      )}
-    </section>
+      <div className="pembed__body">
+        <p className="muted">{description}</p>
+        {url ? (
+          <iframe
+            className="pembed__frame"
+            src={url}
+            title={title}
+            height={height}
+            loading="lazy"
+          />
+        ) : (
+          <div className="pembed__placeholder t-frame t-frame--sunken">
+            <p className="muted">[no embed url configured]</p>
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
