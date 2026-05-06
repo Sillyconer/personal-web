@@ -8,7 +8,18 @@ interface Burst {
   y: number;
 }
 
-const TRAIL_COUNT = 10;
+const TRAIL_COUNT = 14;
+const BURST_PARTICLE_COUNT = 16;
+
+const PIXEL_COLORS = [
+  'var(--signal-teal)',
+  'var(--aap-magenta)',
+  'var(--aap-lime)',
+  'var(--signal-yellow)',
+  'var(--aap-orange)',
+  'var(--signal-red)',
+  'var(--aap-lavender)',
+];
 
 export const InteractionFx = () => {
   const trailRefs = useRef<Array<HTMLSpanElement | null>>([]);
@@ -62,7 +73,7 @@ export const InteractionFx = () => {
 
       window.setTimeout(() => {
         setBursts((current) => current.filter((burst) => burst.id !== id));
-      }, 780);
+      }, 900);
     };
 
     const animateTrail = () => {
@@ -72,12 +83,14 @@ export const InteractionFx = () => {
 
       const points = pointsRef.current;
 
-      points[0].x += (mouseRef.current.x - points[0].x) * 0.28;
-      points[0].y += (mouseRef.current.y - points[0].y) * 0.28;
+      /* Lead pixel snaps faster */
+      points[0].x += (mouseRef.current.x - points[0].x) * 0.38;
+      points[0].y += (mouseRef.current.y - points[0].y) * 0.38;
 
       for (let index = 1; index < points.length; index += 1) {
-        points[index].x += (points[index - 1].x - points[index].x) * 0.24;
-        points[index].y += (points[index - 1].y - points[index].y) * 0.24;
+        const ease = index < 4 ? 0.22 : 0.14;
+        points[index].x += (points[index - 1].x - points[index].x) * ease;
+        points[index].y += (points[index - 1].y - points[index].y) * ease;
       }
 
       trailRefs.current.forEach((node, index) => {
@@ -86,11 +99,14 @@ export const InteractionFx = () => {
         }
 
         const point = points[index];
-        const scale = 1 - index * 0.07;
-        const rotation = index % 2 === 0 ? index * 6 : -index * 5;
+        /* Snap to 2px grid for pixel feel */
+        const sx = Math.round(point.x / 2) * 2;
+        const sy = Math.round(point.y / 2) * 2;
+        const scale = 1 - index * 0.04;
+        const rotation = index % 2 === 0 ? index * 8 : -index * 7;
 
-        node.style.transform = `translate3d(${point.x}px, ${point.y}px, 0) translate(-50%, -50%) scale(${scale}) rotate(${rotation}deg)`;
-        node.style.opacity = `${0.88 - index * 0.07}`;
+        node.style.transform = `translate3d(${sx}px, ${sy}px, 0) translate(-50%, -50%) scale(${scale}) rotate(${rotation}deg)`;
+        node.style.opacity = `${0.92 - index * 0.055}`;
       });
 
       frameRef.current = window.requestAnimationFrame(animateTrail);
@@ -140,26 +156,41 @@ export const InteractionFx = () => {
 
   return (
     <div className={`interaction-fx ${interactive ? 'is-interactive' : ''}`} aria-hidden="true">
+      {/* Cursor trail pixels */}
       {trailIndexes.map((index) => (
         <span
           key={index}
           ref={(node) => {
             trailRefs.current[index] = node;
           }}
-          className={`interaction-fx__trail interaction-fx__trail--${index % 3}`}
+          className="interaction-fx__trail"
+          style={{
+            ['--trail-color' as string]: PIXEL_COLORS[index % PIXEL_COLORS.length],
+          }}
         />
       ))}
 
+      {/* Click bursts */}
       {bursts.map((burst) => (
         <div key={burst.id} className="interaction-fx__burst" style={{ left: burst.x, top: burst.y }}>
-          <span className="interaction-fx__burst-ring" />
-          {Array.from({ length: 10 }, (_, index) => (
+          {/* Screen flash */}
+          <span className="interaction-fx__burst-flash" />
+          {/* Inner ring */}
+          <span className="interaction-fx__burst-ring interaction-fx__burst-ring--inner" />
+          {/* Outer ring */}
+          <span className="interaction-fx__burst-ring interaction-fx__burst-ring--outer" />
+          {/* Cross lines */}
+          <span className="interaction-fx__burst-cross" />
+          {/* Particles */}
+          {Array.from({ length: BURST_PARTICLE_COUNT }, (_, index) => (
             <span
               key={index}
               className="interaction-fx__burst-pixel"
               style={{
-                ['--burst-angle' as string]: `${index * 36}deg`,
-                ['--burst-distance' as string]: `${18 + (index % 3) * 10}px`,
+                ['--burst-angle' as string]: `${index * (360 / BURST_PARTICLE_COUNT)}deg`,
+                ['--burst-distance' as string]: `${22 + (index % 4) * 12}px`,
+                ['--burst-delay' as string]: `${(index % 3) * 30}ms`,
+                ['--burst-color' as string]: PIXEL_COLORS[index % PIXEL_COLORS.length],
               }}
             />
           ))}
