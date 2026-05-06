@@ -39,11 +39,11 @@
   min-height: 3rem;
   border-radius: 999px;
   border: 2px solid var(--line-strong);
-  background: linear-gradient(135deg, var(--signal-yellow), #ffd891);
+  background: linear-gradient(135deg, var(--signal-yellow), var(--aap-orange));
   box-shadow: 0.3rem 0.3rem 0 var(--shadow-color-soft);
   font-family: var(--font-accent);
   font-size: 0.72rem;
-  color: var(--ink);
+  color: #141013;
 }
 
 .project-section__index--floating {

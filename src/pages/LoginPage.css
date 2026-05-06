@@ -17,7 +17,8 @@
   padding: 0.55rem 0.8rem;
   border-radius: 999px;
   border: 2px solid var(--line-strong);
-  background: linear-gradient(135deg, var(--signal-yellow), #ffda94);
+  background: linear-gradient(135deg, var(--signal-yellow), var(--aap-orange));
+  color: #141013;
   box-shadow: 0.35rem 0.35rem 0 var(--shadow-color-soft);
   font-family: var(--font-accent);
   font-size: 0.68rem;
@@ -35,7 +36,7 @@
 }
 
 .login-card button {
-  background: linear-gradient(135deg, var(--signal-red), #d96d65);
+  background: linear-gradient(135deg, var(--signal-red), #B4202A);
   color: var(--signal-ink);
 }
 

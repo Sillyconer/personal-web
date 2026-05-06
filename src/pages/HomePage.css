@@ -53,7 +53,7 @@
   padding: 0.55rem 0.85rem;
   border-radius: 999px;
   border: 2px dashed var(--line-strong);
-  background: rgba(255, 255, 255, 0.45);
+  background: rgba(34, 28, 26, 0.55);
   font-family: var(--font-mono);
   font-size: 0.78rem;
   color: var(--ink-soft);
@@ -107,7 +107,7 @@
   width: 0.9rem;
   height: 0.9rem;
   border-radius: 999px;
-  border: 2px solid rgba(28, 35, 39, 0.2);
+  border: 2px solid var(--line-strong);
   background: var(--paper-strong);
 }
 
@@ -127,7 +127,7 @@
   position: relative;
   min-height: 24rem;
   border-radius: 1.2rem;
-  background: linear-gradient(145deg, rgba(243, 230, 198, 0.96), rgba(255, 248, 235, 0.92));
+  background: linear-gradient(145deg, rgba(36, 34, 52, 0.95), rgba(20, 16, 19, 0.92));
   border: 2px solid var(--line);
   overflow: hidden;
 }
@@ -140,8 +140,8 @@
 .hero-window__grid {
   inset: 0;
   background-image:
-    linear-gradient(rgba(62, 119, 162, 0.1) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(62, 119, 162, 0.1) 1px, transparent 1px);
+    linear-gradient(rgba(40, 92, 196, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(40, 92, 196, 0.08) 1px, transparent 1px);
   background-size: 44px 44px;
 }
 
@@ -154,8 +154,8 @@
   border: 2px solid var(--line-strong);
   display: grid;
   place-items: center;
-  background: rgba(255, 255, 255, 0.66);
-  color: var(--signal-blue);
+  background: rgba(34, 28, 26, 0.72);
+  color: var(--signal-teal);
   animation: compassSpin 12s linear infinite;
 }
 
@@ -164,8 +164,8 @@
   width: min(14rem, calc(100% - 2rem));
   padding: 0.95rem;
   border: 2px solid var(--line-strong);
-  background: rgba(255, 251, 243, 0.92);
-  box-shadow: 0.5rem 0.5rem 0 rgba(28, 35, 39, 0.14);
+  background: rgba(34, 28, 26, 0.92);
+  box-shadow: 0.5rem 0.5rem 0 var(--shadow-color-strong);
 }
 
 .hero-note-card strong {
@@ -201,7 +201,7 @@
   align-items: center;
   padding: 0.75rem 0.85rem;
   border: 2px solid var(--line-strong);
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.88), rgba(251, 240, 214, 0.96));
+  background: linear-gradient(135deg, rgba(34, 28, 26, 0.88), rgba(36, 34, 52, 0.92));
   box-shadow: 0.35rem 0.35rem 0 var(--shadow-color-soft);
   font-family: var(--font-accent);
   font-size: 0.72rem;
@@ -252,14 +252,14 @@
 
 .process-panel {
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.55), transparent 32%),
-    linear-gradient(145deg, rgba(255, 248, 233, 0.96), rgba(240, 224, 190, 0.98));
+    linear-gradient(180deg, rgba(254, 243, 192, 0.03), transparent 32%),
+    linear-gradient(145deg, rgba(34, 28, 26, 0.96), rgba(20, 16, 19, 0.98));
 }
 
 .ecosystem-panel {
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.48), transparent 32%),
-    linear-gradient(145deg, rgba(240, 248, 245, 0.96), rgba(225, 240, 234, 0.98));
+    linear-gradient(180deg, rgba(32, 214, 199, 0.04), transparent 32%),
+    linear-gradient(145deg, rgba(18, 32, 32, 0.96), rgba(20, 16, 19, 0.98));
 }
 
 .ecosystem-grid {
@@ -274,7 +274,7 @@
 }
 
 .ecosystem-card__head {
-  color: var(--signal-blue);
+  color: var(--signal-teal);
 }
 
 .cta-panel {

@@ -29,7 +29,8 @@
   padding: 0.55rem 0.8rem;
   border-radius: 999px;
   border: 2px solid var(--line-strong);
-  background: linear-gradient(135deg, var(--signal-yellow), #ffd995);
+  background: linear-gradient(135deg, var(--signal-yellow), var(--aap-orange));
+  color: #141013;
   box-shadow: 0.3rem 0.3rem 0 var(--shadow-color-soft);
   font-family: var(--font-accent);
   font-size: 0.68rem;
@@ -44,7 +45,7 @@
 .project-card__slug {
   font-family: var(--font-accent);
   font-size: 0.72rem;
-  color: var(--signal-blue);
+  color: var(--signal-teal);
 }
 
 .project-card__tagline {
@@ -84,7 +85,7 @@
 }
 
 .project-card__tags span {
-  background: rgba(255, 255, 255, 0.55);
+  background: rgba(34, 28, 26, 0.72);
   font-family: var(--font-mono);
   font-size: 0.76rem;
   color: var(--ink-soft);
@@ -95,15 +96,15 @@
   align-items: center;
   gap: 0.45rem;
   color: var(--ink);
-  background: rgba(255, 255, 255, 0.72);
+  background: rgba(34, 28, 26, 0.72);
 }
 
 .project-link--primary {
-  background: linear-gradient(135deg, var(--signal-blue), #4d84b4);
-  border-color: rgba(28, 35, 39, 0.18);
+  background: linear-gradient(135deg, var(--signal-blue), #588DBE);
+  border-color: rgba(40, 92, 196, 0.35);
   color: var(--signal-ink);
 }
 
 .project-link.alt {
-  background: rgba(255, 251, 242, 0.92);
+  background: rgba(36, 34, 52, 0.72);
 }

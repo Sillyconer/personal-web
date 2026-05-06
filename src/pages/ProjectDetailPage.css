@@ -52,7 +52,7 @@
   padding: 1rem 1.1rem;
   border-radius: var(--radius-card);
   border: 2px dashed var(--line);
-  background: rgba(255, 255, 255, 0.45);
+  background: rgba(34, 28, 26, 0.55);
 }
 
 .detail-list p,
@@ -69,13 +69,13 @@
 
 .project-sidebar {
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.45), transparent 32%),
-    linear-gradient(145deg, rgba(229, 240, 236, 0.98), rgba(243, 249, 247, 0.96));
+    linear-gradient(180deg, rgba(32, 214, 199, 0.04), transparent 32%),
+    linear-gradient(145deg, rgba(18, 32, 32, 0.96), rgba(20, 16, 19, 0.98));
 }
 
 .mapper-note {
   background:
-    linear-gradient(145deg, rgba(255, 244, 221, 0.94), rgba(255, 251, 241, 0.92));
+    linear-gradient(145deg, rgba(255, 213, 65, 0.08), rgba(34, 28, 26, 0.95));
 }
 
 @media (max-width: 860px) {

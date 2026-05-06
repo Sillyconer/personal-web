@@ -30,8 +30,8 @@
 .about-hero__meta {
   align-content: start;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.45), transparent 32%),
-    linear-gradient(145deg, rgba(255, 244, 221, 0.95), rgba(255, 249, 240, 0.96));
+    linear-gradient(180deg, rgba(255, 213, 65, 0.04), transparent 32%),
+    linear-gradient(145deg, rgba(34, 28, 26, 0.95), rgba(20, 16, 19, 0.98));
 }
 
 .about-pillar--1 {

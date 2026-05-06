@@ -16,7 +16,7 @@
   pointer-events: none;
   border-radius: 50%;
   filter: blur(4px);
-  opacity: 0.55;
+  opacity: 0.35;
 }
 
 .app-shell::before {
@@ -24,7 +24,7 @@
   height: 14rem;
   top: 5rem;
   right: 4rem;
-  background: radial-gradient(circle, rgba(55, 120, 128, 0.18), transparent 68%);
+  background: radial-gradient(circle, rgba(32, 214, 199, 0.14), transparent 68%);
   animation: orbitDrift 16s ease-in-out infinite;
 }
 
@@ -33,7 +33,7 @@
   height: 11rem;
   bottom: 5rem;
   left: 1rem;
-  background: radial-gradient(circle, rgba(194, 84, 83, 0.16), transparent 70%);
+  background: radial-gradient(circle, rgba(223, 62, 35, 0.12), transparent 70%);
   animation: orbitDrift 18s ease-in-out infinite reverse;
 }
 
@@ -94,7 +94,7 @@
   height: 0.78rem;
   border-radius: 999px;
   background: var(--signal-red);
-  box-shadow: 0 0 0 3px rgba(194, 84, 83, 0.14);
+  box-shadow: 0 0 0 3px rgba(223, 62, 35, 0.2), 0 0 12px rgba(223, 62, 35, 0.3);
   animation: blinkBadge 2.4s steps(2, end) infinite;
 }
 
@@ -116,9 +116,9 @@
   border-radius: 1.25rem;
   display: grid;
   place-items: center;
-  background: linear-gradient(145deg, var(--signal-yellow), #ffd17d);
-  color: var(--ink);
-  border: 2px solid rgba(29, 33, 36, 0.2);
+  background: linear-gradient(145deg, var(--signal-yellow), var(--aap-orange));
+  color: #141013;
+  border: 2px solid var(--line-strong);
   box-shadow: 0.55rem 0.55rem 0 var(--shadow-color-strong);
   transform: rotate(-4deg);
 }
@@ -179,7 +179,7 @@
   overflow: hidden;
   border-radius: 999px;
   border: 2px solid var(--line-strong);
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.58), rgba(255, 247, 229, 0.96));
+  background: linear-gradient(90deg, rgba(34, 28, 26, 0.85), rgba(36, 34, 52, 0.92));
 }
 
 .app-marquee__track {
@@ -203,7 +203,7 @@
 
 .app-marquee__item::before {
   content: '✦';
-  color: var(--signal-blue);
+  color: var(--signal-teal);
 }
 
 .main-nav,
@@ -238,13 +238,13 @@
 }
 
 .nav-link.is-active {
-  background: linear-gradient(135deg, var(--signal-blue), #4a81b2);
-  color: var(--paper);
+  background: linear-gradient(135deg, var(--signal-blue), #588DBE);
+  color: var(--signal-ink);
 }
 
 .header-chip--primary {
-  background: linear-gradient(135deg, var(--signal-red), #da7066);
-  color: var(--paper);
+  background: linear-gradient(135deg, var(--signal-red), #B4202A);
+  color: var(--signal-ink);
 }
 
 .footer-summary,

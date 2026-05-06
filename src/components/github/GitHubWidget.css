@@ -19,7 +19,7 @@
   width: 0.85rem;
   height: 0.85rem;
   border-radius: 999px;
-  border: 2px solid rgba(28, 35, 39, 0.18);
+  border: 2px solid var(--line-strong);
 }
 
 .github-widget__chrome span:nth-child(1) {
@@ -60,7 +60,7 @@
 .readme-card {
   border-radius: var(--radius-card);
   border: 2px solid var(--line-strong);
-  background: rgba(255, 255, 255, 0.55);
+  background: rgba(34, 28, 26, 0.72);
   box-shadow: 0.3rem 0.3rem 0 var(--shadow-color-soft);
 }
 
@@ -86,8 +86,8 @@
 }
 
 .repo-item.is-active {
-  border-color: rgba(62, 119, 162, 0.66);
-  background: linear-gradient(145deg, rgba(224, 239, 248, 0.9), rgba(243, 250, 252, 0.92));
+  border-color: rgba(40, 92, 196, 0.55);
+  background: linear-gradient(145deg, rgba(36, 34, 52, 0.92), rgba(20, 16, 19, 0.95));
 }
 
 .repo-item p,
@@ -110,9 +110,9 @@
 }
 
 .readme-card--terminal {
-  background: linear-gradient(145deg, #0c1117, #101824 68%, #0a0e14);
-  color: #d2ffe5;
-  box-shadow: 0.4rem 0.4rem 0 rgba(6, 10, 14, 0.5);
+  background: linear-gradient(145deg, #060608, #0e0c10 68%, #060608);
+  color: var(--terminal-green);
+  box-shadow: 0.4rem 0.4rem 0 rgba(6, 6, 8, 0.6);
 }
 
 .readme-card__head {
@@ -123,16 +123,16 @@
 .readme-card--terminal .readme-card__head a,
 .readme-card--terminal .readme-meta,
 .readme-card--terminal .readme-card__head .eyebrow {
-  color: #9cd6c7;
+  color: var(--terminal-cyan);
 }
 
 .readme-card__screen {
   position: relative;
   overflow: hidden;
   border-radius: 1rem;
-  border: 1px solid rgba(126, 231, 206, 0.16);
-  background: linear-gradient(180deg, rgba(10, 18, 26, 0.94), rgba(6, 12, 18, 0.98));
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(32, 214, 199, 0.14);
+  background: linear-gradient(180deg, rgba(6, 6, 8, 0.96), rgba(6, 6, 8, 0.99));
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
 }
 
 .readme-card__scanlines {
@@ -140,10 +140,10 @@
   inset: 0;
   pointer-events: none;
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(76, 140, 128, 0.04) 1px, transparent 1px);
+    linear-gradient(rgba(254, 243, 192, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(32, 214, 199, 0.03) 1px, transparent 1px);
   background-size: 100% 4px, 8px 100%;
-  opacity: 0.45;
+  opacity: 0.55;
   mix-blend-mode: screen;
 }
 
@@ -152,9 +152,9 @@
   top: 0;
   z-index: 1;
   padding: 0.8rem 0.95rem;
-  border-bottom: 1px solid rgba(126, 231, 206, 0.16);
-  background: rgba(8, 14, 20, 0.94);
-  color: #ffe28d;
+  border-bottom: 1px solid rgba(32, 214, 199, 0.14);
+  background: rgba(6, 6, 8, 0.96);
+  color: var(--terminal-amber);
 }
 
 .readme-card pre {
@@ -168,8 +168,8 @@
 }
 
 .readme-card--terminal pre {
-  color: #c8ffd8;
-  text-shadow: 0 0 12px rgba(126, 231, 206, 0.08);
+  color: var(--terminal-green);
+  text-shadow: 0 0 12px rgba(166, 252, 219, 0.06);
 }
 
 @media (max-width: 860px) {
