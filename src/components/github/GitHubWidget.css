@@ -1,0 +1,103 @@
+.github-widget {
+  border-radius: 30px;
+  padding: 1.2rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.github-error {
+  margin: 0;
+  color: #ffb0a6;
+}
+
+.github-widget p,
+.github-widget h2,
+.github-widget h3 {
+  margin: 0;
+}
+
+.github-grid {
+  display: grid;
+  grid-template-columns: 0.95fr 1.05fr;
+  gap: 1rem;
+}
+
+.github-list {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.repo-item,
+.readme-card {
+  border-radius: 24px;
+  border: 1px solid var(--border-soft);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.repo-item {
+  padding: 0.95rem;
+  color: var(--text);
+  text-align: left;
+  display: grid;
+  gap: 0.8rem;
+}
+
+.repo-item.is-active {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+}
+
+.repo-item p,
+.repo-empty {
+  color: var(--muted);
+}
+
+.repo-meta,
+.readme-meta,
+.readme-card__head,
+.readme-card__head a {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.repo-meta {
+  flex-wrap: wrap;
+  color: var(--muted);
+}
+
+.readme-meta {
+  flex-wrap: wrap;
+  color: var(--muted);
+}
+
+.readme-card {
+  padding: 1rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.readme-card__head {
+  justify-content: space-between;
+}
+
+.readme-card pre {
+  margin: 0;
+  white-space: pre-wrap;
+  font-family: var(--font-mono);
+  line-height: 1.55;
+  color: var(--muted);
+  max-height: 28rem;
+  overflow: auto;
+}
+
+@media (max-width: 860px) {
+  .github-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .readme-card__head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

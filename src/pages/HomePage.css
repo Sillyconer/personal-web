@@ -1,0 +1,240 @@
+.home-page,
+.hero,
+.stats-grid,
+.dual-grid,
+.home-story-grid,
+.story-panel,
+.timeline-panel,
+.timeline-list {
+  display: grid;
+  gap: var(--section-gap);
+}
+
+.hero,
+.stat-card,
+.story-panel,
+.timeline-panel,
+.info-panel,
+.bullet-card {
+  border-radius: var(--radius-panel);
+  padding: 1.35rem;
+}
+
+.hero {
+  grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+  align-items: stretch;
+  overflow: hidden;
+  position: relative;
+  background:
+    radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 24%, transparent), transparent 34%),
+    radial-gradient(circle at bottom right, color-mix(in srgb, var(--accent-2) 26%, transparent), transparent 38%),
+    linear-gradient(180deg, color-mix(in srgb, var(--panel) 84%, transparent), var(--panel-strong));
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: auto -4rem -5rem auto;
+  width: 18rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+  filter: blur(16px);
+}
+
+.hero-copy,
+.hero-orbit,
+.hero-links,
+.hero-orbit__card,
+.hero-availability,
+.section-copy,
+.info-panel {
+  display: grid;
+  gap: 1rem;
+}
+
+.hero-copy {
+  align-content: center;
+}
+
+.hero h2,
+.section-head h2,
+.info-panel h2,
+.stat-card h3,
+.story-panel h2,
+.timeline-panel h2,
+.timeline-item h3 {
+  margin: 0;
+}
+
+.hero h2 {
+  max-width: 12ch;
+  font-size: clamp(2.2rem, 5vw, 4rem);
+  line-height: 0.98;
+}
+
+.hero-lead {
+  max-width: 62ch;
+  font-size: 1.05rem;
+}
+
+.hero-support,
+.hero-availability p,
+.story-panel p,
+.timeline-item p,
+.info-panel p,
+.stat-card .muted {
+  color: var(--muted);
+}
+
+.hero-links {
+  grid-template-columns: repeat(auto-fit, minmax(140px, max-content));
+}
+
+.hero-availability {
+  width: min(100%, 34rem);
+  border-radius: 24px;
+  padding: 1rem 1.1rem;
+}
+
+.hero-orbit {
+  justify-items: center;
+  align-content: center;
+  position: relative;
+  min-height: 100%;
+}
+
+.hero-orbit__ring {
+  width: min(25rem, 100%);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at center, transparent 53%, color-mix(in srgb, var(--accent) 42%, transparent) 54%, transparent 58%),
+    radial-gradient(circle at 30% 30%, color-mix(in srgb, var(--accent-2) 54%, transparent), transparent 36%),
+    radial-gradient(circle at 70% 65%, color-mix(in srgb, var(--accent) 46%, transparent), transparent 30%);
+  filter: blur(0.1rem);
+}
+
+.hero-orbit__card,
+.hero-orbit__status {
+  position: absolute;
+}
+
+.hero-orbit__card {
+  inset: auto auto 1rem 1rem;
+  max-width: 18rem;
+  padding: 1rem;
+  border-radius: 24px;
+}
+
+.hero-orbit__card p {
+  margin: 0;
+}
+
+.hero-orbit__status {
+  inset: 1rem 0 auto auto;
+  max-width: 14rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  padding: 0.9rem 1rem;
+  border-radius: 22px;
+}
+
+.stats-grid,
+.dual-grid,
+.home-story-grid {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.stat-card {
+  align-content: start;
+  gap: 0.6rem;
+}
+
+.stat-card h3 {
+  font-size: 1.3rem;
+}
+
+.story-panel,
+.timeline-panel,
+.info-panel {
+  align-content: start;
+}
+
+.capabilities-grid {
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+}
+
+.bullet-card {
+  border: 1px solid var(--border-soft);
+  line-height: 1.6;
+}
+
+.timeline-item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-soft);
+}
+
+.timeline-item:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.timeline-label {
+  min-width: 3.6rem;
+}
+
+.home-footer-grid {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+@media (max-width: 960px) {
+  .hero {
+    grid-template-columns: 1fr;
+  }
+
+  .hero h2 {
+    max-width: 14ch;
+  }
+
+  .hero-orbit {
+    min-height: 22rem;
+  }
+}
+
+@media (max-width: 720px) {
+  .hero,
+  .stat-card,
+  .story-panel,
+  .timeline-panel,
+  .info-panel,
+  .bullet-card {
+    padding: 1.1rem;
+  }
+
+  .hero-orbit__card,
+  .hero-orbit__status {
+    position: static;
+    width: 100%;
+    max-width: none;
+  }
+
+  .hero-orbit {
+    justify-items: stretch;
+    min-height: auto;
+  }
+
+  .hero-orbit__ring {
+    width: min(18rem, 100%);
+    margin: 0 auto;
+  }
+
+  .timeline-item {
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+  }
+}

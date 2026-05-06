@@ -1,0 +1,37 @@
+.login-page {
+  min-height: 70vh;
+  display: grid;
+  place-items: center;
+}
+
+.login-card {
+  width: min(100%, 32rem);
+  border-radius: 32px;
+  padding: 1.4rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.login-card h2,
+.login-card p,
+.login-card label {
+  margin: 0;
+}
+
+.login-card label {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.login-card input,
+.login-card button {
+  width: 100%;
+}
+
+.login-error {
+  color: #ffb0a6;
+}
+
+.login-hint {
+  color: var(--muted);
+}

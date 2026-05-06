@@ -1,0 +1,163 @@
+.app-shell {
+  min-height: 100vh;
+  display: grid;
+  gap: 1.5rem;
+  padding: 1.25rem;
+  width: min(100%, calc(var(--content-width) + 2.5rem));
+  margin: 0 auto;
+}
+
+.app-header,
+.theme-dock {
+  box-shadow: var(--shadow-soft);
+}
+
+.app-header {
+  position: sticky;
+  top: 1rem;
+  z-index: 20;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1rem;
+  border-radius: var(--radius-panel);
+  padding: 1rem 1.2rem;
+}
+
+.brand-block,
+.brand-meta,
+.header-actions,
+.main-nav {
+  display: flex;
+  align-items: center;
+}
+
+.brand-block {
+  gap: 0.9rem;
+}
+
+.brand-mark {
+  width: 2.9rem;
+  height: 2.9rem;
+  border-radius: 18px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: var(--accent-ink);
+  box-shadow: var(--shadow-glow);
+}
+
+.brand-meta {
+  gap: 0.85rem;
+  flex-wrap: wrap;
+}
+
+.brand-block h1,
+.panel-head h2 {
+  font-size: 1.08rem;
+}
+
+.brand-block p,
+.brand-block h1,
+.panel-head p,
+.panel-head h2 {
+  margin: 0;
+}
+
+.brand-note {
+  color: var(--muted);
+  font-size: 0.88rem;
+  padding-left: 0.85rem;
+  border-left: 1px solid var(--border-soft);
+}
+
+.main-nav {
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.nav-link,
+.header-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  border-radius: 999px;
+  border: 1px solid var(--border-soft);
+  padding: 0.72rem 0.95rem;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.02);
+  transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+}
+
+.nav-link:hover,
+.header-chip:hover {
+  transform: translateY(-1px);
+  border-color: var(--border-strong);
+}
+
+.nav-link.is-active {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
+.header-actions {
+  gap: 0.55rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.app-main {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.theme-dock {
+  border-radius: var(--radius-panel);
+  padding: 1.2rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.panel-head {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.panel-head p {
+  color: var(--muted);
+  max-width: 60ch;
+}
+
+@media (max-width: 1080px) {
+  .app-header {
+    grid-template-columns: 1fr;
+  }
+
+  .main-nav,
+  .header-actions {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 720px) {
+  .app-shell {
+    padding: 0.9rem;
+  }
+
+  .brand-meta {
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .brand-note {
+    border-left: 0;
+    padding-left: 0;
+  }
+
+  .nav-link,
+  .header-chip {
+    width: 100%;
+    justify-content: center;
+  }
+}

@@ -1,0 +1,28 @@
+.cv-page,
+.cv-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.cv-hero,
+.cv-card {
+  border-radius: 30px;
+  padding: 1.3rem;
+}
+
+.cv-grid {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.cv-hero h2,
+.cv-hero p,
+.cv-card h3,
+.cv-card p {
+  margin: 0;
+}
+
+.cv-hero,
+.cv-card {
+  display: grid;
+  gap: 0.8rem;
+}
