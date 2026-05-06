@@ -1,0 +1,170 @@
+.ecosystem-graph,
+.ecosystem-graph__header,
+.ecosystem-graph__layout,
+.ecosystem-graph__detail,
+.ecosystem-graph__connections {
+  display: grid;
+  gap: 1rem;
+}
+
+.ecosystem-graph {
+  padding: 1.2rem;
+  border-radius: var(--radius-panel);
+}
+
+.ecosystem-graph__layout {
+  grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+  align-items: start;
+}
+
+.ecosystem-graph__legend,
+.ecosystem-graph__connection-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.legend-chip,
+.connection-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.5rem;
+  padding: 0.6rem 0.85rem;
+  border-radius: 999px;
+  border: 2px solid var(--line-strong);
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: 0.25rem 0.25rem 0 var(--shadow-color-soft);
+  font-family: var(--font-accent);
+  font-size: 0.68rem;
+  text-transform: lowercase;
+}
+
+.ecosystem-graph__field {
+  position: relative;
+  min-height: 33rem;
+  padding: 1rem;
+  border-radius: var(--radius-panel);
+  overflow: hidden;
+}
+
+.ecosystem-graph__grid,
+.ecosystem-graph__lines {
+  position: absolute;
+  inset: 0;
+}
+
+.ecosystem-graph__grid {
+  background-image:
+    linear-gradient(rgba(62, 119, 162, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(62, 119, 162, 0.12) 1px, transparent 1px),
+    radial-gradient(circle, rgba(194, 84, 83, 0.06) 1.4px, transparent 1.4px);
+  background-size: 42px 42px, 42px 42px, 18px 18px;
+  background-position: 0 0, 0 0, 4px 6px;
+  opacity: 0.9;
+}
+
+.ecosystem-graph__lines line {
+  stroke: rgba(28, 35, 39, 0.18);
+  stroke-width: 0.35;
+  stroke-dasharray: 1.8 1.4;
+}
+
+.ecosystem-graph__lines line.is-active {
+  stroke: rgba(62, 119, 162, 0.7);
+  stroke-width: 0.48;
+  animation: graphDash 9s linear infinite;
+}
+
+.graph-node {
+  position: absolute;
+  z-index: 1;
+  min-width: 9.5rem;
+  max-width: 12rem;
+  padding: 0.9rem;
+  border-radius: 1.15rem;
+  border: 2px solid var(--line-strong);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0.45rem 0.45rem 0 var(--shadow-color-soft);
+  transform: translate(-50%, -50%);
+  text-align: left;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.graph-node__kind {
+  font-family: var(--font-accent);
+  font-size: 0.65rem;
+  text-transform: lowercase;
+}
+
+.graph-node.is-active {
+  box-shadow: 0.6rem 0.6rem 0 var(--shadow-color-strong);
+}
+
+.graph-node.is-blue,
+.legend-chip.is-blue,
+.connection-chip.is-blue {
+  background: linear-gradient(145deg, rgba(224, 239, 248, 0.96), rgba(244, 249, 252, 0.98));
+}
+
+.graph-node.is-teal,
+.legend-chip.is-teal,
+.connection-chip.is-teal {
+  background: linear-gradient(145deg, rgba(223, 241, 236, 0.96), rgba(243, 250, 247, 0.98));
+}
+
+.graph-node.is-red,
+.legend-chip.is-red,
+.connection-chip.is-red {
+  background: linear-gradient(145deg, rgba(248, 226, 223, 0.96), rgba(255, 245, 243, 0.98));
+}
+
+.graph-node.is-yellow,
+.legend-chip.is-yellow,
+.connection-chip.is-yellow {
+  background: linear-gradient(145deg, rgba(252, 240, 214, 0.98), rgba(255, 249, 234, 0.98));
+}
+
+.ecosystem-graph__detail {
+  padding: 1rem;
+  border-radius: var(--radius-panel);
+  align-content: start;
+}
+
+.ecosystem-graph__detail-head {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+@keyframes graphDash {
+  from {
+    stroke-dashoffset: 0;
+  }
+
+  to {
+    stroke-dashoffset: -12;
+  }
+}
+
+@media (max-width: 960px) {
+  .ecosystem-graph__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .ecosystem-graph__field {
+    min-height: 30rem;
+  }
+}
+
+@media (max-width: 720px) {
+  .graph-node {
+    min-width: 7.8rem;
+    max-width: 9rem;
+    padding: 0.7rem;
+  }
+
+  .graph-node strong {
+    font-size: 0.85rem;
+  }
+}

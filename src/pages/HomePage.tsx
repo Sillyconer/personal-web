@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, BriefcaseBusiness, Compass, Layers3, Star } from 'lucide-react';
 import { motion } from 'framer-motion';
 
+import { EcosystemGraph } from '../components/graph/EcosystemGraph';
 import { GitHubWidget } from '../components/github/GitHubWidget';
 import { ProjectCard } from '../components/projects/ProjectCard';
 import { featuredProjects } from '../data/projects';
@@ -196,6 +197,8 @@ export const HomePage = () => {
         </div>
       </motion.section>
 
+      <EcosystemGraph />
+
       <motion.section className="home-process-grid" initial="hidden" whileInView="show" viewport={viewport} variants={staggerGroup}>
         <motion.article className="surface-panel process-panel" variants={cardReveal}>
           <div className="section-copy content-cluster">
@@ -219,9 +222,9 @@ export const HomePage = () => {
 
         <motion.article className="surface-panel ecosystem-panel" variants={cardReveal}>
           <div className="section-copy content-cluster">
-            <p className="eyebrow">web ring</p>
-            <h2>One portfolio, multiple connected rooms</h2>
-            <p>This site acts like a front door, directory, and world map for the wider ecosystem.</p>
+            <p className="eyebrow">outposts</p>
+            <h2>Quick exits into the rest of the world</h2>
+            <p>The graph handles the big relationships. These are the direct doors out into the supporting rooms.</p>
           </div>
 
           <div className="ecosystem-grid">

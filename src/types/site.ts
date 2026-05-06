@@ -156,6 +156,28 @@ export interface ContactChannel {
   external?: boolean;
 }
 
+export interface EcosystemGraphNode {
+  id: string;
+  label: string;
+  type: 'project' | 'collab' | 'discipline' | 'signal';
+  x: number;
+  y: number;
+  description: string;
+  accent: 'blue' | 'teal' | 'red' | 'yellow';
+  href?: string;
+}
+
+export interface EcosystemGraphEdge {
+  from: string;
+  to: string;
+  label: string;
+}
+
+export interface EcosystemGraphDefinition {
+  nodes: EcosystemGraphNode[];
+  edges: EcosystemGraphEdge[];
+}
+
 export interface Credentials {
   username: string;
   password: string;
