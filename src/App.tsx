@@ -1,26 +1,30 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import { AppShell } from './components/layout/AppShell';
-import { ThemeSync } from './components/theme/ThemeSync';
-import { AdminPage } from './pages/AdminPage';
-import { CvPage } from './pages/CvPage';
+import { AboutPage } from './pages/AboutPage';
+import { ContactPage } from './pages/ContactPage';
 import { HomePage } from './pages/HomePage';
 import { LoginPage } from './pages/LoginPage';
 import { ProjectDetailPage } from './pages/ProjectDetailPage';
-import { ProjectsPage } from './pages/ProjectsPage';
+import { StudioPage } from './pages/StudioPage';
+import { WorkPage } from './pages/WorkPage';
 
 function App() {
   return (
     <BrowserRouter>
-      <ThemeSync />
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/" element={<AppShell />}>
           <Route index element={<HomePage />} />
-          <Route path="projects" element={<ProjectsPage />} />
+          <Route path="work" element={<WorkPage />} />
+          <Route path="about" element={<AboutPage />} />
+          <Route path="contact" element={<ContactPage />} />
+          <Route path="studio" element={<StudioPage />} />
+          <Route path="projects" element={<Navigate to="/work" replace />} />
           <Route path="projects/:slug" element={<ProjectDetailPage />} />
-          <Route path="cv" element={<CvPage />} />
-          <Route path="admin" element={<AdminPage />} />
+          <Route path="work/:slug" element={<ProjectDetailPage />} />
+          <Route path="cv" element={<Navigate to="/about" replace />} />
+          <Route path="admin" element={<Navigate to="/studio" replace />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>

@@ -32,11 +32,11 @@ export const LoginPage = () => {
   return (
     <div className="login-page">
       <form className="login-card surface-panel" onSubmit={handleSubmit}>
-        <p className="eyebrow">Owner access</p>
-        <h2>Login to PersonalWeb</h2>
+        <span className="login-stamp">private room only</span>
+        <p className="eyebrow">Studio access</p>
+        <h2>Login to the private studio</h2>
         <p>
-          This is a temporary owner-only gate so you can unlock admin tools and private Mapper views
-          while the real auth backend is still pending.
+          The public portfolio stays streamlined for visitors. This login keeps private embeds and future studio workflows behind a separate owner-only surface.
         </p>
 
         <label>
@@ -53,9 +53,9 @@ export const LoginPage = () => {
           />
         </label>
 
-        <button type="submit">Enter owner mode</button>
+        <button type="submit">Enter studio mode</button>
         {error ? <p className="login-error">{error}</p> : null}
-        <p className="login-hint">
+        <p className="login-hint surface-faint">
           Dev placeholder credentials: `{ownerCredentials.username}` / `{ownerCredentials.password}`
         </p>
       </form>

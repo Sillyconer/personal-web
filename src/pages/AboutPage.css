@@ -1,0 +1,58 @@
+.about-page,
+.about-hero,
+.about-story-grid,
+.about-fit-list {
+  display: grid;
+  gap: var(--section-gap);
+}
+
+.about-hero {
+  grid-template-columns: minmax(0, 1.14fr) minmax(280px, 0.86fr);
+}
+
+.about-badges,
+.about-hero__meta-head {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.about-hero__meta,
+.about-pillar,
+.about-timeline,
+.about-fit-panel,
+.about-fit-item {
+  border-radius: var(--radius-panel);
+  padding: 1.2rem;
+}
+
+.about-hero__meta {
+  align-content: start;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.45), transparent 32%),
+    linear-gradient(145deg, rgba(255, 244, 221, 0.95), rgba(255, 249, 240, 0.96));
+}
+
+.about-pillar--1 {
+  transform: rotate(-1deg);
+}
+
+.about-pillar--2 {
+  transform: rotate(0.9deg);
+}
+
+.about-pillar--3 {
+  transform: rotate(-0.5deg);
+}
+
+.about-story-grid {
+  grid-template-columns: minmax(0, 1.05fr) minmax(300px, 0.95fr);
+}
+
+@media (max-width: 960px) {
+  .about-hero,
+  .about-story-grid {
+    grid-template-columns: 1fr;
+  }
+}

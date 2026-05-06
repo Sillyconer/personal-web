@@ -5,17 +5,23 @@
 }
 
 .login-card {
-  width: min(100%, 32rem);
-  border-radius: 32px;
-  padding: 1.4rem;
+  width: min(100%, 36rem);
+  border-radius: var(--radius-panel);
+  padding: 1.35rem;
   display: grid;
   gap: 1rem;
 }
 
-.login-card h2,
-.login-card p,
-.login-card label {
-  margin: 0;
+.login-stamp {
+  justify-self: start;
+  padding: 0.55rem 0.8rem;
+  border-radius: 999px;
+  border: 2px solid var(--line-strong);
+  background: linear-gradient(135deg, var(--signal-yellow), #ffda94);
+  box-shadow: 0.35rem 0.35rem 0 var(--shadow-color-soft);
+  font-family: var(--font-accent);
+  font-size: 0.68rem;
+  transform: rotate(-4deg);
 }
 
 .login-card label {
@@ -28,10 +34,17 @@
   width: 100%;
 }
 
+.login-card button {
+  background: linear-gradient(135deg, var(--signal-red), #d96d65);
+  color: var(--signal-ink);
+}
+
 .login-error {
-  color: #ffb0a6;
+  color: var(--signal-red);
 }
 
 .login-hint {
-  color: var(--muted);
+  color: var(--ink-soft);
+  border-radius: var(--radius-card);
+  padding: 0.95rem 1rem;
 }

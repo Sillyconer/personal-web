@@ -1,0 +1,64 @@
+.studio-page,
+.studio-grid,
+.studio-list,
+.studio-projects {
+  display: grid;
+  gap: var(--section-gap);
+}
+
+.studio-hero,
+.studio-card,
+.studio-projects,
+.studio-note,
+.studio-project,
+.studio-list-item {
+  border-radius: var(--radius-panel);
+  padding: 1.2rem;
+}
+
+.studio-badges,
+.studio-project__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.studio-badges span,
+.studio-project__meta span {
+  border-radius: 999px;
+  border: 2px solid var(--line-strong);
+  padding: 0.6rem 0.85rem;
+  background: rgba(255, 255, 255, 0.72);
+  font-family: var(--font-accent);
+  font-size: 0.68rem;
+}
+
+.studio-grid {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.studio-list-item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.9rem;
+  align-items: start;
+}
+
+.studio-list-item__index {
+  font-family: var(--font-accent);
+  color: var(--signal-red);
+  font-size: 0.7rem;
+  padding-top: 0.15rem;
+}
+
+.studio-project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 0.85rem;
+}
+
+.studio-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+}

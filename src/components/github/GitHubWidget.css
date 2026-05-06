@@ -1,19 +1,48 @@
 .github-widget {
-  border-radius: 30px;
-  padding: 1.2rem;
+  border-radius: var(--radius-panel);
+  padding: 1.15rem;
   display: grid;
   gap: 1rem;
 }
 
-.github-error {
-  margin: 0;
-  color: #ffb0a6;
+.github-widget__chrome,
+.repo-meta,
+.readme-meta,
+.readme-card__head,
+.readme-card__head a {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
 }
 
-.github-widget p,
-.github-widget h2,
-.github-widget h3 {
+.github-widget__chrome span {
+  width: 0.85rem;
+  height: 0.85rem;
+  border-radius: 999px;
+  border: 2px solid rgba(28, 35, 39, 0.18);
+}
+
+.github-widget__chrome span:nth-child(1) {
+  background: var(--signal-red);
+}
+
+.github-widget__chrome span:nth-child(2) {
+  background: var(--signal-yellow);
+}
+
+.github-widget__chrome span:nth-child(3) {
+  background: var(--signal-teal);
+}
+
+.github-note {
+  border-radius: var(--radius-card);
+  padding: 0.95rem 1rem;
+  color: var(--ink-soft);
+}
+
+.github-error {
   margin: 0;
+  color: var(--signal-red);
 }
 
 .github-grid {
@@ -29,46 +58,42 @@
 
 .repo-item,
 .readme-card {
-  border-radius: 24px;
-  border: 1px solid var(--border-soft);
-  background: rgba(255, 255, 255, 0.03);
+  border-radius: var(--radius-card);
+  border: 2px solid var(--line-strong);
+  background: rgba(255, 255, 255, 0.55);
+  box-shadow: 0.3rem 0.3rem 0 var(--shadow-color-soft);
 }
 
 .repo-item {
   padding: 0.95rem;
-  color: var(--text);
+  color: var(--ink);
   text-align: left;
   display: grid;
   gap: 0.8rem;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.repo-item:hover {
+  transform: translate(-1px, -2px) rotate(-0.6deg);
+  box-shadow: 0.45rem 0.45rem 0 var(--shadow-color-strong);
 }
 
 .repo-item.is-active {
-  border-color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  border-color: rgba(62, 119, 162, 0.66);
+  background: linear-gradient(145deg, rgba(224, 239, 248, 0.9), rgba(243, 250, 252, 0.92));
 }
 
 .repo-item p,
-.repo-empty {
-  color: var(--muted);
+.repo-empty,
+.repo-meta,
+.readme-meta,
+.readme-card pre {
+  color: var(--ink-soft);
 }
 
 .repo-meta,
-.readme-meta,
-.readme-card__head,
-.readme-card__head a {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-}
-
-.repo-meta {
-  flex-wrap: wrap;
-  color: var(--muted);
-}
-
 .readme-meta {
   flex-wrap: wrap;
-  color: var(--muted);
 }
 
 .readme-card {
@@ -86,7 +111,6 @@
   white-space: pre-wrap;
   font-family: var(--font-mono);
   line-height: 1.55;
-  color: var(--muted);
   max-height: 28rem;
   overflow: auto;
 }

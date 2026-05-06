@@ -23,7 +23,8 @@ export const ProjectEmbed = ({
     return (
       <div className="project-embed project-embed--locked surface-panel">
         <Lock size={18} />
-        <div>
+        <div className="content-cluster">
+          <p className="eyebrow">Private surface</p>
           <h3>{title}</h3>
           <p>{description}</p>
           <p className="embed-note">Owner login unlocks this private view.</p>
@@ -35,7 +36,8 @@ export const ProjectEmbed = ({
   return (
     <section className="project-embed surface-panel">
       <div className="project-embed__head">
-        <div>
+        <div className="content-cluster">
+          <p className="eyebrow">Live surface</p>
           <h3>{title}</h3>
           <p>{description}</p>
         </div>
@@ -54,6 +56,7 @@ export const ProjectEmbed = ({
           className="project-embed__frame"
           style={{ height }}
           loading="lazy"
+          referrerPolicy="no-referrer"
         />
       ) : (
         <div className="project-embed__placeholder">Embed URL not configured yet.</div>

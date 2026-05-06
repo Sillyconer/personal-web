@@ -20,6 +20,7 @@ interface GitHubRepo {
 }
 
 export const GitHubWidget = () => {
+  const isDemoFeed = githubConfig.username === 'octocat';
   const [repos, setRepos] = useState<GitHubRepo[]>([]);
   const [selectedRepo, setSelectedRepo] = useState<GitHubRepo | null>(null);
   const [readme, setReadme] = useState<string>('');
@@ -105,12 +106,19 @@ export const GitHubWidget = () => {
 
   return (
     <section className="github-widget surface-panel">
-      <div className="panel-head">
-        <span className="eyebrow">GitHub widget</span>
-        <h2>Browse recent repos</h2>
-        <p>{repoCountLabel}</p>
+      <div className="github-widget__chrome" aria-hidden="true">
+        <span />
+        <span />
+        <span />
       </div>
 
+      <div className="panel-head">
+        <span className="eyebrow">source previews</span>
+        <h2>Recent repositories and README context</h2>
+        <p>{isDemoFeed ? 'Connect your GitHub username in src/data/github.ts to replace the demo feed.' : repoCountLabel}</p>
+      </div>
+
+      {isDemoFeed ? <p className="github-note surface-faint">Showing the configured demo account until a real GitHub username is connected.</p> : null}
       {error ? <p className="github-error">{error}</p> : null}
 
       <div className="github-grid">

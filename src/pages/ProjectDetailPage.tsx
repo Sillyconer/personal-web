@@ -1,28 +1,24 @@
-import { useMemo, useState } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
-import { ArrowLeft, LockKeyhole, Sparkles } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight, Sparkles } from 'lucide-react';
+import { motion } from 'framer-motion';
 
-import { ProjectEmbed } from '../components/projects/ProjectEmbed';
+import { ProjectSection } from '../components/projects/ProjectSection';
 import { useAuthStore } from '../store/useAuthStore';
+import { cardReveal, sectionReveal, staggerGroup, viewport } from '../utils/motion';
 import { getProjectBySlug } from '../utils/projects';
+import { hasPrivateProjectSections } from '../utils/projects';
 import './ProjectDetailPage.css';
 
 export const ProjectDetailPage = () => {
   const { slug } = useParams();
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const project = getProjectBySlug(slug);
-  const visibleTabs = useMemo(
-    () => project?.tabs.filter((tab) => !tab.ownerOnly || isAuthenticated) ?? [],
-    [isAuthenticated, project],
-  );
-  const [activeTabId, setActiveTabId] = useState(visibleTabs[0]?.id ?? '');
 
   if (!project) {
-    return <Navigate to="/projects" replace />;
+    return <Navigate to="/work" replace />;
   }
 
-  const activeTab = visibleTabs.find((tab) => tab.id === activeTabId) ?? visibleTabs[0];
-  const lockedTabs = project.tabs.filter((tab) => tab.ownerOnly && !isAuthenticated);
+  const visibleLinks = project.links.filter((link) => !link.ownerOnly || isAuthenticated);
   const mapperEmbedNote =
     project.slug === 'mapper'
       ? 'Mapper currently points at a local development URL. Add an embed-safe deploy or dedicated embed route next.'
@@ -30,32 +26,50 @@ export const ProjectDetailPage = () => {
 
   return (
     <div className="project-detail-page">
-      <section className="surface-panel project-hero">
+      <motion.section className="surface-panel project-hero" initial="hidden" animate="show" variants={staggerGroup}>
         <div className="project-hero__top">
-          <Link to="/projects" className="inline-link">
+          <Link to="/work" className="inline-link">
             <ArrowLeft size={16} />
-            Back to projects
+            Back to work
           </Link>
-          <span className="project-pill status-chip">{project.status}</span>
+          <div className="chip-row project-chip-row">
+            <span className="project-pill status-chip">{project.status}</span>
+            <span className="project-pill status-chip">{project.type}</span>
+            {hasPrivateProjectSections(project) ? <span className="project-pill status-chip">owner surfaces</span> : null}
+          </div>
         </div>
 
         <div className="project-hero__content">
           <div className="content-cluster">
             <p className="eyebrow">{project.year}</p>
-            <h2>{project.name}</h2>
+            <h1>{project.name}</h1>
             <p>{project.description}</p>
+            <p className="project-outcome">{project.outcome}</p>
             <div className="detail-list surface-faint">
               <div>
-                <span className="eyebrow">Theme hint</span>
-                <p>{project.themeHint}</p>
+                <span className="eyebrow">Roles</span>
+                <p>{project.roles.join(' · ')}</p>
               </div>
               <div>
-                <span className="eyebrow">Tags</span>
-                <p>{project.tags.join(' · ')}</p>
+                <span className="eyebrow">Services</span>
+                <p>{project.services.join(' · ')}</p>
+              </div>
+              <div>
+                <span className="eyebrow">Best for</span>
+                <p>{project.idealFor.join(' · ')}</p>
               </div>
             </div>
+
+            <div className="project-links">
+              {visibleLinks.map((link) => (
+                <a key={link.label} href={link.href} target={link.external ? '_blank' : undefined} rel={link.external ? 'noreferrer' : undefined} className="inline-link">
+                  {link.label}
+                  {link.external ? <ArrowUpRight size={16} /> : null}
+                </a>
+              ))}
+            </div>
           </div>
-          <div className="surface-subpanel">
+          <div className="surface-subpanel project-sidebar">
             <Sparkles size={18} />
             <h3>{project.tagline}</h3>
             <p>{project.summary}</p>
@@ -66,55 +80,29 @@ export const ProjectDetailPage = () => {
             </div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
-      <section className="project-tabs-row">
-        {visibleTabs.map((tab) => (
-          <button
-            key={tab.id}
-            type="button"
-            className={`tab-chip ${activeTab?.id === tab.id ? 'is-active' : ''}`}
-            onClick={() => setActiveTabId(tab.id)}
-          >
-            {tab.label}
-          </button>
+      <motion.section className="metric-strip project-metrics" initial="hidden" whileInView="show" viewport={viewport} variants={staggerGroup}>
+        {project.metrics.map((metric) => (
+          <motion.article key={metric.label} className="surface-panel stat-card" variants={cardReveal} whileHover={{ y: -6, rotate: -0.8 }}>
+            <p className="eyebrow">{metric.label}</p>
+            <h2>{metric.value}</h2>
+            {metric.detail ? <p className="muted">{metric.detail}</p> : null}
+          </motion.article>
         ))}
+      </motion.section>
 
-        {lockedTabs.map((tab) => (
-          <div key={tab.id} className="tab-chip tab-chip--locked">
-            <LockKeyhole size={14} />
-            {tab.label}
-          </div>
-        ))}
-      </section>
-
-      {activeTab?.type === 'content' ? (
-        <section className="surface-panel tab-panel">
-          <h3>{activeTab.title}</h3>
-          <p>{activeTab.description}</p>
-          <div className="bullet-column">
-            {activeTab.content?.map((item) => (
-              <article key={item} className="bullet-card">
-                {item}
-              </article>
-            ))}
-          </div>
-        </section>
+      {mapperEmbedNote ? (
+        <motion.div className="surface-panel mapper-note" initial="hidden" whileInView="show" viewport={viewport} variants={sectionReveal}>
+          {mapperEmbedNote}
+        </motion.div>
       ) : null}
 
-      {activeTab?.type === 'embed' ? (
-        <>
-          {mapperEmbedNote ? <div className="surface-panel mapper-note">{mapperEmbedNote}</div> : null}
-          <ProjectEmbed
-            title={activeTab.title}
-            description={activeTab.description}
-            url={activeTab.embedUrl}
-            height={activeTab.embedHeight}
-            locked={!!activeTab.ownerOnly && !isAuthenticated}
-            ctaLabel={activeTab.ctaLabel}
-          />
-        </>
-      ) : null}
+      <div className="project-section-stack">
+        {project.sections.map((section, index) => (
+          <ProjectSection key={section.id} section={section} isAuthenticated={isAuthenticated} index={index} />
+        ))}
+      </div>
     </div>
   );
 };

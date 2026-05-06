@@ -1,73 +1,62 @@
-# React + TypeScript + Vite
+# PersonalWeb v2
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Client-facing portfolio and product ecosystem built with React, TypeScript, and Vite.
 
-Currently, two official plugins are available:
+## What changed in v2
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Reframed the app around `Home`, `Work`, `About`, `Contact`, and a private `Studio`.
+- Rebuilt project detail pages as richer case studies instead of tab-only summaries.
+- Moved project content into per-project files so new work is easier to add.
+- Kept the theme system and ecosystem direction while simplifying the public experience.
 
-## React Compiler
+## Tech stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React 19
+- TypeScript
+- Vite
+- React Router
+- Zustand
+- Framer Motion
 
-## Expanding the ESLint configuration
+## Project structure
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```text
+src/
+  components/
+  config/
+  content/
+    projects/
+      mapper.ts
+      personalweb.ts
+      projectTemplate.ts
+  data/
+    projects.ts
+    site.ts
+  pages/
+  store/
+  types/
+  utils/
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Adding a new project
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+1. Duplicate `src/content/projects/projectTemplate.ts`.
+2. Rename it to the new slug, for example `src/content/projects/new-app.ts`.
+3. Fill in the metadata, metrics, links, and `sections`.
+4. Import the new project into `src/data/projects.ts`.
+5. If the project has a live or private embed, replace placeholder URLs with deployed ones.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Available commands
+
+- `npm run dev` - start the local dev server
+- `npm run build` - type-check and build for production
+- `npm run lint` - run ESLint
+- `npm run typecheck` - run TypeScript without emitting files
+- `npm run preview` - preview the production build locally
+
+## Important follow-up before deployment
+
+- Replace placeholder auth in `src/data/auth.ts` and `src/store/useAuthStore.ts`.
+- Replace demo GitHub data in `src/data/github.ts`.
+- Replace placeholder contact details in `src/data/site.ts`.
+- Replace localhost embed URLs in `src/content/projects/mapper.ts`.
