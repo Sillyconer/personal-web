@@ -37,23 +37,29 @@ export const AppShell = () => {
         </div>
 
         <div className="app-header__core">
-        <NavLink to="/" className="brand-block">
-          <div className="brand-mark">
-            <MapPinned size={18} />
-          </div>
-          <div className="brand-meta">
-            <div>
-              <p className="eyebrow">Neighbourhood atlas / v2</p>
-              <h1>{siteProfile.name}</h1>
+          <NavLink to="/" className="brand-block">
+            <div className="brand-mark">
+              <MapPinned size={18} />
             </div>
-            <span className="brand-note">A hand-built portfolio world for product work, flagship experiments, and the ecosystem around them.</span>
-          </div>
-        </NavLink>
+            <div className="brand-meta">
+              <div>
+                <p className="eyebrow">Neighbourhood atlas / v2</p>
+                <h1>{siteProfile.name}</h1>
+              </div>
+              <span className="brand-note">A hand-built portfolio world for product work, flagship experiments, and the ecosystem around them.</span>
+            </div>
+          </NavLink>
 
           <div className="brand-souvenirs" aria-label="Site badges">
-            <span className="souvenir-chip"><Star size={14} /> guestbook energy</span>
-            <span className="souvenir-chip"><Sparkles size={14} /> case study archive</span>
-            <span className="souvenir-chip"><Mail size={14} /> available now</span>
+            <span className="souvenir-chip">
+              <Star size={14} /> guestbook energy
+            </span>
+            <span className="souvenir-chip">
+              <Sparkles size={14} /> case study archive
+            </span>
+            <span className="souvenir-chip">
+              <Mail size={14} /> available now
+            </span>
           </div>
         </div>
 
@@ -68,42 +74,42 @@ export const AppShell = () => {
         </div>
 
         <div className="app-header__navline">
-        <nav className="main-nav" aria-label="Main navigation">
-          {navigation.map((item) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              className={({ isActive }) => `nav-link ${isActive ? 'is-active' : ''}`}
-            >
-              {item.label}
-            </NavLink>
-          ))}
-        </nav>
-
-        <div className="header-actions">
-          <NavLink to="/contact" className="header-chip header-chip--primary">
-            Let&apos;s work together
-            <ArrowUpRight size={16} />
-          </NavLink>
-
-          {isAuthenticated ? (
-            <>
-              <NavLink to="/studio" className="header-chip">
-                <Lock size={16} />
-                Studio
+          <nav className="main-nav" aria-label="Main navigation">
+            {navigation.map((item) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                className={({ isActive }) => `nav-link ${isActive ? 'is-active' : ''}`}
+              >
+                {item.label}
               </NavLink>
-              <button type="button" className="header-chip" onClick={logout}>
-                <LogOut size={16} />
-                Logout
-              </button>
-            </>
-          ) : (
-            <NavLink to="/login" className="header-chip">
-              <Lock size={16} />
-              Owner access
+            ))}
+          </nav>
+
+          <div className="header-actions">
+            <NavLink to="/contact" className="header-chip header-chip--primary">
+              Let&apos;s work together
+              <ArrowUpRight size={16} />
             </NavLink>
-          )}
-        </div>
+
+            {isAuthenticated ? (
+              <>
+                <NavLink to="/studio" className="header-chip">
+                  <Lock size={16} />
+                  Studio
+                </NavLink>
+                <button type="button" className="header-chip" onClick={logout}>
+                  <LogOut size={16} />
+                  Logout
+                </button>
+              </>
+            ) : (
+              <NavLink to="/login" className="header-chip">
+                <Lock size={16} />
+                Owner access
+              </NavLink>
+            )}
+          </div>
         </div>
       </header>
 

@@ -130,6 +130,7 @@ export const GitHubWidget = () => {
               className={`repo-item ${selectedRepo?.id === repo.id ? 'is-active' : ''}`}
               onClick={() => setSelectedRepo(repo)}
             >
+              <span className="repo-item__prompt">&gt; open repo entry</span>
               <div>
                 <strong>{repo.name}</strong>
                 <p>{repo.description ?? 'No description yet.'}</p>
@@ -144,7 +145,7 @@ export const GitHubWidget = () => {
           {!loading && repos.length === 0 ? <p className="repo-empty">No repos available.</p> : null}
         </div>
 
-        <div className="readme-card">
+        <div className="readme-card readme-card--terminal">
           <div className="readme-card__head">
             <div>
               <span className="eyebrow">README preview</span>
@@ -168,7 +169,11 @@ export const GitHubWidget = () => {
               ) : null}
             </div>
           ) : null}
-          <pre>{readmeLoading ? 'Loading README...' : readme || 'Pick a repo to preview its README.'}</pre>
+          <div className="readme-card__screen">
+            <div className="readme-card__scanlines" aria-hidden="true" />
+            <div className="readme-card__prompt">guest@github:~$ cat README.md</div>
+            <pre>{readmeLoading ? 'Loading README...' : readme || 'Pick a repo to preview its README.'}</pre>
+          </div>
         </div>
       </div>
     </section>

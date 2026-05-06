@@ -5,6 +5,39 @@
   gap: 1rem;
 }
 
+.project-embed__chrome {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.project-embed__chrome span {
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 999px;
+  border: 2px solid rgba(28, 35, 39, 0.16);
+}
+
+.project-embed__chrome span:nth-child(1) {
+  background: var(--signal-red);
+}
+
+.project-embed__chrome span:nth-child(2) {
+  background: var(--signal-yellow);
+}
+
+.project-embed__chrome span:nth-child(3) {
+  background: var(--signal-teal);
+}
+
+.project-embed__chrome p {
+  margin-left: 0.35rem;
+  font-family: var(--font-accent);
+  font-size: 0.66rem;
+  color: var(--ink-soft);
+  text-transform: lowercase;
+}
+
 .project-embed__head {
   display: flex;
   justify-content: space-between;

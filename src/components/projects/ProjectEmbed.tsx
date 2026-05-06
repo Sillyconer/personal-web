@@ -35,6 +35,13 @@ export const ProjectEmbed = ({
 
   return (
     <section className="project-embed surface-panel">
+      <div className="project-embed__chrome" aria-hidden="true">
+        <span />
+        <span />
+        <span />
+        <p>live view / embedded surface</p>
+      </div>
+
       <div className="project-embed__head">
         <div className="content-cluster">
           <p className="eyebrow">Live surface</p>
