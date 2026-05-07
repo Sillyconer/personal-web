@@ -41,10 +41,10 @@ export const WorkPage = () => {
       {/* ── Hero ── */}
       <motion.section className="work__hero" initial="hidden" animate="show" variants={staggerGroup}>
         <motion.div variants={pixelReveal}>
-          <p className="eyebrow">&gt; cd /work</p>
-          <h1>project directory</h1>
+          <p className="eyebrow">world select</p>
+          <h1>pick a project world</h1>
           <p className="muted">
-            case studies, live surfaces, and the ecosystem built around them. filter by status, type, or search directly.
+            Case studies, live surfaces, and ecosystem fragments. Filter by status or type, then jump into the ones that feel most relevant.
           </p>
         </motion.div>
       </motion.section>
@@ -63,7 +63,7 @@ export const WorkPage = () => {
             <span className="t-header__dot t-header__dot--y" />
             <span className="t-header__dot t-header__dot--g" />
           </div>
-          <span>filter --interactive</span>
+           <span>filter board</span>
         </div>
 
         <div className="work__filter-body">
@@ -72,7 +72,7 @@ export const WorkPage = () => {
             <input
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="$ grep -i 'query' projects/*"
+               placeholder="search by project, role, or tag"
               aria-label="Search projects"
             />
           </div>
@@ -112,7 +112,7 @@ export const WorkPage = () => {
       {/* ── Results ── */}
       <motion.section initial="hidden" whileInView="show" viewport={viewport} variants={staggerGroup}>
         <motion.div variants={pixelReveal}>
-          <p className="eyebrow">&gt; results: {filteredProjects.length} found</p>
+           <p className="eyebrow">{filteredProjects.length} worlds unlocked</p>
         </motion.div>
 
         {filteredProjects.length > 0 ? (

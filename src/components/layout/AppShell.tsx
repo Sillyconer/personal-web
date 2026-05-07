@@ -1,5 +1,5 @@
-import { Outlet, NavLink, useLocation } from 'react-router-dom';
-import { Lock, LogOut } from 'lucide-react';
+import { NavLink, useLocation, useOutlet } from 'react-router-dom';
+import { Lock, LogOut, Sparkles, Star } from 'lucide-react';
 
 import { PageTransition } from '../effects/PageTransition';
 import { navigation } from '../../config/navigation';
@@ -11,12 +11,12 @@ export const AppShell = () => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const logout = useAuthStore((state) => state.logout);
   const location = useLocation();
+  const outlet = useOutlet();
 
   const currentPage = navigation.find((n) => n.to === location.pathname)?.label ?? 'home';
 
   return (
     <div className="shell">
-      {/* ── Title bar ── */}
       <header className="shell__titlebar">
         <div className="shell__dots">
           <span className="shell__dot shell__dot--r" />
@@ -25,13 +25,23 @@ export const AppShell = () => {
         </div>
 
         <NavLink to="/" className="shell__title">
-          {siteProfile.name.toLowerCase()}@portfolio:~/{currentPage.toLowerCase()}
+          {siteProfile.name.toLowerCase()} :: dream cartridge :: {currentPage.toLowerCase()}
         </NavLink>
 
-        <span className="shell__version">v2.0</span>
+        <span className="shell__version">aap-64 / crt / v2.0</span>
       </header>
 
-      {/* ── Nav bar ── */}
+      <section className="shell__hero-strip">
+        <div className="shell__hero-copy">
+          <p className="eyebrow">pixel playground</p>
+          <strong>{siteProfile.title}</strong>
+        </div>
+        <div className="shell__hero-badges">
+          <span className="px-tag px-tag--yellow"><Star size={10} /> whimsical crt</span>
+          <span className="px-tag px-tag--teal"><Sparkles size={10} /> handmade world</span>
+        </div>
+      </section>
+
       <nav className="shell__nav" aria-label="Main navigation">
         {navigation.map((item) => (
           <NavLink
@@ -61,14 +71,12 @@ export const AppShell = () => {
         )}
       </nav>
 
-      {/* ── Main content ── */}
       <main className="shell__main">
-        <PageTransition>
-          <Outlet />
+        <PageTransition routeKey={location.pathname}>
+          {outlet}
         </PageTransition>
       </main>
 
-      {/* ── Status bar ── */}
       <footer className="shell__statusbar">
         <span className="shell__status-item">
           <span className="shell__status-dot" /> online
@@ -76,7 +84,7 @@ export const AppShell = () => {
         <span className="shell__status-item">page: {currentPage.toLowerCase()}</span>
         <span className="shell__status-item">visitor #0002</span>
         <span className="shell__status-item shell__status-right">
-          {siteProfile.name.toLowerCase()} — hand-built portfolio terminal
+          {siteProfile.name.toLowerCase()} - whimsical pixel-art portfolio world
         </span>
       </footer>
     </div>
