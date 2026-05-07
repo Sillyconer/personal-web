@@ -38,35 +38,35 @@ export const WorkPage = () => {
 
   return (
     <div className="page-stack work">
-      <motion.section className="work__hero t-frame t-frame--raised" initial="hidden" animate="show" variants={staggerGroup}>
+      <motion.section className="work__hero" initial="hidden" animate="show" variants={staggerGroup}>
         <motion.div className="work__hero-copy" variants={pixelReveal}>
-          <p className="eyebrow">world select</p>
-          <h1>pick a project world</h1>
+          <p className="eyebrow">zelda homage / dungeon archive</p>
+          <h1>Enter the archive chambers.</h1>
           <p className="muted">
-            Case studies, live surfaces, and ecosystem fragments. Filter by status or type, then jump into the ones that feel most relevant.
+            Projects are treated like dungeon rooms: each one hides a different system, atmosphere, and set of design decisions. Use the stone filters to narrow the route.
           </p>
           <div className="flex-row work__hero-tags">
-            <span className="px-tag px-tag--yellow">portal gates</span>
-            <span className="px-tag px-tag--teal">side quests</span>
-            <span className="px-tag px-tag--blue">stage select</span>
+            <span className="px-tag px-tag--yellow">maps</span>
+            <span className="px-tag px-tag--teal">keys</span>
+            <span className="px-tag px-tag--blue">relics</span>
           </div>
         </motion.div>
 
         <motion.div className="work__hero-scene" variants={cardReveal}>
-          <div className="work__hero-island work__hero-island--1" />
-          <div className="work__hero-island work__hero-island--2" />
-          <div className="work__hero-island work__hero-island--3" />
-          <div className="work__hero-route work__hero-route--1" />
-          <div className="work__hero-route work__hero-route--2" />
-          <div className="work__hero-gate work__hero-gate--1">mapper</div>
-          <div className="work__hero-gate work__hero-gate--2">web</div>
-          <div className="work__hero-gate work__hero-gate--3">next</div>
+          <div className="work__hero-scene-core" aria-hidden="true">
+            <div className="work__torch work__torch--left" />
+            <div className="work__torch work__torch--right" />
+            <div className="work__door work__door--1">mapper</div>
+            <div className="work__door work__door--2">web</div>
+            <div className="work__door work__door--3">next</div>
+            <div className="work__map-grid" />
+          </div>
         </motion.div>
       </motion.section>
 
       {/* ── Filters ── */}
       <motion.section
-        className="work__filters t-frame t-frame--sunken"
+        className="work__filters"
         initial="hidden"
         whileInView="show"
         viewport={viewport}
@@ -78,7 +78,7 @@ export const WorkPage = () => {
             <span className="t-header__dot t-header__dot--y" />
             <span className="t-header__dot t-header__dot--g" />
           </div>
-           <span>filter board</span>
+            <span>stone map table</span>
         </div>
 
         <div className="work__filter-body">
@@ -127,7 +127,7 @@ export const WorkPage = () => {
       {/* ── Results ── */}
       <motion.section initial="hidden" whileInView="show" viewport={viewport} variants={staggerGroup}>
         <motion.div variants={pixelReveal}>
-           <p className="eyebrow">{filteredProjects.length} worlds unlocked</p>
+          <p className="eyebrow">{filteredProjects.length} chambers revealed</p>
         </motion.div>
 
         {filteredProjects.length > 0 ? (

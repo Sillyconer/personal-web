@@ -66,6 +66,52 @@
   background: var(--shell-accent-alt);
 }
 
+.detail--mapper .detail__world-card {
+  border-color: rgba(255, 213, 65, 0.36);
+  background: linear-gradient(180deg, rgba(61, 49, 34, 0.94), rgba(11, 9, 8, 0.98));
+}
+
+.detail--mapper .detail__world-scene {
+  background: linear-gradient(180deg, rgba(72, 64, 38, 0.9), rgba(16, 14, 10, 0.98));
+}
+
+.detail--mapper .detail__world-layer--1 {
+  background: #4a5462;
+}
+
+.detail--mapper .detail__world-layer--2 {
+  background: #71413b;
+}
+
+.detail--mapper .detail__world-marker {
+  box-shadow: 0 0 12px rgba(255, 213, 65, 0.28);
+}
+
+.detail--personalweb .detail__world-card {
+  border-color: rgba(223, 62, 35, 0.36);
+  background: linear-gradient(90deg, rgba(95, 20, 18, 0.92), rgba(25, 26, 54, 0.96));
+}
+
+.detail--personalweb .detail__world-scene {
+  background: linear-gradient(90deg, rgba(223, 62, 35, 0.22) 0 50%, rgba(40, 92, 196, 0.22) 50% 100%), rgba(10, 14, 22, 0.96);
+}
+
+.detail--personalweb .detail__world-layer--1 {
+  background: rgba(223, 62, 35, 0.34);
+}
+
+.detail--personalweb .detail__world-layer--2 {
+  background: rgba(40, 92, 196, 0.34);
+}
+
+.detail--personalweb .detail__world-marker--1 {
+  background: var(--signal-red);
+}
+
+.detail--personalweb .detail__world-marker--2 {
+  background: var(--signal-blue);
+}
+
 .detail__info-grid {
   display: grid;
   gap: 4px;

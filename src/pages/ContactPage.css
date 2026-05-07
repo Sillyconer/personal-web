@@ -7,12 +7,37 @@
 }
 
 .contact__hero {
-  grid-template-columns: minmax(0, 1fr) auto minmax(220px, 0.9fr);
+  grid-template-columns: minmax(0, 1fr) auto minmax(240px, 0.9fr);
   align-items: center;
+}
+
+.contact__hero,
+.contact__channel,
+.contact__modes,
+.contact__fit .t-frame {
+  border-color: rgba(223, 62, 35, 0.22);
+  background: linear-gradient(180deg, rgba(249, 246, 229, 0.96), rgba(194, 224, 255, 0.96));
+  color: #2d213c;
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.18);
+}
+
+.contact__hero::after,
+.contact__channel::after,
+.contact__modes::after,
+.contact__fit .t-frame::after {
+  background: repeating-linear-gradient(0deg, transparent 0 5px, rgba(40, 92, 196, 0.04) 5px 6px);
 }
 
 .contact__hero h1 {
   max-width: 18ch;
+  color: #2d213c;
+}
+
+.contact__hero .muted,
+.contact__channel .muted,
+.contact__mode-item,
+.contact__fit .t-frame p {
+  color: #4a5462;
 }
 
 .contact__actions {
@@ -21,67 +46,96 @@
   gap: var(--gap-sm);
 }
 
+.contact__actions .px-btn {
+  border-color: rgba(223, 62, 35, 0.28);
+  background: linear-gradient(180deg, rgba(223, 62, 35, 0.88), rgba(141, 31, 27, 0.94));
+  color: #fff6e2;
+}
+
 .contact__hero-scene {
   position: relative;
   min-height: 220px;
-  border: 2px solid var(--border);
-  background: linear-gradient(180deg, rgba(255, 213, 65, 0.16), rgba(223, 62, 35, 0.1) 36%, rgba(27, 27, 47, 0.94));
+  border: 3px solid rgba(40, 92, 196, 0.18);
   overflow: hidden;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(185, 191, 251, 0.62) 58%, rgba(81, 136, 222, 0.94));
 }
 
-.contact__tower,
-.contact__beam,
-.contact__lantern {
+.contact__terminal,
+.contact__orb,
+.contact__beam {
   position: absolute;
 }
 
-.contact__tower {
+.contact__terminal {
   left: 50%;
-  bottom: 24px;
-  width: 18px;
-  height: 110px;
+  bottom: 34px;
+  width: 132px;
+  height: 82px;
   transform: translateX(-50%);
-  background: var(--aap-brown);
-  box-shadow: 0 0 0 2px rgba(20, 16, 19, 0.35);
+  border: 3px solid rgba(40, 92, 196, 0.2);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(240, 242, 255, 0.96));
+}
+
+.contact__terminal::before {
+  content: '';
+  position: absolute;
+  inset: 14px 18px auto;
+  height: 22px;
+  background: rgba(40, 92, 196, 0.82);
 }
 
 .contact__beam {
   left: 50%;
   top: 18px;
-  width: 140px;
-  height: 140px;
+  width: 180px;
+  height: 180px;
   transform: translateX(-50%);
-  background: radial-gradient(circle, rgba(255, 213, 65, 0.28), transparent 62%);
+  background: radial-gradient(circle, rgba(255, 213, 65, 0.3) 0%, rgba(255, 255, 255, 0.08) 28%, transparent 58%);
 }
 
-.contact__lantern {
-  width: 14px;
-  height: 14px;
-  background: var(--signal-yellow);
-  box-shadow: 0 0 10px rgba(255, 213, 65, 0.5);
+.contact__orb {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 3px solid rgba(45, 33, 60, 0.24);
+  background: linear-gradient(180deg, #df3e23 0 50%, #fff6e2 50% 100%);
 }
 
-.contact__lantern--1 { left: 26px; bottom: 30px; }
-.contact__lantern--2 { left: 62px; bottom: 60px; }
-.contact__lantern--3 { right: 30px; bottom: 38px; }
+.contact__orb::after {
+  content: '';
+  position: absolute;
+  inset: calc(50% - 4px);
+  width: 8px;
+  height: 8px;
+  margin: auto;
+  border-radius: 50%;
+  background: #fff6e2;
+  border: 2px solid #2d213c;
+}
+
+.contact__orb--1 { left: 34px; top: 38px; }
+.contact__orb--2 { right: 36px; top: 58px; }
+.contact__orb--3 { left: calc(50% - 16px); bottom: 132px; }
 
 .contact__channel {
   display: grid;
   gap: 4px;
   text-decoration: none;
-  color: var(--ink);
-  transition: border-color 80ms steps(2);
-  background: linear-gradient(180deg, rgba(188, 74, 155, 0.08), rgba(27, 27, 47, 0.86));
 }
 
 .contact__channel:hover {
-  border-color: var(--signal-teal);
+  border-color: rgba(40, 92, 196, 0.32);
   text-decoration: none;
 }
 
 .contact__modes {
   padding: 0;
   overflow: hidden;
+}
+
+.contact__modes .t-header {
+  background: linear-gradient(90deg, rgba(223, 62, 35, 0.12), rgba(40, 92, 196, 0.18));
+  color: #4a5462;
 }
 
 .contact__mode-list {
@@ -91,21 +145,12 @@
 
 .contact__mode-item {
   padding: 8px 16px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid rgba(45, 33, 60, 0.12);
   font-size: 13px;
 }
 
 .contact__mode-item:last-child {
   border-bottom: none;
-}
-
-.contact__fit {
-  display: grid;
-  gap: var(--gap);
-}
-
-.contact__fit .t-frame {
-  background: linear-gradient(180deg, rgba(255, 213, 65, 0.06), rgba(27, 27, 47, 0.86));
 }
 
 @media (max-width: 960px) {

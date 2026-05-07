@@ -11,9 +11,9 @@ export const ContactPage = () => {
       {/* ── Hero ── */}
       <motion.section className="contact__hero t-frame t-frame--raised" initial="hidden" animate="show" variants={staggerGroup}>
         <motion.div className="contact__hero-copy" variants={pixelReveal}>
-          <p className="eyebrow">co-op lobby open</p>
+          <p className="eyebrow">pokemon homage / link center</p>
           <h1>need a frontend partner for a product that deserves a stronger surface?</h1>
-          <p className="muted">This cartridge is the signal tower: outreach, invites, and the paths into working together.</p>
+          <p className="muted">This world plays like a trainer link hub: clean, bright, and built for making contact without losing personality.</p>
         </motion.div>
 
         <motion.div className="contact__actions" variants={pixelReveal}>
@@ -23,11 +23,11 @@ export const ContactPage = () => {
         </motion.div>
 
         <motion.div className="contact__hero-scene" variants={cardReveal}>
-          <div className="contact__tower" />
+          <div className="contact__terminal" />
+          <div className="contact__orb contact__orb--1" />
+          <div className="contact__orb contact__orb--2" />
+          <div className="contact__orb contact__orb--3" />
           <div className="contact__beam" />
-          <div className="contact__lantern contact__lantern--1" />
-          <div className="contact__lantern contact__lantern--2" />
-          <div className="contact__lantern contact__lantern--3" />
         </motion.div>
       </motion.section>
 
@@ -72,7 +72,7 @@ export const ContactPage = () => {
             <span className="t-header__dot t-header__dot--y" />
             <span className="t-header__dot t-header__dot--g" />
           </div>
-          <span>ways to work together</span>
+          <span>party menu / ways to work together</span>
         </div>
         <div className="contact__mode-list">
           {engagementModes.map((mode) => (
