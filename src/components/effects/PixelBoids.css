@@ -11,9 +11,18 @@
   filter: saturate(1.15);
 }
 
-.pixel-boids[data-preset='airships'],
+.pixel-boids[data-preset='zeldaFairies'],
+.pixel-boids[data-preset='chronoWisps'],
 .pixel-boids[data-preset='atlasBirds'] {
   opacity: 0.92;
+}
+
+.pixel-boids[data-preset='minecraftBits'] {
+  opacity: 0.78;
+}
+
+.pixel-boids[data-preset='pokeOrbs'] {
+  opacity: 0.88;
 }
 
 .pixel-boids[data-preset='saveRoom'],

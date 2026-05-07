@@ -47,6 +47,30 @@
   background: linear-gradient(180deg, rgba(32, 214, 199, 0.12), transparent 24%, transparent 76%, rgba(32, 214, 199, 0.12));
 }
 
+html[data-cartridge='work'] .crt-overlay__vignette,
+html[data-cartridge='mapper'] .crt-overlay__vignette {
+  background:
+    radial-gradient(ellipse at center, transparent 44%, rgba(11, 10, 8, 0.24) 76%, rgba(6, 6, 8, 0.64) 100%),
+    linear-gradient(90deg, rgba(255, 213, 65, 0.05), transparent 18%, transparent 82%, rgba(32, 214, 199, 0.04));
+}
+
+html[data-cartridge='story'] .crt-overlay__fringe::before,
+html[data-cartridge='story'] .crt-overlay__fringe::after {
+  opacity: 0.22;
+}
+
+html[data-cartridge='arcade'] .crt-overlay__scanlines {
+  background:
+    repeating-linear-gradient(0deg, transparent 0 3px, rgba(6, 6, 8, 0.12) 3px 4px),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 24%, rgba(255, 255, 255, 0.02) 70%, transparent 100%);
+}
+
+html[data-cartridge='contact'] .crt-overlay__vignette {
+  background:
+    radial-gradient(ellipse at center, transparent 54%, rgba(6, 6, 8, 0.12) 76%, rgba(6, 6, 8, 0.48) 100%),
+    linear-gradient(90deg, rgba(223, 62, 35, 0.04), transparent 18%, transparent 82%, rgba(40, 92, 196, 0.04));
+}
+
 @keyframes crtFlicker {
   0% { opacity: 0.86; }
   50% { opacity: 1; }

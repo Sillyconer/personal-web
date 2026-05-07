@@ -10,9 +10,10 @@ const STAR_COLORS = ['rgba(254, 243, 192, 0.55)', 'rgba(254, 243, 192, 0.32)', '
 
 type SpriteKind =
   | 'starbird'
-  | 'airship'
-  | 'moth'
-  | 'lantern'
+  | 'fairy'
+  | 'chrono'
+  | 'blockbit'
+  | 'pokeorb'
   | 'crystal'
   | 'debug'
   | 'atlas'
@@ -59,9 +60,10 @@ interface VisualProfile {
 
 const PROFILE_MAP: Record<BoidPresetId, VisualProfile> = {
   starbirds: { scale: 0.48, starCount: 180, flockCount: 20, driftCount: 180, flockerKind: 'starbird', drifterKind: 'quest' },
-  airships: { scale: 0.46, starCount: 120, flockCount: 16, driftCount: 140, flockerKind: 'airship', drifterKind: 'comet' },
-  moths: { scale: 0.44, starCount: 110, flockCount: 14, driftCount: 130, flockerKind: 'moth', drifterKind: 'quest' },
-  lanterns: { scale: 0.44, starCount: 100, flockCount: 14, driftCount: 120, flockerKind: 'lantern', drifterKind: 'lantern' },
+  zeldaFairies: { scale: 0.46, starCount: 120, flockCount: 18, driftCount: 132, flockerKind: 'fairy', drifterKind: 'quest' },
+  chronoWisps: { scale: 0.44, starCount: 116, flockCount: 14, driftCount: 138, flockerKind: 'chrono', drifterKind: 'chrono' },
+  minecraftBits: { scale: 0.46, starCount: 74, flockCount: 10, driftCount: 164, flockerKind: 'blockbit', drifterKind: 'blockbit' },
+  pokeOrbs: { scale: 0.44, starCount: 96, flockCount: 12, driftCount: 128, flockerKind: 'pokeorb', drifterKind: 'pokeorb' },
   saveRoom: { scale: 0.4, starCount: 80, flockCount: 8, driftCount: 70, flockerKind: 'crystal', drifterKind: 'quest' },
   debugSprites: { scale: 0.4, starCount: 88, flockCount: 10, driftCount: 90, flockerKind: 'debug', drifterKind: 'debug' },
   atlasBirds: { scale: 0.45, starCount: 130, flockCount: 18, driftCount: 130, flockerKind: 'atlas', drifterKind: 'quest' },
@@ -108,20 +110,32 @@ const drawSprite = (
       ctx.fillRect(facingRight ? sx + 4 : sx - 2, sy + 2, 2, 2);
       ctx.fillRect(facingRight ? sx - 2 : sx + 4, sy + (flap ? -2 : 2), 2, 2);
       break;
-    case 'airship':
-      ctx.fillRect(sx, sy, 6, 2);
-      ctx.fillRect(sx + 1, sy - 2, 4, 2);
-      ctx.fillRect(sx + 2, sy + 2, 2, 2);
+    case 'fairy':
+      ctx.fillRect(sx + 1, sy + 1, 2, 2);
+      ctx.fillRect(sx - 1, sy + (flap ? -2 : 2), 2, 2);
+      ctx.fillRect(sx + 3, sy + (flap ? 2 : -2), 2, 2);
+      ctx.globalAlpha *= 0.25;
+      ctx.fillRect(sx - 2, sy - 2, 8, 8);
+      ctx.globalAlpha = 1;
       break;
-    case 'moth':
-      ctx.fillRect(sx, sy, 2, 2);
-      ctx.fillRect(sx - 2, sy + (flap ? -2 : 2), 2, 2);
-      ctx.fillRect(sx + 2, sy + (flap ? 2 : -2), 2, 2);
+    case 'chrono':
+      ctx.fillRect(sx + 1, sy + 1, 2, 2);
+      ctx.fillRect(sx - 2, sy, 2, 2);
+      ctx.fillRect(sx + 4, sy + 2, 2, 2);
+      ctx.fillRect(sx, sy - 2, 2, 2);
+      ctx.fillRect(sx + 2, sy + 4, 2, 2);
       break;
-    case 'lantern':
-      ctx.fillRect(sx, sy, 3, 3);
-      ctx.fillRect(sx + 1, sy - 2, 1, 2);
-      ctx.fillRect(sx - 1, sy + 3, 5, 1);
+    case 'blockbit':
+      ctx.fillRect(sx, sy, 4, 4);
+      ctx.fillRect(sx + 4, sy + 2, 2, 2);
+      ctx.fillRect(sx - 2, sy + 1, 2, 2);
+      break;
+    case 'pokeorb':
+      ctx.fillRect(sx, sy, 4, 2);
+      ctx.fillRect(sx, sy + 2, 4, 2);
+      ctx.fillStyle = '#fef3c0';
+      ctx.fillRect(sx, sy + 2, 4, 2);
+      ctx.fillStyle = color;
       break;
     case 'crystal':
       ctx.fillRect(sx + 1, sy, 2, 2);

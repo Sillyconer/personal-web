@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
+import { getCartridgeByPath } from '../../config/cartridges';
 import './InteractionFx.css';
 
 interface Burst {
@@ -22,6 +24,8 @@ const PIXEL_COLORS = [
 ];
 
 export const InteractionFx = () => {
+  const location = useLocation();
+  const cartridge = getCartridgeByPath(location.pathname);
   const trailRefs = useRef<Array<HTMLSpanElement | null>>([]);
   const interactiveRef = useRef(false);
   const pointsRef = useRef(
@@ -155,7 +159,7 @@ export const InteractionFx = () => {
   }
 
   return (
-    <div className={`interaction-fx ${interactive ? 'is-interactive' : ''}`} aria-hidden="true">
+    <div className={`interaction-fx interaction-fx--${cartridge.id} ${interactive ? 'is-interactive' : ''}`} aria-hidden="true">
       {/* Cursor trail pixels */}
       {trailIndexes.map((index) => (
         <span

@@ -223,3 +223,153 @@
     cursor: none !important;
   }
 }
+
+.interaction-fx--home .interaction-fx__trail {
+  border-style: solid;
+}
+
+.interaction-fx--work .interaction-fx__trail {
+  width: 0.75rem;
+  height: 0.75rem;
+  transform-origin: center;
+  clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+  border-color: rgba(255, 213, 65, 0.2);
+}
+
+.interaction-fx--mapper .interaction-fx__trail {
+  width: 0.75rem;
+  height: 0.75rem;
+  clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+  border-color: rgba(255, 213, 65, 0.2);
+}
+
+.interaction-fx--mapper .interaction-fx__trail::after {
+  border-style: solid;
+  border-color: rgba(32, 214, 199, 0.32);
+}
+
+.interaction-fx--mapper .interaction-fx__burst-ring--inner {
+  border-color: var(--signal-teal);
+  box-shadow: 0 0 10px var(--signal-teal);
+}
+
+.interaction-fx--work .interaction-fx__trail::after {
+  border-style: solid;
+  border-color: rgba(32, 214, 199, 0.32);
+}
+
+.interaction-fx--work .interaction-fx__burst-ring--inner {
+  border-color: var(--signal-teal);
+  box-shadow: 0 0 10px var(--signal-teal);
+}
+
+.interaction-fx--work .interaction-fx__burst-star::before,
+.interaction-fx--work .interaction-fx__burst-star::after {
+  background: var(--signal-yellow);
+  box-shadow: 0 0 10px var(--signal-yellow);
+}
+
+.interaction-fx--story .interaction-fx__trail {
+  border-radius: 50%;
+  background: rgba(185, 191, 251, 0.78);
+  box-shadow: 0 0 0 2px rgba(6, 6, 8, 0.35), 0 0 10px rgba(185, 191, 251, 0.45), 0 0 24px rgba(32, 214, 199, 0.3);
+}
+
+.interaction-fx--story .interaction-fx__trail::after {
+  border-style: solid;
+  border-color: rgba(185, 191, 251, 0.3);
+  border-radius: 50%;
+}
+
+.interaction-fx--story .interaction-fx__burst-ring--inner {
+  border-color: var(--aap-lavender);
+  box-shadow: 0 0 12px var(--aap-lavender);
+}
+
+.interaction-fx--story .interaction-fx__burst-ring--outer {
+  border-color: var(--signal-teal);
+  box-shadow: 0 0 14px var(--signal-teal);
+}
+
+.interaction-fx--story .interaction-fx__burst-flash {
+  background: radial-gradient(circle, rgba(185, 191, 251, 0.18) 0%, rgba(32, 214, 199, 0.1) 28%, transparent 60%);
+}
+
+.interaction-fx--arcade .interaction-fx__trail {
+  width: 1rem;
+  height: 1rem;
+  border-color: rgba(89, 193, 53, 0.2);
+  background: linear-gradient(180deg, #59c135 0 50%, #71413b 50% 100%);
+  box-shadow: 0 0 0 2px rgba(6, 6, 8, 0.35), 0 0 8px rgba(89, 193, 53, 0.4);
+}
+
+.interaction-fx--arcade .interaction-fx__trail::before {
+  inset: auto 2px 2px 2px;
+  top: 50%;
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.interaction-fx--arcade .interaction-fx__trail::after {
+  inset: -2px;
+  border-style: solid;
+  border-color: rgba(219, 164, 99, 0.22);
+}
+
+.interaction-fx--arcade .interaction-fx__burst-cross,
+.interaction-fx--arcade .interaction-fx__burst-star {
+  display: none;
+}
+
+.interaction-fx--arcade .interaction-fx__burst-flash {
+  background: radial-gradient(circle, rgba(89, 193, 53, 0.12) 0%, rgba(219, 164, 99, 0.08) 26%, transparent 54%);
+}
+
+.interaction-fx--contact .interaction-fx__trail {
+  border-radius: 50%;
+  background: linear-gradient(180deg, var(--signal-red) 0 52%, #fef3c0 52% 100%);
+  border-color: rgba(255, 255, 255, 0.26);
+}
+
+.interaction-fx--contact .interaction-fx__trail::before {
+  inset: calc(50% - 1px) 0 auto 0;
+  height: 2px;
+  border: 0;
+  background: rgba(6, 6, 8, 0.4);
+}
+
+.interaction-fx--contact .interaction-fx__trail::after {
+  inset: calc(50% - 4px);
+  width: 8px;
+  height: 8px;
+  margin: auto;
+  border-radius: 50%;
+  border-style: solid;
+  border-color: rgba(6, 6, 8, 0.45);
+}
+
+.interaction-fx--contact .interaction-fx__burst-ring--inner {
+  border-color: var(--signal-red);
+  box-shadow: 0 0 10px var(--signal-red);
+}
+
+.interaction-fx--contact .interaction-fx__burst-ring--outer {
+  border-color: #fef3c0;
+  box-shadow: 0 0 14px rgba(254, 243, 192, 0.45);
+}
+
+.interaction-fx--personalweb .interaction-fx__trail {
+  width: 1.1rem;
+  height: 0.55rem;
+  border-color: rgba(223, 62, 35, 0.24);
+  background: linear-gradient(90deg, var(--signal-red) 0 50%, var(--signal-blue) 50% 100%);
+  box-shadow: 0 0 0 2px rgba(6, 6, 8, 0.35), 0 0 10px rgba(223, 62, 35, 0.32), 0 0 16px rgba(40, 92, 196, 0.24);
+}
+
+.interaction-fx--personalweb .interaction-fx__trail::after {
+  border-style: solid;
+  border-color: rgba(185, 191, 251, 0.3);
+}
+
+.interaction-fx--personalweb .interaction-fx__burst-flash {
+  background: radial-gradient(circle, rgba(223, 62, 35, 0.14) 0%, rgba(40, 92, 196, 0.1) 28%, transparent 60%);
+}
