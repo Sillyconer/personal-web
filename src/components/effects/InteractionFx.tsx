@@ -181,6 +181,7 @@ export const InteractionFx = () => {
           <span className="interaction-fx__burst-ring interaction-fx__burst-ring--outer" />
           {/* Cross lines */}
           <span className="interaction-fx__burst-cross" />
+          <span className="interaction-fx__burst-star" />
           {/* Particles */}
           {Array.from({ length: BURST_PARTICLE_COUNT }, (_, index) => (
             <span

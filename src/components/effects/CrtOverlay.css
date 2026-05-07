@@ -1,100 +1,61 @@
-/* ── CRT Overlay: scanlines, vignette, flicker ── */
-
 .crt-overlay {
   position: fixed;
   inset: 0;
-  z-index: 90;
+  z-index: 100;
   pointer-events: none;
   overflow: hidden;
 }
-
-/* ── Scanlines ── */
 
 .crt-overlay__scanlines {
   position: absolute;
   inset: 0;
   background:
-    repeating-linear-gradient(
-      0deg,
-      transparent 0px,
-      transparent 2px,
-      rgba(6, 6, 8, 0.12) 2px,
-      rgba(6, 6, 8, 0.12) 4px
-    );
-  animation: crtFlicker 0.08s steps(2) infinite;
+    repeating-linear-gradient(0deg, transparent 0 2px, rgba(6, 6, 8, 0.18) 2px 4px),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 24%, rgba(255, 255, 255, 0.02) 70%, transparent 100%);
+  opacity: 0.9;
+  animation: crtFlicker 0.12s steps(2) infinite;
 }
-
-/* ── Vignette (dark edges) ── */
 
 .crt-overlay__vignette {
   position: absolute;
   inset: 0;
-  background: radial-gradient(
-    ellipse at center,
-    transparent 55%,
-    rgba(6, 6, 8, 0.25) 78%,
-    rgba(6, 6, 8, 0.55) 100%
-  );
+  background:
+    radial-gradient(ellipse at center, transparent 50%, rgba(6, 6, 8, 0.18) 76%, rgba(6, 6, 8, 0.58) 100%),
+    linear-gradient(90deg, rgba(188, 74, 155, 0.05), transparent 18%, transparent 82%, rgba(32, 214, 199, 0.05));
 }
-
-/* ── RGB fringe at top/bottom ── */
 
 .crt-overlay__fringe {
   position: absolute;
   inset: 0;
 }
 
-.crt-overlay__fringe::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(
-    90deg,
-    rgba(223, 62, 35, 0.15),
-    rgba(89, 193, 53, 0.12),
-    rgba(40, 92, 196, 0.15)
-  );
-}
-
+.crt-overlay__fringe::before,
 .crt-overlay__fringe::after {
   content: '';
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(
-    90deg,
-    rgba(40, 92, 196, 0.15),
-    rgba(89, 193, 53, 0.12),
-    rgba(223, 62, 35, 0.15)
-  );
+  inset: 0;
+  opacity: 0.16;
 }
 
-/* ── Subtle flicker ── */
+.crt-overlay__fringe::before {
+  transform: translateX(-1px);
+  background: linear-gradient(180deg, rgba(223, 62, 35, 0.12), transparent 24%, transparent 76%, rgba(223, 62, 35, 0.12));
+}
+
+.crt-overlay__fringe::after {
+  transform: translateX(1px);
+  background: linear-gradient(180deg, rgba(32, 214, 199, 0.12), transparent 24%, transparent 76%, rgba(32, 214, 199, 0.12));
+}
 
 @keyframes crtFlicker {
-  0% {
-    opacity: 0.92;
-  }
-
-  50% {
-    opacity: 1;
-  }
-
-  100% {
-    opacity: 0.94;
-  }
+  0% { opacity: 0.86; }
+  50% { opacity: 1; }
+  100% { opacity: 0.9; }
 }
-
-/* ── Reduced motion ── */
 
 @media (prefers-reduced-motion: reduce) {
   .crt-overlay__scanlines {
     animation: none;
-    opacity: 0.92;
+    opacity: 0.82;
   }
 }

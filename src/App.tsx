@@ -2,6 +2,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import { CrtOverlay } from './components/effects/CrtOverlay';
 import { InteractionFx } from './components/effects/InteractionFx';
+import { PixelBoids } from './components/effects/PixelBoids';
 import { AppShell } from './components/layout/AppShell';
 import { AboutPage } from './pages/AboutPage';
 import { ContactPage } from './pages/ContactPage';
@@ -14,6 +15,7 @@ import { WorkPage } from './pages/WorkPage';
 function App() {
   return (
     <BrowserRouter>
+      <PixelBoids />
       <CrtOverlay />
       <InteractionFx />
       <Routes>

@@ -1,107 +1,96 @@
-/* ── Interaction FX: retro pixel cursor + click explosions ── */
-
 .interaction-fx {
   position: fixed;
   inset: 0;
-  z-index: 80;
+  z-index: 110;
   pointer-events: none;
 }
-
-/* ── Trail pixels ── */
 
 .interaction-fx__trail {
   position: fixed;
   left: 0;
   top: 0;
-  width: 0.7rem;
-  height: 0.7rem;
-  border-radius: 0;
-  border: 2px solid rgba(254, 243, 192, 0.18);
+  width: 0.9rem;
+  height: 0.9rem;
+  border: 2px solid rgba(254, 243, 192, 0.2);
   background: var(--trail-color, var(--signal-teal));
   box-shadow:
-    0 0 6px var(--trail-color, var(--signal-teal)),
-    0 0 14px color-mix(in srgb, var(--trail-color, var(--signal-teal)) 40%, transparent),
-    inset 0 0 2px rgba(255, 255, 255, 0.3);
+    0 0 0 2px rgba(6, 6, 8, 0.35),
+    0 0 8px var(--trail-color, var(--signal-teal)),
+    0 0 18px color-mix(in srgb, var(--trail-color, var(--signal-teal)) 68%, transparent);
   image-rendering: pixelated;
 }
 
-.interaction-fx.is-interactive .interaction-fx__trail {
-  background: var(--aap-lime);
-  box-shadow:
-    0 0 8px var(--aap-lime),
-    0 0 20px color-mix(in srgb, var(--aap-lime) 45%, transparent),
-    inset 0 0 3px rgba(255, 255, 255, 0.35);
-  width: 0.9rem;
-  height: 0.9rem;
+.interaction-fx__trail::before,
+.interaction-fx__trail::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
 }
 
-/* ── Burst container ── */
+.interaction-fx__trail::after {
+  inset: -4px;
+  border: 1px dashed color-mix(in srgb, var(--trail-color, var(--signal-teal)) 70%, transparent);
+  opacity: 0.48;
+}
+
+.interaction-fx.is-interactive .interaction-fx__trail {
+  width: 1.1rem;
+  height: 1.1rem;
+  background: linear-gradient(180deg, var(--aap-lime), var(--signal-yellow));
+  box-shadow:
+    0 0 0 2px rgba(6, 6, 8, 0.45),
+    0 0 10px var(--aap-lime),
+    0 0 26px rgba(214, 242, 100, 0.4);
+}
 
 .interaction-fx__burst {
   position: fixed;
   width: 0;
   height: 0;
+  transform: translate(-50%, -50%);
 }
-
-/* ── Burst children: ABSOLUTE so they stay at click point ── */
 
 .interaction-fx__burst-ring,
 .interaction-fx__burst-pixel,
 .interaction-fx__burst-cross,
-.interaction-fx__burst-flash {
+.interaction-fx__burst-flash,
+.interaction-fx__burst-star {
   position: absolute;
+  left: 0;
+  top: 0;
 }
-
-/* ── Screen flash ── */
 
 .interaction-fx__burst-flash {
-  left: 50%;
-  top: 50%;
-  width: 200vmax;
-  height: 200vmax;
+  width: 120vmax;
+  height: 120vmax;
   transform: translate(-50%, -50%);
-  background: radial-gradient(
-    circle,
-    rgba(254, 243, 192, 0.18) 0%,
-    rgba(254, 243, 192, 0.06) 30%,
-    transparent 60%
-  );
-  border-radius: 50%;
-  animation: burstFlash 0.35s ease-out forwards;
+  background: radial-gradient(circle, rgba(255, 213, 65, 0.16) 0%, rgba(32, 214, 199, 0.08) 24%, transparent 58%);
+  animation: burstFlash 0.45s steps(5, end) forwards;
 }
-
-/* ── Burst rings ── */
 
 .interaction-fx__burst-ring {
-  left: 50%;
-  top: 50%;
-  border-radius: 0;
   border: 2px solid var(--signal-teal);
+  transform: translate(-50%, -50%);
 }
 
 .interaction-fx__burst-ring--inner {
   width: 1rem;
   height: 1rem;
   border-color: var(--signal-yellow);
-  box-shadow: 0 0 8px var(--signal-yellow);
-  transform: translate(-50%, -50%);
-  animation: burstRingInner 0.5s ease-out forwards;
+  box-shadow: 0 0 10px var(--signal-yellow);
+  animation: burstRingInner 0.56s steps(6, end) forwards;
 }
 
 .interaction-fx__burst-ring--outer {
   width: 1rem;
   height: 1rem;
-  border-color: var(--signal-teal);
-  box-shadow: 0 0 12px var(--signal-teal);
-  transform: translate(-50%, -50%);
-  animation: burstRingOuter 0.75s ease-out forwards;
+  border-color: var(--aap-magenta);
+  box-shadow: 0 0 14px var(--aap-magenta);
+  animation: burstRingOuter 0.84s steps(8, end) forwards;
 }
 
-/* ── Cross lines ── */
-
 .interaction-fx__burst-cross {
-  left: 50%;
-  top: 50%;
   width: 2px;
   height: 2px;
   transform: translate(-50%, -50%);
@@ -114,131 +103,119 @@
   left: 50%;
   top: 50%;
   background: var(--signal-yellow);
-  box-shadow: 0 0 6px var(--signal-yellow);
-  animation: burstCross 0.6s ease-out forwards;
+  box-shadow: 0 0 8px var(--signal-yellow);
 }
 
 .interaction-fx__burst-cross::before {
   width: 2px;
   height: 2px;
   transform: translate(-50%, -50%);
-  animation-name: burstCrossV;
+  animation: burstCrossV 0.72s steps(8, end) forwards;
 }
 
 .interaction-fx__burst-cross::after {
   width: 2px;
   height: 2px;
   transform: translate(-50%, -50%);
-  animation-name: burstCrossH;
+  animation: burstCrossH 0.72s steps(8, end) forwards;
 }
 
-/* ── Burst pixels ── */
+.interaction-fx__burst-star {
+  width: 1rem;
+  height: 1rem;
+  transform: translate(-50%, -50%);
+}
 
-.interaction-fx__burst-pixel {
+.interaction-fx__burst-star::before,
+.interaction-fx__burst-star::after {
+  content: '';
+  position: absolute;
   left: 50%;
   top: 50%;
-  width: 0.45rem;
-  height: 0.45rem;
-  border-radius: 0;
+  background: var(--aap-lavender);
+  box-shadow: 0 0 10px var(--aap-lavender);
+}
+
+.interaction-fx__burst-star::before {
+  width: 18px;
+  height: 2px;
+  transform: translate(-50%, -50%);
+  animation: burstStarH 0.6s steps(5, end) forwards;
+}
+
+.interaction-fx__burst-star::after {
+  width: 2px;
+  height: 18px;
+  transform: translate(-50%, -50%);
+  animation: burstStarV 0.6s steps(5, end) forwards;
+}
+
+.interaction-fx__burst-pixel {
+  width: 0.5rem;
+  height: 0.5rem;
   background: var(--burst-color, var(--signal-yellow));
-  border: 1px solid rgba(254, 243, 192, 0.2);
-  box-shadow: 0 0 6px var(--burst-color, var(--signal-yellow));
-  transform: translate(-50%, -50%) rotate(var(--burst-angle));
-  animation: burstPixel 0.72s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  border: 1px solid rgba(254, 243, 192, 0.24);
+  box-shadow: 0 0 7px var(--burst-color, var(--signal-yellow));
+  transform: rotate(var(--burst-angle));
+  animation: burstPixel 0.86s steps(8, end) forwards;
   animation-delay: var(--burst-delay, 0ms);
 }
 
 .interaction-fx__burst-pixel:nth-child(odd) {
-  width: 0.55rem;
-  height: 0.35rem;
+  width: 0.7rem;
+  height: 0.36rem;
 }
 
 .interaction-fx__burst-pixel:nth-child(3n) {
-  width: 0.35rem;
-  height: 0.55rem;
+  width: 0.36rem;
+  height: 0.7rem;
 }
 
-/* ── Keyframes ── */
-
 @keyframes burstRingInner {
-  from {
-    opacity: 0.9;
-    transform: translate(-50%, -50%) scale(0.2);
-  }
-
-  to {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(3.5);
-  }
+  from { opacity: 0.95; transform: translate(-50%, -50%) scale(0.15); }
+  to { opacity: 0; transform: translate(-50%, -50%) scale(5); }
 }
 
 @keyframes burstRingOuter {
-  from {
-    opacity: 0.6;
-    transform: translate(-50%, -50%) scale(0.3);
-  }
-
-  to {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(6);
-  }
+  from { opacity: 0.85; transform: translate(-50%, -50%) scale(0.3); }
+  to { opacity: 0; transform: translate(-50%, -50%) scale(8.5); }
 }
 
 @keyframes burstPixel {
   0% {
     opacity: 1;
-    transform: translate(-50%, -50%) rotate(var(--burst-angle)) translateX(0) scale(1.2);
+    transform: translate(-50%, -50%) rotate(var(--burst-angle)) translateX(0) scale(1.4);
   }
-
   100% {
     opacity: 0;
-    transform: translate(-50%, -50%) rotate(var(--burst-angle)) translateX(var(--burst-distance)) scale(0.2);
+    transform: translate(-50%, -50%) rotate(var(--burst-angle)) translateX(var(--burst-distance)) scale(0.15);
   }
 }
 
 @keyframes burstCrossV {
-  0% {
-    opacity: 0.9;
-    width: 2px;
-    height: 2px;
-    transform: translate(-50%, -50%);
-  }
-
-  100% {
-    opacity: 0;
-    width: 2px;
-    height: 60px;
-    transform: translate(-50%, -50%);
-  }
+  0% { opacity: 1; width: 2px; height: 2px; }
+  100% { opacity: 0; width: 2px; height: 74px; }
 }
 
 @keyframes burstCrossH {
-  0% {
-    opacity: 0.9;
-    width: 2px;
-    height: 2px;
-    transform: translate(-50%, -50%);
-  }
+  0% { opacity: 1; width: 2px; height: 2px; }
+  100% { opacity: 0; width: 74px; height: 2px; }
+}
 
-  100% {
-    opacity: 0;
-    width: 60px;
-    height: 2px;
-    transform: translate(-50%, -50%);
-  }
+@keyframes burstStarH {
+  0% { opacity: 0.9; width: 10px; }
+  100% { opacity: 0; width: 34px; }
+}
+
+@keyframes burstStarV {
+  0% { opacity: 0.9; height: 10px; }
+  100% { opacity: 0; height: 34px; }
 }
 
 @keyframes burstFlash {
-  0% {
-    opacity: 1;
-  }
-
-  100% {
-    opacity: 0;
-  }
+  0% { opacity: 1; }
+  100% { opacity: 0; }
 }
-
-/* ── Hide native cursor ── */
 
 @media (pointer: fine) {
   html[data-pointer-fx='active'],
