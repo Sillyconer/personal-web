@@ -176,6 +176,10 @@ export const PixelBoids = () => {
   const cartridge = getCartridgeByPath(location.pathname);
   const profile = PROFILE_MAP[cartridge.boidPreset];
 
+  if (cartridge.id === 'contact') {
+    return null;
+  }
+
   useEffect(() => {
     const canvas = canvasRef.current;
 

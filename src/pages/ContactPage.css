@@ -1,3 +1,30 @@
+/* ══════════════════════════════════════════
+   CONTACT PAGE — Pokémon World Theme
+   Pokeball cursor, Accumula Town map,
+   overworld sprites, trainer-card panels
+   ══════════════════════════════════════════ */
+
+/* ── Pokeball cursor for entire page ── */
+.contact--pokemon,
+.contact--pokemon * {
+  cursor: url('/src/assets/pokemon/pokeball.cur'), auto;
+}
+
+/* ── World map section ── */
+.contact__world-section {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Ensure content sits above the fixed background map */
+.contact--pokemon > *:not(.contact__world-section) {
+  position: relative;
+  z-index: 10;
+}
+
+/* ── Hero ── */
 .contact__hero,
 .contact__hero-copy,
 .contact__channels,
@@ -7,134 +34,109 @@
 }
 
 .contact__hero {
-  grid-template-columns: minmax(0, 1fr) auto minmax(240px, 0.9fr);
-  align-items: center;
+  grid-template-columns: 1fr;
 }
 
-.contact__hero,
-.contact__channel,
-.contact__modes,
-.contact__fit .t-frame {
-  border-color: rgba(223, 62, 35, 0.22);
-  background: linear-gradient(180deg, rgba(249, 246, 229, 0.96), rgba(194, 224, 255, 0.96));
+/* Pokémon-themed panel styling — trainer card feel */
+.contact--pokemon .contact__hero,
+.contact--pokemon .contact__channel,
+.contact--pokemon .contact__modes,
+.contact--pokemon .contact__fit .t-frame {
+  border-color: rgba(223, 62, 35, 0.28);
+  background: linear-gradient(
+    180deg,
+    rgba(249, 246, 229, 0.96),
+    rgba(194, 224, 255, 0.96)
+  );
   color: #2d213c;
-  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
 }
 
-.contact__hero::after,
-.contact__channel::after,
-.contact__modes::after,
-.contact__fit .t-frame::after {
-  background: repeating-linear-gradient(0deg, transparent 0 5px, rgba(40, 92, 196, 0.04) 5px 6px);
+/* Pokéball-red accents */
+.contact--pokemon .contact__hero::after,
+.contact--pokemon .contact__channel::after,
+.contact--pokemon .contact__modes::after,
+.contact--pokemon .contact__fit .t-frame::after {
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0 5px,
+    rgba(223, 62, 35, 0.04) 5px 6px
+  );
+}
+
+.contact--pokemon h1,
+.contact--pokemon h2,
+.contact--pokemon h3 {
+  color: #2d213c;
+}
+
+.contact--pokemon .eyebrow {
+  color: #df3e23;
 }
 
 .contact__hero h1 {
-  max-width: 18ch;
-  color: #2d213c;
+  max-width: 28ch;
 }
 
-.contact__hero .muted,
-.contact__channel .muted,
-.contact__mode-item,
-.contact__fit .t-frame p {
+.contact--pokemon .muted,
+.contact--pokemon .contact__mode-item,
+.contact--pokemon .contact__fit .t-frame p {
   color: #4a5462;
 }
 
+/* ── Actions ── */
 .contact__actions {
   display: flex;
   flex-wrap: wrap;
   gap: var(--gap-sm);
 }
 
-.contact__actions .px-btn {
-  border-color: rgba(223, 62, 35, 0.28);
-  background: linear-gradient(180deg, rgba(223, 62, 35, 0.88), rgba(141, 31, 27, 0.94));
+.contact--pokemon .contact__actions .px-btn {
+  border-color: rgba(223, 62, 35, 0.36);
+  background: linear-gradient(
+    180deg,
+    rgba(223, 62, 35, 0.92),
+    rgba(141, 31, 27, 0.96)
+  );
   color: #fff6e2;
+  box-shadow: 0 2px 8px rgba(223, 62, 35, 0.25);
 }
 
-.contact__hero-scene {
-  position: relative;
-  min-height: 220px;
-  border: 3px solid rgba(40, 92, 196, 0.18);
-  overflow: hidden;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(185, 191, 251, 0.62) 58%, rgba(81, 136, 222, 0.94));
+.contact--pokemon .contact__actions .px-btn:hover {
+  background: linear-gradient(
+    180deg,
+    rgba(250, 106, 10, 0.96),
+    rgba(223, 62, 35, 0.98)
+  );
+  box-shadow: 0 4px 16px rgba(223, 62, 35, 0.35);
 }
 
-.contact__terminal,
-.contact__orb,
-.contact__beam {
-  position: absolute;
-}
-
-.contact__terminal {
-  left: 50%;
-  bottom: 34px;
-  width: 132px;
-  height: 82px;
-  transform: translateX(-50%);
-  border: 3px solid rgba(40, 92, 196, 0.2);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(240, 242, 255, 0.96));
-}
-
-.contact__terminal::before {
-  content: '';
-  position: absolute;
-  inset: 14px 18px auto;
-  height: 22px;
-  background: rgba(40, 92, 196, 0.82);
-}
-
-.contact__beam {
-  left: 50%;
-  top: 18px;
-  width: 180px;
-  height: 180px;
-  transform: translateX(-50%);
-  background: radial-gradient(circle, rgba(255, 213, 65, 0.3) 0%, rgba(255, 255, 255, 0.08) 28%, transparent 58%);
-}
-
-.contact__orb {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: 3px solid rgba(45, 33, 60, 0.24);
-  background: linear-gradient(180deg, #df3e23 0 50%, #fff6e2 50% 100%);
-}
-
-.contact__orb::after {
-  content: '';
-  position: absolute;
-  inset: calc(50% - 4px);
-  width: 8px;
-  height: 8px;
-  margin: auto;
-  border-radius: 50%;
-  background: #fff6e2;
-  border: 2px solid #2d213c;
-}
-
-.contact__orb--1 { left: 34px; top: 38px; }
-.contact__orb--2 { right: 36px; top: 58px; }
-.contact__orb--3 { left: calc(50% - 16px); bottom: 132px; }
-
+/* ── Channels ── */
 .contact__channel {
   display: grid;
   gap: 4px;
   text-decoration: none;
+  transition: border-color 80ms steps(2), box-shadow 80ms steps(2);
 }
 
-.contact__channel:hover {
-  border-color: rgba(40, 92, 196, 0.32);
+.contact--pokemon .contact__channel:hover {
+  border-color: rgba(223, 62, 35, 0.42);
+  box-shadow: 0 4px 20px rgba(223, 62, 35, 0.15);
   text-decoration: none;
 }
 
+/* ── Modes ── */
 .contact__modes {
   padding: 0;
   overflow: hidden;
 }
 
-.contact__modes .t-header {
-  background: linear-gradient(90deg, rgba(223, 62, 35, 0.12), rgba(40, 92, 196, 0.18));
+.contact--pokemon .contact__modes .t-header {
+  background: linear-gradient(
+    90deg,
+    rgba(223, 62, 35, 0.14),
+    rgba(40, 92, 196, 0.18)
+  );
   color: #4a5462;
 }
 
@@ -153,6 +155,7 @@
   border-bottom: none;
 }
 
+/* ── Responsive ── */
 @media (max-width: 960px) {
   .contact__hero {
     grid-template-columns: 1fr;

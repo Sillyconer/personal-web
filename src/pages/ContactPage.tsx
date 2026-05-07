@@ -1,17 +1,30 @@
 import { Mail } from 'lucide-react';
 import { motion } from 'framer-motion';
 
+import { PokemonWorld } from '../components/worlds/PokemonWorld';
 import { clientFitPoints, contactChannels, engagementModes, siteProfile } from '../data/site';
 import { cardReveal, pixelReveal, staggerGroup, viewport } from '../utils/motion';
 import './ContactPage.css';
 
 export const ContactPage = () => {
   return (
-    <div className="page-stack contact">
+    <div className="page-stack contact contact--pokemon">
+      {/* ── Pokemon World Map ── */}
+      <motion.section
+        className="contact__world-section"
+        initial="hidden"
+        animate="show"
+        variants={staggerGroup}
+      >
+        <motion.div variants={pixelReveal}>
+          <PokemonWorld />
+        </motion.div>
+      </motion.section>
+
       {/* ── Hero ── */}
       <motion.section className="contact__hero t-frame t-frame--raised" initial="hidden" animate="show" variants={staggerGroup}>
         <motion.div className="contact__hero-copy" variants={pixelReveal}>
-          <p className="eyebrow">pokemon homage / link center</p>
+          <p className="eyebrow">pokémon homage / link center</p>
           <h1>need a frontend partner for a product that deserves a stronger surface?</h1>
           <p className="muted">This world plays like a trainer link hub: clean, bright, and built for making contact without losing personality.</p>
         </motion.div>
@@ -20,14 +33,6 @@ export const ContactPage = () => {
           <a href={`mailto:${siteProfile.email}`} className="px-btn px-btn--primary">
             <Mail size={14} /> {siteProfile.email}
           </a>
-        </motion.div>
-
-        <motion.div className="contact__hero-scene" variants={cardReveal}>
-          <div className="contact__terminal" />
-          <div className="contact__orb contact__orb--1" />
-          <div className="contact__orb contact__orb--2" />
-          <div className="contact__orb contact__orb--3" />
-          <div className="contact__beam" />
         </motion.div>
       </motion.section>
 

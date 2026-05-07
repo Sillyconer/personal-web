@@ -1,0 +1,51 @@
+/* ── Pokemon World ── */
+
+.pokemon-world {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  background: #060608;
+}
+
+.pokemon-world__canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.pokemon-world__season-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 2px 8px;
+  background: rgba(6, 6, 8, 0.82);
+  border: 2px solid rgba(254, 243, 192, 0.28);
+  font-family: var(--font-display);
+  font-size: 10px;
+  color: var(--ink);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  pointer-events: none;
+}
+
+/* Season-specific tint overlays */
+.pokemon-world[data-season="spring"] {
+  box-shadow: 0 0 24px rgba(89, 193, 53, 0.15), inset 0 0 40px rgba(89, 193, 53, 0.06);
+}
+
+.pokemon-world[data-season="summer"] {
+  box-shadow: 0 0 24px rgba(255, 213, 65, 0.15), inset 0 0 40px rgba(255, 213, 65, 0.06);
+}
+
+.pokemon-world[data-season="autumn"] {
+  box-shadow: 0 0 24px rgba(250, 106, 10, 0.15), inset 0 0 40px rgba(250, 106, 10, 0.06);
+}
+
+.pokemon-world[data-season="winter"] {
+  box-shadow: 0 0 24px rgba(185, 191, 251, 0.15), inset 0 0 40px rgba(185, 191, 251, 0.06);
+}

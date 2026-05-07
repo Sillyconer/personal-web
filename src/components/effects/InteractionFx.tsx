@@ -159,48 +159,72 @@ export const InteractionFx = () => {
   }
 
   return (
-    <div className={`interaction-fx interaction-fx--${cartridge.id} ${interactive ? 'is-interactive' : ''}`} aria-hidden="true">
-      {/* Cursor trail pixels */}
-      {trailIndexes.map((index) => (
-        <span
-          key={index}
-          ref={(node) => {
-            trailRefs.current[index] = node;
-          }}
-          className="interaction-fx__trail"
-          style={{
-            ['--trail-color' as string]: PIXEL_COLORS[index % PIXEL_COLORS.length],
-          }}
-        />
-      ))}
-
-      {/* Click bursts */}
-      {bursts.map((burst) => (
-        <div key={burst.id} className="interaction-fx__burst" style={{ left: burst.x, top: burst.y }}>
-          {/* Screen flash */}
-          <span className="interaction-fx__burst-flash" />
-          {/* Inner ring */}
-          <span className="interaction-fx__burst-ring interaction-fx__burst-ring--inner" />
-          {/* Outer ring */}
-          <span className="interaction-fx__burst-ring interaction-fx__burst-ring--outer" />
-          {/* Cross lines */}
-          <span className="interaction-fx__burst-cross" />
-          <span className="interaction-fx__burst-star" />
-          {/* Particles */}
-          {Array.from({ length: BURST_PARTICLE_COUNT }, (_, index) => (
+    <>
+      {cartridge.id !== 'contact' && (
+        <div
+          className={`interaction-fx__trail ${interactive ? 'interaction-fx__trail--active' : ''}`}
+          aria-hidden="true"
+        >
+          {trailIndexes.map((index) => (
             <span
               key={index}
-              className="interaction-fx__burst-pixel"
+              ref={(element) => {
+                trailRefs.current[index] = element;
+              }}
               style={{
-                ['--burst-angle' as string]: `${index * (360 / BURST_PARTICLE_COUNT)}deg`,
-                ['--burst-distance' as string]: `${22 + (index % 4) * 12}px`,
-                ['--burst-delay' as string]: `${(index % 3) * 30}ms`,
-                ['--burst-color' as string]: PIXEL_COLORS[index % PIXEL_COLORS.length],
+                backgroundColor: PIXEL_COLORS[index % PIXEL_COLORS.length],
               }}
             />
           ))}
         </div>
+      )}
+
+      {bursts.map((burst) => (
+        <div
+          key={burst.id}
+          className={`interaction-fx__burst ${cartridge.id === 'contact' ? 'interaction-fx__burst--pokemon' : ''}`}
+          style={{ left: burst.x, top: burst.y }}
+          aria-hidden="true"
+        >
+          {cartridge.id === 'contact' ? (
+            <div className="pokeball-catch">
+              <div className="pokeball-catch__flash" />
+              <div className="pokeball-catch__stars">
+                <span style={{ '--dir-x': -1, '--dir-y': -1 } as any} />
+                <span style={{ '--dir-x': 1, '--dir-y': -1 } as any} />
+                <span style={{ '--dir-x': -1, '--dir-y': 1 } as any} />
+                <span style={{ '--dir-x': 1, '--dir-y': 1 } as any} />
+              </div>
+            </div>
+          ) : (
+            <>
+              <span className="interaction-fx__burst-flash" />
+              <span className="interaction-fx__burst-ring interaction-fx__burst-ring--inner" />
+              <span className="interaction-fx__burst-ring interaction-fx__burst-ring--outer" />
+              <span className="interaction-fx__burst-cross" />
+              <span className="interaction-fx__burst-star" />
+              {Array.from({ length: BURST_PARTICLE_COUNT }).map((_, index) => {
+                const color = PIXEL_COLORS[Math.floor(Math.random() * PIXEL_COLORS.length)];
+
+                return (
+                  <span
+                    key={index}
+                    className="interaction-fx__burst-pixel"
+                    style={
+                      {
+                        '--burst-angle': `${index * (360 / BURST_PARTICLE_COUNT)}deg`,
+                        '--burst-distance': `${22 + (index % 4) * 12}px`,
+                        '--burst-delay': `${(index % 3) * 30}ms`,
+                        '--burst-color': color,
+                      } as React.CSSProperties
+                    }
+                  />
+                );
+              })}
+            </>
+          )}
+        </div>
       ))}
-    </div>
+    </>
   );
 };
