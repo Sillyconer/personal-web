@@ -3,6 +3,10 @@
   gap: var(--gap);
 }
 
+.contact__hero h1 {
+  max-width: 18ch;
+}
+
 .contact__actions {
   display: flex;
   flex-wrap: wrap;
@@ -20,6 +24,7 @@
   text-decoration: none;
   color: var(--ink);
   transition: border-color 80ms steps(2);
+  background: linear-gradient(180deg, rgba(188, 74, 155, 0.08), rgba(27, 27, 47, 0.86));
 }
 
 .contact__channel:hover {
@@ -50,4 +55,8 @@
 .contact__fit {
   display: grid;
   gap: var(--gap);
+}
+
+.contact__fit .t-frame {
+  background: linear-gradient(180deg, rgba(255, 213, 65, 0.06), rgba(27, 27, 47, 0.86));
 }

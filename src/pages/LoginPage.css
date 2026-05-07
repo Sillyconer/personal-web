@@ -6,7 +6,7 @@
 }
 
 .login__card {
-  width: min(100%, 400px);
+  width: min(100%, 460px);
   padding: 0;
   overflow: hidden;
 }
@@ -15,6 +15,10 @@
   display: grid;
   gap: 12px;
   padding: var(--gap);
+}
+
+.login__body h2 {
+  font-size: 20px;
 }
 
 .login__body label {
@@ -26,4 +30,5 @@
   font-size: 12px;
   padding: 8px 12px;
   margin-top: 4px;
+  background: linear-gradient(180deg, rgba(40, 92, 196, 0.08), rgba(27, 27, 47, 0.84));
 }

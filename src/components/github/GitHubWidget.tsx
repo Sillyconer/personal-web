@@ -57,7 +57,7 @@ export const GitHubWidget = () => {
         }
       } catch {
         setRepos([]);
-        setError('github api error. update username or retry.');
+        setError('GitHub data could not be loaded right now. Update the username or try again later.');
       } finally {
         setLoading(false);
       }
@@ -93,19 +93,19 @@ export const GitHubWidget = () => {
 
   const statusText = useMemo(() => {
     if (loading) return 'loading...';
-    return `${repos.length} repos loaded // ${githubConfig.username}`;
+    return `${repos.length} repos loaded for ${githubConfig.username}`;
   }, [loading, repos.length]);
 
   return (
     <section className="ghw t-frame t-frame--sunken">
-      <div className="t-header">
+        <div className="t-header">
         <div className="t-header__dots">
           <span className="t-header__dot t-header__dot--r" />
           <span className="t-header__dot t-header__dot--y" />
           <span className="t-header__dot t-header__dot--g" />
         </div>
-        <span>github --repos</span>
-        <span className="ghw__status">{isDemoFeed ? '[demo feed]' : statusText}</span>
+          <span>github treasure chest</span>
+          <span className="ghw__status">{isDemoFeed ? '[demo feed]' : statusText}</span>
       </div>
 
       {error ? <p className="ghw__error text-red">{error}</p> : null}
@@ -140,12 +140,12 @@ export const GitHubWidget = () => {
             <span className="eyebrow">readme // {selectedRepo?.name ?? '...'}</span>
             {selectedRepo ? (
               <a href={selectedRepo.html_url} target="_blank" rel="noreferrer" className="px-btn">
-                &gt; github
+                open repo
               </a>
             ) : null}
           </div>
           <div className="ghw__readme-prompt">
-            guest@github:~$ cat README.md
+            README // open lore fragment
           </div>
           <pre className="ghw__readme-body">
             {readmeLoading ? 'loading...' : readme || 'select a repo to preview readme.'}

@@ -23,17 +23,17 @@ export const StudioPage = () => {
   return (
     <div className="page-stack studio">
       {/* ── Hero ── */}
-      <motion.section initial="hidden" animate="show" variants={staggerGroup}>
+      <motion.section className="studio__hero" initial="hidden" animate="show" variants={staggerGroup}>
         <motion.div variants={pixelReveal}>
-          <p className="eyebrow">&gt; sudo studio</p>
-          <h1>private control surface</h1>
-          <p className="muted">maintenance notes, private surfaces, and operations. same world, different room.</p>
+          <p className="eyebrow">maker room / backstage</p>
+          <h1>private workshop</h1>
+          <p className="muted">Maintenance notes, private surfaces, and world-building tools. Same universe, hidden door.</p>
         </motion.div>
 
         <motion.div className="studio__badges flex-row" variants={pixelReveal}>
           <span className="px-tag px-tag--teal">{profile?.displayName ?? 'owner'}</span>
           <span className="px-tag">{profile?.role ?? 'private'}</span>
-          <span className="px-tag px-tag--yellow">{mode} auth</span>
+          <span className="px-tag px-tag--yellow">{mode} gate</span>
         </motion.div>
       </motion.section>
 
@@ -45,7 +45,7 @@ export const StudioPage = () => {
             <span className="t-header__dot t-header__dot--y" />
             <span className="t-header__dot t-header__dot--g" />
           </div>
-          <span>stats --studio</span>
+          <span>workshop counters</span>
         </div>
         <div className="studio__stat-list">
           <motion.div className="studio__stat" variants={cardReveal}>
@@ -63,7 +63,7 @@ export const StudioPage = () => {
       {/* ── Workflows ── */}
       <motion.section className="grid-2" initial="hidden" whileInView="show" viewport={viewport} variants={staggerGroup}>
         <motion.div className="t-frame" variants={cardReveal}>
-          <p className="eyebrow">&gt; add project flow</p>
+          <p className="eyebrow">new world recipe</p>
           <h3>repeatable content flow</h3>
           <div className="studio__steps">
             {projectIngestionSteps.map((step, index) => (
@@ -75,7 +75,7 @@ export const StudioPage = () => {
         </motion.div>
 
         <motion.div className="t-frame" variants={cardReveal}>
-          <p className="eyebrow">&gt; hardening checklist</p>
+          <p className="eyebrow">boss fight prep</p>
           <h3>before production</h3>
           <div className="studio__steps">
             {studioChecklist.map((item, index) => (
@@ -95,8 +95,8 @@ export const StudioPage = () => {
             <span className="t-header__dot t-header__dot--y" />
             <span className="t-header__dot t-header__dot--g" />
           </div>
-          <span>ls projects/ --all</span>
-          <Link to="/work" className="px-btn" style={{ marginLeft: 'auto' }}>&gt; public index</Link>
+          <span>world registry</span>
+          <Link to="/work" className="px-btn" style={{ marginLeft: 'auto' }}>public archive</Link>
         </div>
         <div className="studio__project-list">
           {projects.map((project) => (

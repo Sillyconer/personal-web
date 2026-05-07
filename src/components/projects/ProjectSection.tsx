@@ -78,7 +78,7 @@ export const ProjectSection = ({ section, isAuthenticated, index }: ProjectSecti
         <div className="psec__items">
           {section.items.map((item) => (
             <div key={item} className="psec__item">
-              <span className="text-teal">&gt;</span> {item}
+              <span className="text-teal">*</span> {item}
             </div>
           ))}
         </div>

@@ -3,6 +3,10 @@
   gap: var(--gap);
 }
 
+.detail__hero h1 {
+  max-width: 14ch;
+}
+
 .detail__nav {
   display: flex;
   justify-content: space-between;
@@ -38,6 +42,7 @@
 .detail__metric {
   display: grid;
   gap: 4px;
+  background: linear-gradient(180deg, rgba(185, 191, 251, 0.08), rgba(27, 27, 47, 0.88));
 }
 
 .detail__sections {

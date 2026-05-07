@@ -1,6 +1,7 @@
 .ghw {
   padding: 0;
   overflow: hidden;
+  background: linear-gradient(180deg, rgba(185, 191, 251, 0.05), transparent 18%), var(--crt-panel);
 }
 
 .ghw__status {
@@ -44,12 +45,12 @@
 }
 
 .ghw__repo:hover {
-  background: var(--crt-surface);
+  background: linear-gradient(180deg, rgba(188, 74, 155, 0.08), var(--crt-surface));
 }
 
 .ghw__repo--active {
-  background: var(--crt-panel);
-  border-left: 2px solid var(--signal-teal);
+  background: linear-gradient(180deg, rgba(255, 213, 65, 0.08), var(--crt-panel));
+  border-left: 2px solid var(--signal-yellow);
 }
 
 .ghw__repo-head {
@@ -84,7 +85,7 @@
   padding: 6px 12px;
   font-family: var(--font-accent);
   font-size: 10px;
-  color: var(--signal-teal);
+  color: var(--signal-yellow);
   border-bottom: 1px solid var(--border);
   background: var(--crt-black);
 }

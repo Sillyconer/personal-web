@@ -24,7 +24,7 @@ export const ProjectDetailPage = () => {
       {/* ── Hero ── */}
       <motion.section className="detail__hero" initial="hidden" animate="show" variants={staggerGroup}>
         <motion.div className="detail__nav" variants={pixelReveal}>
-          <Link to="/work" className="px-btn">&lt;-- back to /work</Link>
+          <Link to="/work" className="px-btn">back to archive</Link>
           <div className="flex-row">
             <span className="px-tag px-tag--teal">{project.status}</span>
             <span className="px-tag px-tag--yellow">{project.type}</span>
@@ -33,7 +33,7 @@ export const ProjectDetailPage = () => {
         </motion.div>
 
         <motion.div variants={pixelReveal}>
-          <p className="eyebrow">&gt; cat projects/{project.slug}/readme</p>
+          <p className="eyebrow">world dossier / {project.slug}</p>
           <h1>{project.name}</h1>
           <p>{project.description}</p>
           <p className="muted">{project.outcome}</p>

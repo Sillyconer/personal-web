@@ -11,7 +11,7 @@ export const AboutPage = () => {
       {/* ── Hero ── */}
       <motion.section className="about__hero" initial="hidden" animate="show" variants={staggerGroup}>
         <motion.div variants={pixelReveal}>
-          <p className="eyebrow">&gt; man dark</p>
+          <p className="eyebrow">player card</p>
           <h1>building frontend systems that feel considered, not assembled.</h1>
         </motion.div>
 
@@ -29,7 +29,7 @@ export const AboutPage = () => {
         viewport={viewport}
         variants={staggerGroup}
       >
-        <motion.p className="eyebrow" variants={pixelReveal}>&gt; cat principles.txt</motion.p>
+        <motion.p className="eyebrow" variants={pixelReveal}>core principles</motion.p>
         <div className="about__pillar-grid">
           {aboutPillars.map((pillar) => (
             <motion.div key={pillar} className="t-frame" variants={cardReveal}>
@@ -53,7 +53,7 @@ export const AboutPage = () => {
             <span className="t-header__dot t-header__dot--y" />
             <span className="t-header__dot t-header__dot--g" />
           </div>
-          <span>history --highlights</span>
+          <span>highlight reel</span>
         </div>
         <div className="about__timeline-list">
           {experienceHighlights.map((item) => (
@@ -77,7 +77,7 @@ export const AboutPage = () => {
         variants={staggerGroup}
       >
         <motion.div variants={pixelReveal}>
-          <p className="eyebrow">&gt; where this approach adds value</p>
+          <p className="eyebrow">best party match</p>
           <h2>best fit</h2>
         </motion.div>
 
@@ -90,7 +90,7 @@ export const AboutPage = () => {
         </div>
 
         <motion.div variants={pixelReveal}>
-          <Link to="/contact" className="px-btn px-btn--primary">&gt; talk about a project</Link>
+          <Link to="/contact" className="px-btn px-btn--primary">talk about a project</Link>
         </motion.div>
       </motion.section>
     </div>

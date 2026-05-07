@@ -44,11 +44,11 @@ export const ProjectCard = ({ project }: { project: ProjectDefinition }) => {
 
       <div className="pcard__actions">
         <Link to={`/work/${project.slug}`} className="px-btn px-btn--primary">
-          &gt; view case study
+          enter world
         </Link>
         {liveLink ? (
           <a href={liveLink.href} target="_blank" rel="noreferrer" className="px-btn">
-            &gt; live
+            live build
           </a>
         ) : null}
       </div>

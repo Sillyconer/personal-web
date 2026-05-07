@@ -11,7 +11,7 @@ export const ContactPage = () => {
       {/* ── Hero ── */}
       <motion.section className="contact__hero" initial="hidden" animate="show" variants={staggerGroup}>
         <motion.div variants={pixelReveal}>
-          <p className="eyebrow">&gt; contact --open</p>
+          <p className="eyebrow">co-op lobby open</p>
           <h1>need a frontend partner for a product that deserves a stronger surface?</h1>
         </motion.div>
 
@@ -30,7 +30,7 @@ export const ContactPage = () => {
         viewport={viewport}
         variants={staggerGroup}
       >
-        <motion.p className="eyebrow" variants={pixelReveal}>&gt; ls channels/</motion.p>
+        <motion.p className="eyebrow" variants={pixelReveal}>available channels</motion.p>
         <div className="grid-auto">
           {contactChannels.map((channel) => (
             <motion.a
@@ -63,12 +63,12 @@ export const ContactPage = () => {
             <span className="t-header__dot t-header__dot--y" />
             <span className="t-header__dot t-header__dot--g" />
           </div>
-          <span>engagement --modes</span>
+          <span>ways to work together</span>
         </div>
         <div className="contact__mode-list">
           {engagementModes.map((mode) => (
             <motion.div key={mode} className="contact__mode-item" variants={cardReveal}>
-              <span className="text-teal">&gt;</span> {mode}
+               <span className="text-teal">*</span> {mode}
             </motion.div>
           ))}
         </div>
@@ -83,7 +83,7 @@ export const ContactPage = () => {
         variants={staggerGroup}
       >
         <motion.div variants={pixelReveal}>
-          <p className="eyebrow">&gt; strongest fit</p>
+          <p className="eyebrow">best fit quests</p>
           <h2>projects that benefit from structure and atmosphere together</h2>
         </motion.div>
         <div className="grid-auto">

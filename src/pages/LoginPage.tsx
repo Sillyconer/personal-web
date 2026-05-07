@@ -31,27 +31,28 @@ export const LoginPage = () => {
 
   return (
     <div className="login">
-      <form className="login__card t-frame" onSubmit={handleSubmit}>
+      <form className="login__card t-frame t-frame--raised" onSubmit={handleSubmit}>
         <div className="t-header">
           <div className="t-header__dots">
             <span className="t-header__dot t-header__dot--r" />
             <span className="t-header__dot t-header__dot--y" />
             <span className="t-header__dot t-header__dot--g" />
           </div>
-          <span>login --studio</span>
+          <span>save room gateway</span>
         </div>
 
         <div className="login__body">
-          <p className="eyebrow">&gt; authentication required</p>
-          <h2>studio access</h2>
+          <p className="eyebrow">private room access</p>
+          <h2>enter the backstage workshop</h2>
+          <p className="muted">The public world stays open to visitors. This gate only unlocks the maker room, private embeds, and studio tools.</p>
 
           <label>
-            <span className="muted">username:</span>
+            <span className="muted">traveler name</span>
             <input value={username} onChange={(event) => setUsername(event.target.value)} />
           </label>
 
           <label>
-            <span className="muted">password:</span>
+            <span className="muted">secret key</span>
             <input
               type="password"
               value={password}
@@ -60,7 +61,7 @@ export const LoginPage = () => {
           </label>
 
           <button type="submit" className="px-btn px-btn--primary" style={{ width: '100%' }}>
-            &gt; authenticate
+            unlock workshop
           </button>
 
           {error ? <p className="text-red">{error}</p> : null}

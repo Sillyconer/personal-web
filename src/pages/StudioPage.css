@@ -1,3 +1,12 @@
+.studio__hero {
+  display: grid;
+  gap: var(--gap);
+}
+
+.studio__hero h1 {
+  max-width: 14ch;
+}
+
 .studio__badges {
   margin-top: 8px;
 }
@@ -59,4 +68,19 @@
 
 .studio__project:last-child {
   border-bottom: none;
+}
+
+.grid-2 > .t-frame:first-child {
+  background: linear-gradient(180deg, rgba(255, 213, 65, 0.08), rgba(27, 27, 47, 0.88));
+}
+
+.grid-2 > .t-frame:last-child {
+  background: linear-gradient(180deg, rgba(188, 74, 155, 0.1), rgba(27, 27, 47, 0.88));
+}
+
+@media (max-width: 720px) {
+  .studio__project {
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
 }

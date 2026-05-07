@@ -1,6 +1,7 @@
 .psec {
   display: grid;
   gap: var(--gap-sm);
+  background: linear-gradient(180deg, rgba(185, 191, 251, 0.04), transparent 20%), var(--crt-panel);
 }
 
 .psec--locked {
@@ -16,6 +17,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .psec__narrative {
@@ -47,6 +49,11 @@
 .psec__metric {
   display: grid;
   gap: 4px;
+}
+
+.psec__gallery > .t-frame,
+.psec__metric {
+  background: linear-gradient(180deg, rgba(255, 213, 65, 0.05), rgba(27, 27, 47, 0.88));
 }
 
 .psec__gallery {
