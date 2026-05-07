@@ -1,11 +1,95 @@
-.work__hero {
+.work__hero,
+.work__hero-copy {
   display: grid;
-  gap: var(--gap-sm);
+  gap: var(--gap);
+}
+
+.work__hero {
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 0.9fr);
+  align-items: center;
 }
 
 .work__hero h1 {
   font-size: 28px;
 }
+
+.work__hero-tags {
+  margin-top: 4px;
+}
+
+.work__hero-scene {
+  position: relative;
+  min-height: 260px;
+  border: 2px solid var(--border);
+  background:
+    linear-gradient(180deg, rgba(255, 213, 65, 0.14), rgba(250, 106, 10, 0.08) 30%, rgba(27, 27, 47, 0.92) 100%);
+  overflow: hidden;
+}
+
+.work__hero-island,
+.work__hero-route,
+.work__hero-gate {
+  position: absolute;
+}
+
+.work__hero-island {
+  background: rgba(74, 84, 98, 0.95);
+  box-shadow: inset 0 -6px 0 rgba(113, 65, 59, 0.72);
+}
+
+.work__hero-island--1 {
+  left: 18px;
+  bottom: 46px;
+  width: 86px;
+  height: 26px;
+}
+
+.work__hero-island--2 {
+  left: 120px;
+  bottom: 120px;
+  width: 96px;
+  height: 30px;
+}
+
+.work__hero-island--3 {
+  right: 18px;
+  bottom: 74px;
+  width: 98px;
+  height: 34px;
+}
+
+.work__hero-route {
+  border-top: 2px dashed var(--signal-yellow);
+  transform-origin: left center;
+}
+
+.work__hero-route--1 {
+  left: 90px;
+  bottom: 134px;
+  width: 64px;
+  transform: rotate(-26deg);
+}
+
+.work__hero-route--2 {
+  left: 198px;
+  bottom: 126px;
+  width: 86px;
+  transform: rotate(20deg);
+}
+
+.work__hero-gate {
+  padding: 6px 10px;
+  border: 2px solid var(--border-bright);
+  background: rgba(20, 16, 19, 0.9);
+  font-family: var(--font-accent);
+  font-size: 10px;
+  text-transform: lowercase;
+  color: var(--ink);
+}
+
+.work__hero-gate--1 { left: 24px; bottom: 76px; }
+.work__hero-gate--2 { left: 136px; bottom: 152px; }
+.work__hero-gate--3 { right: 26px; bottom: 112px; }
 
 .work__filters {
   padding: 0;
@@ -43,8 +127,18 @@
   gap: var(--gap-sm);
 }
 
+@media (max-width: 860px) {
+  .work__hero {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 720px) {
   .work__hero h1 {
     font-size: 22px;
+  }
+
+  .work__hero-scene {
+    min-height: 220px;
   }
 }

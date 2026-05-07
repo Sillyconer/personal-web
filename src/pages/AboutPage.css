@@ -1,22 +1,90 @@
-.about__hero {
+.about__hero,
+.about__hero-copy,
+.about__pillars,
+.about__fit {
   display: grid;
   gap: var(--gap);
+}
+
+.about__hero {
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 0.8fr);
+  align-items: start;
 }
 
 .about__hero h1 {
   max-width: 18ch;
 }
 
+.about__hero-scene {
+  position: relative;
+  min-height: 210px;
+  border: 2px solid var(--border);
+  background: linear-gradient(180deg, rgba(185, 191, 251, 0.18), rgba(27, 27, 47, 0.9) 54%, rgba(20, 16, 19, 0.96));
+  overflow: hidden;
+}
+
+.about__scene-moon,
+.about__scene-rings,
+.about__scene-constellation {
+  position: absolute;
+}
+
+.about__scene-moon {
+  top: 26px;
+  right: 32px;
+  width: 52px;
+  height: 52px;
+  background: var(--aap-lavender);
+  box-shadow: 0 0 0 6px rgba(185, 191, 251, 0.08);
+}
+
+.about__scene-rings {
+  left: 22px;
+  bottom: 18px;
+  width: 140px;
+  height: 70px;
+  border: 2px solid rgba(32, 214, 199, 0.32);
+  border-radius: 50%;
+}
+
+.about__scene-constellation {
+  width: 64px;
+  height: 40px;
+  border-top: 2px dashed rgba(254, 243, 192, 0.44);
+}
+
+.about__scene-constellation::before,
+.about__scene-constellation::after {
+  content: '';
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: var(--ink);
+}
+
+.about__scene-constellation--1 {
+  left: 18px;
+  top: 30px;
+  transform: rotate(16deg);
+}
+
+.about__scene-constellation--1::before { left: 0; top: -2px; }
+.about__scene-constellation--1::after { right: 0; top: -2px; }
+
+.about__scene-constellation--2 {
+  right: 26px;
+  bottom: 52px;
+  transform: rotate(-14deg);
+}
+
+.about__scene-constellation--2::before { left: 0; top: -2px; }
+.about__scene-constellation--2::after { right: 0; top: -2px; }
+
 .about__meta {
   display: grid;
   gap: 4px;
   padding: 12px 16px;
   background: linear-gradient(180deg, rgba(188, 74, 155, 0.12), rgba(27, 27, 47, 0.88));
-}
-
-.about__pillars {
-  display: grid;
-  gap: var(--gap);
 }
 
 .about__pillar-grid {
@@ -47,11 +115,6 @@
   border-bottom: none;
 }
 
-.about__fit {
-  display: grid;
-  gap: var(--gap);
-}
-
 .about__fit-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -61,4 +124,10 @@
 .about__pillar-grid .t-frame,
 .about__fit-grid .t-frame {
   background: linear-gradient(180deg, rgba(255, 213, 65, 0.06), rgba(27, 27, 47, 0.86));
+}
+
+@media (max-width: 860px) {
+  .about__hero {
+    grid-template-columns: 1fr;
+  }
 }

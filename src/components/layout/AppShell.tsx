@@ -1,7 +1,9 @@
+import { useEffect, type CSSProperties } from 'react';
 import { NavLink, useLocation, useOutlet } from 'react-router-dom';
 import { Lock, LogOut, Sparkles, Star } from 'lucide-react';
 
 import { PageTransition } from '../effects/PageTransition';
+import { getCartridgeByPath } from '../../config/cartridges';
 import { navigation } from '../../config/navigation';
 import { siteProfile } from '../../data/site';
 import { useAuthStore } from '../../store/useAuthStore';
@@ -12,11 +14,36 @@ export const AppShell = () => {
   const logout = useAuthStore((state) => state.logout);
   const location = useLocation();
   const outlet = useOutlet();
+  const cartridge = getCartridgeByPath(location.pathname);
 
-  const currentPage = navigation.find((n) => n.to === location.pathname)?.label ?? 'home';
+  const currentPage =
+    navigation.find((n) => n.to === location.pathname)?.label ??
+    location.pathname.split('/').filter(Boolean).pop() ??
+    'home';
+
+  useEffect(() => {
+    document.documentElement.dataset.cartridge = cartridge.id;
+
+    return () => {
+      delete document.documentElement.dataset.cartridge;
+    };
+  }, [cartridge.id]);
+
+  const shellStyle: CSSProperties = {
+    ['--shell-tint-a' as string]: cartridge.vars.shellTintA,
+    ['--shell-tint-b' as string]: cartridge.vars.shellTintB,
+    ['--shell-tint-c' as string]: cartridge.vars.shellTintC,
+    ['--shell-panel-start' as string]: cartridge.vars.panelStart,
+    ['--shell-panel-end' as string]: cartridge.vars.panelEnd,
+    ['--shell-accent' as string]: cartridge.vars.accent,
+    ['--shell-accent-soft' as string]: cartridge.vars.accentSoft,
+    ['--shell-accent-alt' as string]: cartridge.vars.accentAlt,
+    ['--transition-primary' as string]: cartridge.vars.transitionPrimary,
+    ['--transition-secondary' as string]: cartridge.vars.transitionSecondary,
+  };
 
   return (
-    <div className="shell">
+    <div className="shell" data-cartridge={cartridge.id} style={shellStyle}>
       <header className="shell__titlebar">
         <div className="shell__dots">
           <span className="shell__dot shell__dot--r" />
@@ -25,20 +52,24 @@ export const AppShell = () => {
         </div>
 
         <NavLink to="/" className="shell__title">
-          {siteProfile.name.toLowerCase()} :: dream cartridge :: {currentPage.toLowerCase()}
+          {siteProfile.name.toLowerCase()} :: {cartridge.shellTitle.toLowerCase()} :: {currentPage.toLowerCase()}
         </NavLink>
 
-        <span className="shell__version">aap-64 / crt / v2.0</span>
+        <span className="shell__version">aap-64 / crt / {cartridge.id}</span>
       </header>
 
       <section className="shell__hero-strip">
         <div className="shell__hero-copy">
-          <p className="eyebrow">pixel playground</p>
-          <strong>{siteProfile.title}</strong>
+          <p className="eyebrow">{cartridge.heroEyebrow}</p>
+          <strong>{cartridge.heroTitle}</strong>
+          <span className="shell__hero-description">{cartridge.heroDescription}</span>
         </div>
         <div className="shell__hero-badges">
-          <span className="px-tag px-tag--yellow"><Star size={10} /> whimsical crt</span>
-          <span className="px-tag px-tag--teal"><Sparkles size={10} /> handmade world</span>
+          {cartridge.badges.map((badge, index) => (
+            <span key={badge.label} className={`px-tag px-tag--${badge.tone}`}>
+              {index === 0 ? <Star size={10} /> : <Sparkles size={10} />} {badge.label}
+            </span>
+          ))}
         </div>
       </section>
 
@@ -84,7 +115,7 @@ export const AppShell = () => {
         <span className="shell__status-item">page: {currentPage.toLowerCase()}</span>
         <span className="shell__status-item">visitor #0002</span>
         <span className="shell__status-item shell__status-right">
-          {siteProfile.name.toLowerCase()} - whimsical pixel-art portfolio world
+          {cartridge.footer}
         </span>
       </footer>
     </div>

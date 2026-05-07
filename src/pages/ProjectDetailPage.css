@@ -1,4 +1,6 @@
-.detail__hero {
+.detail__hero,
+.detail__hero-copy,
+.detail__world-card {
   display: grid;
   gap: var(--gap);
 }
@@ -13,6 +15,55 @@
   align-items: center;
   gap: var(--gap);
   flex-wrap: wrap;
+}
+
+.detail__world-card {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--shell-accent) 14%, transparent), rgba(27, 27, 47, 0.92));
+}
+
+.detail__world-scene {
+  position: relative;
+  min-height: 170px;
+  border: 2px solid var(--border);
+  overflow: hidden;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--shell-accent-alt) 16%, transparent), rgba(20, 16, 19, 0.96));
+}
+
+.detail__world-layer,
+.detail__world-marker {
+  position: absolute;
+}
+
+.detail__world-layer--1 {
+  inset: auto 0 0;
+  height: 72px;
+  background: color-mix(in srgb, var(--shell-accent-alt) 28%, var(--crt-surface));
+  clip-path: polygon(0 68%, 16% 48%, 28% 60%, 44% 36%, 60% 58%, 74% 30%, 88% 48%, 100% 38%, 100% 100%, 0 100%);
+}
+
+.detail__world-layer--2 {
+  inset: auto 0 0;
+  height: 54px;
+  background: color-mix(in srgb, var(--shell-accent) 22%, var(--crt-panel));
+  clip-path: polygon(0 72%, 14% 58%, 34% 68%, 48% 46%, 62% 60%, 84% 42%, 100% 56%, 100% 100%, 0 100%);
+}
+
+.detail__world-marker {
+  width: 14px;
+  height: 14px;
+  background: var(--shell-accent);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--shell-accent) 55%, transparent);
+}
+
+.detail__world-marker--1 {
+  left: 24%;
+  top: 34%;
+}
+
+.detail__world-marker--2 {
+  right: 18%;
+  top: 48%;
+  background: var(--shell-accent-alt);
 }
 
 .detail__info-grid {
@@ -43,6 +94,10 @@
   display: grid;
   gap: 4px;
   background: linear-gradient(180deg, rgba(185, 191, 251, 0.08), rgba(27, 27, 47, 0.88));
+}
+
+.detail__stack-card {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--shell-accent) 10%, transparent), rgba(27, 27, 47, 0.86));
 }
 
 .detail__sections {

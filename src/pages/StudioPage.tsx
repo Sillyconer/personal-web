@@ -23,11 +23,19 @@ export const StudioPage = () => {
   return (
     <div className="page-stack studio">
       {/* ── Hero ── */}
-      <motion.section className="studio__hero" initial="hidden" animate="show" variants={staggerGroup}>
-        <motion.div variants={pixelReveal}>
+      <motion.section className="studio__hero t-frame t-frame--raised" initial="hidden" animate="show" variants={staggerGroup}>
+        <motion.div className="studio__hero-copy" variants={pixelReveal}>
           <p className="eyebrow">maker room / backstage</p>
           <h1>private workshop</h1>
           <p className="muted">Maintenance notes, private surfaces, and world-building tools. Same universe, hidden door.</p>
+        </motion.div>
+
+        <motion.div className="studio__hero-scene" variants={cardReveal}>
+          <div className="studio__console studio__console--1" />
+          <div className="studio__console studio__console--2" />
+          <div className="studio__console studio__console--3" />
+          <div className="studio__wire studio__wire--1" />
+          <div className="studio__wire studio__wire--2" />
         </motion.div>
 
         <motion.div className="studio__badges flex-row" variants={pixelReveal}>

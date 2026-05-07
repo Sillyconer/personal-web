@@ -98,7 +98,7 @@ export const GitHubWidget = () => {
 
   return (
     <section className="ghw t-frame t-frame--sunken">
-        <div className="t-header">
+      <div className="t-header">
         <div className="t-header__dots">
           <span className="t-header__dot t-header__dot--r" />
           <span className="t-header__dot t-header__dot--y" />
@@ -145,7 +145,7 @@ export const GitHubWidget = () => {
             ) : null}
           </div>
           <div className="ghw__readme-prompt">
-            README // open lore fragment
+            codex fragment // readme excerpt
           </div>
           <pre className="ghw__readme-body">
             {readmeLoading ? 'loading...' : readme || 'select a repo to preview readme.'}

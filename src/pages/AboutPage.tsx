@@ -9,10 +9,22 @@ export const AboutPage = () => {
   return (
     <div className="page-stack about">
       {/* ── Hero ── */}
-      <motion.section className="about__hero" initial="hidden" animate="show" variants={staggerGroup}>
-        <motion.div variants={pixelReveal}>
+      <motion.section className="about__hero t-frame t-frame--raised" initial="hidden" animate="show" variants={staggerGroup}>
+        <motion.div className="about__hero-copy" variants={pixelReveal}>
           <p className="eyebrow">player card</p>
           <h1>building frontend systems that feel considered, not assembled.</h1>
+          <p className="muted">This cartridge is the quieter profile world: values, trajectory, and the kinds of interfaces this work suits best.</p>
+          <div className="flex-row">
+            <span className="px-tag px-tag--blue">constellation garden</span>
+            <span className="px-tag px-tag--teal">profile shrine</span>
+          </div>
+        </motion.div>
+
+        <motion.div className="about__hero-scene" variants={cardReveal}>
+          <div className="about__scene-moon" />
+          <div className="about__scene-rings" />
+          <div className="about__scene-constellation about__scene-constellation--1" />
+          <div className="about__scene-constellation about__scene-constellation--2" />
         </motion.div>
 
         <motion.div className="about__meta t-frame t-frame--sunken" variants={pixelReveal}>

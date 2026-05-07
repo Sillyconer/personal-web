@@ -57,7 +57,7 @@ export const EcosystemGraph = () => {
       variants={staggerGroup}
     >
       <motion.div variants={pixelReveal}>
-        <p className="eyebrow">&gt; graph --ecosystem</p>
+        <p className="eyebrow">route map / ecosystem</p>
         <h2>project neighbourhood map</h2>
         <p className="muted">click nodes to explore connections between projects, disciplines, and collaboration modes.</p>
       </motion.div>
@@ -144,11 +144,11 @@ export const EcosystemGraph = () => {
           {activeNode.href ? (
             activeNode.href.startsWith('/') ? (
               <Link to={activeNode.href} className="px-btn px-btn--accent">
-                &gt; open
+                open route
               </Link>
             ) : (
               <a href={activeNode.href} target="_blank" rel="noreferrer" className="px-btn px-btn--accent">
-                &gt; open
+                open route
               </a>
             )
           ) : null}

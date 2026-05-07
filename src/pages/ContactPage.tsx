@@ -9,16 +9,25 @@ export const ContactPage = () => {
   return (
     <div className="page-stack contact">
       {/* ── Hero ── */}
-      <motion.section className="contact__hero" initial="hidden" animate="show" variants={staggerGroup}>
-        <motion.div variants={pixelReveal}>
+      <motion.section className="contact__hero t-frame t-frame--raised" initial="hidden" animate="show" variants={staggerGroup}>
+        <motion.div className="contact__hero-copy" variants={pixelReveal}>
           <p className="eyebrow">co-op lobby open</p>
           <h1>need a frontend partner for a product that deserves a stronger surface?</h1>
+          <p className="muted">This cartridge is the signal tower: outreach, invites, and the paths into working together.</p>
         </motion.div>
 
         <motion.div className="contact__actions" variants={pixelReveal}>
           <a href={`mailto:${siteProfile.email}`} className="px-btn px-btn--primary">
             <Mail size={14} /> {siteProfile.email}
           </a>
+        </motion.div>
+
+        <motion.div className="contact__hero-scene" variants={cardReveal}>
+          <div className="contact__tower" />
+          <div className="contact__beam" />
+          <div className="contact__lantern contact__lantern--1" />
+          <div className="contact__lantern contact__lantern--2" />
+          <div className="contact__lantern contact__lantern--3" />
         </motion.div>
       </motion.section>
 

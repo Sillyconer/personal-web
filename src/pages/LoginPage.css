@@ -17,6 +17,46 @@
   padding: var(--gap);
 }
 
+.login__scene {
+  position: relative;
+  min-height: 120px;
+  border: 2px solid var(--border);
+  background: linear-gradient(180deg, rgba(40, 92, 196, 0.16), rgba(27, 27, 47, 0.94));
+  overflow: hidden;
+}
+
+.login__scene-crystal,
+.login__scene-ring {
+  position: absolute;
+}
+
+.login__scene-crystal {
+  left: 50%;
+  top: 28px;
+  width: 22px;
+  height: 36px;
+  transform: translateX(-50%);
+  background: var(--aap-lavender);
+  clip-path: polygon(50% 0, 100% 34%, 72% 100%, 28% 100%, 0 34%);
+  box-shadow: 0 0 18px rgba(185, 191, 251, 0.45);
+}
+
+.login__scene-ring {
+  left: 50%;
+  bottom: 18px;
+  width: 92px;
+  height: 32px;
+  transform: translateX(-50%);
+  border: 2px solid rgba(32, 214, 199, 0.4);
+  border-radius: 50%;
+}
+
+.login__scene-ring--two {
+  width: 136px;
+  height: 46px;
+  border-color: rgba(255, 213, 65, 0.24);
+}
+
 .login__body h2 {
   font-size: 20px;
 }

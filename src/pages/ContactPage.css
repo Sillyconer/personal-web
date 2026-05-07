@@ -1,6 +1,14 @@
-.contact__hero {
+.contact__hero,
+.contact__hero-copy,
+.contact__channels,
+.contact__fit {
   display: grid;
   gap: var(--gap);
+}
+
+.contact__hero {
+  grid-template-columns: minmax(0, 1fr) auto minmax(220px, 0.9fr);
+  align-items: center;
 }
 
 .contact__hero h1 {
@@ -13,10 +21,49 @@
   gap: var(--gap-sm);
 }
 
-.contact__channels {
-  display: grid;
-  gap: var(--gap);
+.contact__hero-scene {
+  position: relative;
+  min-height: 220px;
+  border: 2px solid var(--border);
+  background: linear-gradient(180deg, rgba(255, 213, 65, 0.16), rgba(223, 62, 35, 0.1) 36%, rgba(27, 27, 47, 0.94));
+  overflow: hidden;
 }
+
+.contact__tower,
+.contact__beam,
+.contact__lantern {
+  position: absolute;
+}
+
+.contact__tower {
+  left: 50%;
+  bottom: 24px;
+  width: 18px;
+  height: 110px;
+  transform: translateX(-50%);
+  background: var(--aap-brown);
+  box-shadow: 0 0 0 2px rgba(20, 16, 19, 0.35);
+}
+
+.contact__beam {
+  left: 50%;
+  top: 18px;
+  width: 140px;
+  height: 140px;
+  transform: translateX(-50%);
+  background: radial-gradient(circle, rgba(255, 213, 65, 0.28), transparent 62%);
+}
+
+.contact__lantern {
+  width: 14px;
+  height: 14px;
+  background: var(--signal-yellow);
+  box-shadow: 0 0 10px rgba(255, 213, 65, 0.5);
+}
+
+.contact__lantern--1 { left: 26px; bottom: 30px; }
+.contact__lantern--2 { left: 62px; bottom: 60px; }
+.contact__lantern--3 { right: 30px; bottom: 38px; }
 
 .contact__channel {
   display: grid;
@@ -59,4 +106,10 @@
 
 .contact__fit .t-frame {
   background: linear-gradient(180deg, rgba(255, 213, 65, 0.06), rgba(27, 27, 47, 0.86));
+}
+
+@media (max-width: 960px) {
+  .contact__hero {
+    grid-template-columns: 1fr;
+  }
 }

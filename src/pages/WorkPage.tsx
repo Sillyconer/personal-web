@@ -7,7 +7,7 @@ import { GitHubWidget } from '../components/github/GitHubWidget';
 import { ProjectCard } from '../components/projects/ProjectCard';
 import { projects } from '../data/projects';
 import type { ProjectStatus, ProjectType } from '../types/site';
-import { pixelReveal, staggerGroup, viewport } from '../utils/motion';
+import { cardReveal, pixelReveal, staggerGroup, viewport } from '../utils/motion';
 import './WorkPage.css';
 
 const statusFilters: Array<'all' | ProjectStatus> = ['all', 'live', 'building', 'concept'];
@@ -38,14 +38,29 @@ export const WorkPage = () => {
 
   return (
     <div className="page-stack work">
-      {/* ── Hero ── */}
-      <motion.section className="work__hero" initial="hidden" animate="show" variants={staggerGroup}>
-        <motion.div variants={pixelReveal}>
+      <motion.section className="work__hero t-frame t-frame--raised" initial="hidden" animate="show" variants={staggerGroup}>
+        <motion.div className="work__hero-copy" variants={pixelReveal}>
           <p className="eyebrow">world select</p>
           <h1>pick a project world</h1>
           <p className="muted">
             Case studies, live surfaces, and ecosystem fragments. Filter by status or type, then jump into the ones that feel most relevant.
           </p>
+          <div className="flex-row work__hero-tags">
+            <span className="px-tag px-tag--yellow">portal gates</span>
+            <span className="px-tag px-tag--teal">side quests</span>
+            <span className="px-tag px-tag--blue">stage select</span>
+          </div>
+        </motion.div>
+
+        <motion.div className="work__hero-scene" variants={cardReveal}>
+          <div className="work__hero-island work__hero-island--1" />
+          <div className="work__hero-island work__hero-island--2" />
+          <div className="work__hero-island work__hero-island--3" />
+          <div className="work__hero-route work__hero-route--1" />
+          <div className="work__hero-route work__hero-route--2" />
+          <div className="work__hero-gate work__hero-gate--1">mapper</div>
+          <div className="work__hero-gate work__hero-gate--2">web</div>
+          <div className="work__hero-gate work__hero-gate--3">next</div>
         </motion.div>
       </motion.section>
 

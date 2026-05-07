@@ -32,11 +32,23 @@ export const ProjectDetailPage = () => {
           </div>
         </motion.div>
 
-        <motion.div variants={pixelReveal}>
+        <motion.div className="detail__hero-copy" variants={pixelReveal}>
           <p className="eyebrow">world dossier / {project.slug}</p>
           <h1>{project.name}</h1>
           <p>{project.description}</p>
           <p className="muted">{project.outcome}</p>
+        </motion.div>
+
+        <motion.div className="detail__world-card t-frame t-frame--raised" variants={cardReveal}>
+          <p className="eyebrow">mini cartridge</p>
+          <div className="detail__world-scene" aria-hidden="true">
+            <div className="detail__world-layer detail__world-layer--1" />
+            <div className="detail__world-layer detail__world-layer--2" />
+            <div className="detail__world-marker detail__world-marker--1" />
+            <div className="detail__world-marker detail__world-marker--2" />
+          </div>
+          <h3>{project.tagline}</h3>
+          <p className="muted">{project.summary}</p>
         </motion.div>
 
         <motion.div className="detail__meta grid-2" variants={pixelReveal}>
@@ -49,10 +61,10 @@ export const ProjectDetailPage = () => {
             </div>
           </div>
 
-          <div className="t-frame">
-            <p className="eyebrow">summary</p>
-            <h3>{project.tagline}</h3>
-            <p className="muted">{project.summary}</p>
+          <div className="t-frame detail__stack-card">
+            <p className="eyebrow">loadout</p>
+            <h3>stack + kit</h3>
+            <p className="muted">The tools and frontend systems shaping this cartridge.</p>
             <div className="detail__stack">
               {project.stack.map((item) => (
                 <span key={item} className="px-tag">{item}</span>

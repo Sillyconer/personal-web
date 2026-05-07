@@ -42,6 +42,12 @@ export const LoginPage = () => {
         </div>
 
         <div className="login__body">
+          <div className="login__scene" aria-hidden="true">
+            <div className="login__scene-crystal" />
+            <div className="login__scene-ring" />
+            <div className="login__scene-ring login__scene-ring--two" />
+          </div>
+
           <p className="eyebrow">private room access</p>
           <h2>enter the backstage workshop</h2>
           <p className="muted">The public world stays open to visitors. This gate only unlocks the maker room, private embeds, and studio tools.</p>
