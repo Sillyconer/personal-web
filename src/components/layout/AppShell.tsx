@@ -1,6 +1,6 @@
 import { useEffect, type CSSProperties } from 'react';
 import { NavLink, useLocation, useOutlet } from 'react-router-dom';
-import { Lock, LogOut, Sparkles, Star } from 'lucide-react';
+import { Lock, LogOut } from 'lucide-react';
 
 import { PageTransition } from '../effects/PageTransition';
 import { getCartridgeByPath } from '../../config/cartridges';
@@ -57,21 +57,6 @@ export const AppShell = () => {
 
         <span className="shell__version">aap-64 / crt / {cartridge.id}</span>
       </header>
-
-      <section className="shell__hero-strip">
-        <div className="shell__hero-copy">
-          <p className="eyebrow">{cartridge.heroEyebrow}</p>
-          <strong>{cartridge.heroTitle}</strong>
-          <span className="shell__hero-description">{cartridge.heroDescription}</span>
-        </div>
-        <div className="shell__hero-badges">
-          {cartridge.badges.map((badge, index) => (
-            <span key={badge.label} className={`px-tag px-tag--${badge.tone}`}>
-              {index === 0 ? <Star size={10} /> : <Sparkles size={10} />} {badge.label}
-            </span>
-          ))}
-        </div>
-      </section>
 
       <nav className="shell__nav" aria-label="Main navigation">
         {navigation.map((item) => (

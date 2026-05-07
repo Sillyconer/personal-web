@@ -1,0 +1,201 @@
+.story-page,
+.story-hero,
+.story-hero__copy,
+.story-acts,
+.story-grid,
+.story-constellation,
+.story-future {
+  display: grid;
+  gap: var(--gap-lg);
+}
+
+.story-panel,
+.story-card {
+  position: relative;
+  overflow: hidden;
+  border: 3px solid rgba(185, 191, 251, 0.45);
+  background: linear-gradient(180deg, rgba(24, 26, 48, 0.95), rgba(11, 16, 29, 0.96));
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.04) inset, 0 24px 44px rgba(0, 0, 0, 0.26);
+}
+
+.story-panel::after,
+.story-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(0deg, transparent 0 3px, rgba(255, 255, 255, 0.03) 3px 4px);
+  opacity: 0.5;
+}
+
+.story-hero {
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 0.9fr);
+  align-items: stretch;
+}
+
+.story-hero__copy {
+  padding: 24px;
+  gap: 14px;
+}
+
+.story-hero__copy h1 {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  line-height: 1.2;
+  text-transform: none;
+}
+
+.story-hero__lead,
+.story-card p,
+.story-timeline__item p,
+.story-panel p {
+  color: #d3d6ff;
+}
+
+.story-hero__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.story-chip {
+  border: 2px solid currentColor;
+  padding: 6px 10px;
+  font-family: var(--font-accent);
+  font-size: 10px;
+  text-transform: lowercase;
+}
+
+.story-chip--lavender { color: #b9bffb; }
+.story-chip--teal { color: #20d6c7; }
+.story-chip--yellow { color: #ffd541; }
+
+.story-hero__scene {
+  padding: 20px;
+  display: grid;
+  place-items: center;
+}
+
+.story-panel--bright {
+  background: radial-gradient(circle at center, rgba(185, 191, 251, 0.22), rgba(32, 40, 72, 0.9) 36%, rgba(10, 14, 22, 0.98));
+}
+
+.story-timegate {
+  position: relative;
+  width: min(100%, 340px);
+  aspect-ratio: 1;
+}
+
+.story-timegate__ring,
+.story-timegate__core,
+.story-timegate__island {
+  position: absolute;
+  inset: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.story-timegate__ring {
+  border-radius: 50%;
+  border: 3px solid rgba(185, 191, 251, 0.42);
+}
+
+.story-timegate__ring--one { width: 82%; height: 82%; }
+.story-timegate__ring--two { width: 58%; height: 58%; border-color: rgba(32, 214, 199, 0.45); }
+.story-timegate__ring--three { width: 36%; height: 36%; border-color: rgba(255, 213, 65, 0.5); }
+
+.story-timegate__core {
+  width: 16%;
+  height: 16%;
+  background: radial-gradient(circle, #ffe98b, #b9bffb 68%, transparent 72%);
+}
+
+.story-timegate__island {
+  width: 56px;
+  height: 28px;
+  background: #3e4d7a;
+  box-shadow: inset 0 -8px 0 #2d213c;
+}
+
+.story-timegate__island--past { left: 16%; top: 70%; }
+.story-timegate__island--present { left: 50%; top: 18%; background: #285cc4; }
+.story-timegate__island--future { left: 82%; top: 62%; background: #20d6c7; }
+
+.story-acts {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.story-card {
+  padding: 20px;
+  display: grid;
+  gap: 12px;
+}
+
+.story-card h2 {
+  font-size: 1.15rem;
+  line-height: 1.35;
+}
+
+.story-card--lavender { border-color: rgba(185, 191, 251, 0.5); }
+.story-card--teal { border-color: rgba(32, 214, 199, 0.55); }
+.story-card--yellow { border-color: rgba(255, 213, 65, 0.55); }
+
+.story-section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 16px;
+}
+
+.story-grid {
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.story-panel--soft,
+.story-panel--gold {
+  padding: 18px;
+}
+
+.story-panel--soft { border-color: rgba(32, 214, 199, 0.38); }
+.story-panel--gold { border-color: rgba(255, 213, 65, 0.42); }
+
+.story-timeline {
+  padding: 22px;
+}
+
+.story-timeline__list {
+  display: grid;
+  gap: 14px;
+}
+
+.story-timeline__item {
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr);
+  gap: 16px;
+  padding-top: 14px;
+  border-top: 1px dashed rgba(185, 191, 251, 0.3);
+}
+
+.story-timeline__item:first-child {
+  padding-top: 0;
+  border-top: none;
+}
+
+.story-timeline__label {
+  font-family: var(--font-accent);
+  font-size: 10px;
+  color: #20d6c7;
+  text-transform: lowercase;
+}
+
+@media (max-width: 980px) {
+  .story-hero,
+  .story-acts {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .story-timeline__item {
+    grid-template-columns: 1fr;
+  }
+}

@@ -4,11 +4,12 @@ import { CrtOverlay } from './components/effects/CrtOverlay';
 import { InteractionFx } from './components/effects/InteractionFx';
 import { PixelBoids } from './components/effects/PixelBoids';
 import { AppShell } from './components/layout/AppShell';
-import { AboutPage } from './pages/AboutPage';
+import { ArcadePage } from './pages/ArcadePage';
 import { ContactPage } from './pages/ContactPage';
 import { HomePage } from './pages/HomePage';
 import { LoginPage } from './pages/LoginPage';
 import { ProjectDetailPage } from './pages/ProjectDetailPage';
+import { StoryPage } from './pages/StoryPage';
 import { StudioPage } from './pages/StudioPage';
 import { WorkPage } from './pages/WorkPage';
 
@@ -23,13 +24,15 @@ function App() {
         <Route path="/" element={<AppShell />}>
           <Route index element={<HomePage />} />
           <Route path="work" element={<WorkPage />} />
-          <Route path="about" element={<AboutPage />} />
+          <Route path="story" element={<StoryPage />} />
+          <Route path="arcade" element={<ArcadePage />} />
           <Route path="contact" element={<ContactPage />} />
           <Route path="studio" element={<StudioPage />} />
           <Route path="projects" element={<Navigate to="/work" replace />} />
           <Route path="projects/:slug" element={<ProjectDetailPage />} />
           <Route path="work/:slug" element={<ProjectDetailPage />} />
-          <Route path="cv" element={<Navigate to="/about" replace />} />
+          <Route path="about" element={<Navigate to="/story" replace />} />
+          <Route path="cv" element={<Navigate to="/story" replace />} />
           <Route path="admin" element={<Navigate to="/studio" replace />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>

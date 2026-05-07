@@ -1,6 +1,8 @@
 export type CartridgeId =
   | 'home'
   | 'work'
+  | 'story'
+  | 'arcade'
   | 'about'
   | 'contact'
   | 'login'
@@ -11,9 +13,10 @@ export type CartridgeId =
 
 export type BoidPresetId =
   | 'starbirds'
-  | 'airships'
-  | 'moths'
-  | 'lanterns'
+  | 'zeldaFairies'
+  | 'chronoWisps'
+  | 'minecraftBits'
+  | 'pokeOrbs'
   | 'saveRoom'
   | 'debugSprites'
   | 'atlasBirds'
@@ -26,7 +29,7 @@ export interface CartridgeDefinition {
   heroEyebrow: string;
   heroTitle: string;
   heroDescription: string;
-  badges: Array<{ label: string; tone: 'teal' | 'yellow' | 'red' | 'blue' }>;
+  badges: Array<{ label: string; tone: 'teal' | 'yellow' | 'red' | 'blue' | 'green' }>;
   footer: string;
   boidPreset: BoidPresetId;
   vars: {
@@ -71,45 +74,45 @@ export const cartridges: Record<CartridgeId, CartridgeDefinition> = {
   },
   work: {
     id: 'work',
-    shellTitle: 'Quest Map Cartridge',
-    heroEyebrow: 'world select / quest board',
-    heroTitle: 'A stage select full of project worlds and hidden routes',
-    heroDescription: 'Portal gates, level plaques, and a bigger overworld feeling for exploring the work.',
+    shellTitle: 'Dungeon Cartridge',
+    heroEyebrow: 'dungeon archive / torchlit chambers',
+    heroTitle: 'A Zelda-style archive of relics, doors, and project chambers',
+    heroDescription: 'Stone interfaces, lantern light, treasure-room pacing, and project pages treated like hidden rooms.',
     badges: [
-      { label: 'airships', tone: 'blue' },
-      { label: 'world map', tone: 'yellow' },
+      { label: 'fairies', tone: 'teal' },
+      { label: 'keys + maps', tone: 'yellow' },
     ],
-    footer: 'Quest board active // choose a project world',
-    boidPreset: 'airships',
+    footer: 'Dungeon cartridge active // project chambers unlocked',
+    boidPreset: 'zeldaFairies',
     vars: {
-      shellTintA: 'rgba(250, 106, 10, 0.14)',
-      shellTintB: 'rgba(255, 213, 65, 0.12)',
-      shellTintC: 'rgba(32, 214, 199, 0.1)',
+      shellTintA: 'rgba(255, 213, 65, 0.12)',
+      shellTintB: 'rgba(32, 214, 199, 0.1)',
+      shellTintC: 'rgba(113, 65, 59, 0.14)',
       panelStart: 'rgba(255, 213, 65, 0.08)',
-      panelEnd: 'rgba(27, 27, 47, 0.94)',
-      accent: 'var(--aap-orange)',
-      accentSoft: 'rgba(250, 106, 10, 0.2)',
-      accentAlt: 'var(--signal-yellow)',
-      transitionPrimary: 'var(--aap-orange)',
-      transitionSecondary: 'var(--signal-yellow)',
+      panelEnd: 'rgba(20, 16, 19, 0.96)',
+      accent: 'var(--signal-yellow)',
+      accentSoft: 'rgba(255, 213, 65, 0.18)',
+      accentAlt: 'var(--signal-teal)',
+      transitionPrimary: 'var(--signal-yellow)',
+      transitionSecondary: 'var(--signal-teal)',
     },
   },
-  about: {
-    id: 'about',
-    shellTitle: 'Memory Garden Cartridge',
-    heroEyebrow: 'player profile / observatory garden',
-    heroTitle: 'A softer profile world full of signals, memories, and constellations',
-    heroDescription: 'The introspective cartridge: slower, quieter, and more reflective than the rest of the site.',
+  story: {
+    id: 'story',
+    shellTitle: 'Time Gate Cartridge',
+    heroEyebrow: 'chrono archive / personal timeline',
+    heroTitle: 'A Chrono Trigger-inspired story world split across past, present, and future',
+    heroDescription: 'Time gates, glowing eras, and a more narrative explanation of who you are and how the work evolved.',
     badges: [
-      { label: 'moths', tone: 'blue' },
-      { label: 'constellations', tone: 'teal' },
+      { label: 'time wisps', tone: 'blue' },
+      { label: 'era gates', tone: 'teal' },
     ],
-    footer: 'Memory garden active // profile signals online',
-    boidPreset: 'moths',
+    footer: 'Time gate cartridge active // chronology aligned',
+    boidPreset: 'chronoWisps',
     vars: {
       shellTintA: 'rgba(185, 191, 251, 0.16)',
-      shellTintB: 'rgba(32, 214, 199, 0.1)',
-      shellTintC: 'rgba(113, 65, 59, 0.12)',
+      shellTintB: 'rgba(32, 214, 199, 0.12)',
+      shellTintC: 'rgba(188, 74, 155, 0.12)',
       panelStart: 'rgba(185, 191, 251, 0.1)',
       panelEnd: 'rgba(27, 27, 47, 0.94)',
       accent: 'var(--aap-lavender)',
@@ -119,18 +122,68 @@ export const cartridges: Record<CartridgeId, CartridgeDefinition> = {
       transitionSecondary: 'var(--signal-teal)',
     },
   },
+  about: {
+    id: 'about',
+    shellTitle: 'Time Gate Cartridge',
+    heroEyebrow: 'chrono archive / personal timeline',
+    heroTitle: 'A Chrono Trigger-inspired story world split across past, present, and future',
+    heroDescription: 'Legacy alias for the story cartridge.',
+    badges: [
+      { label: 'time wisps', tone: 'blue' },
+      { label: 'era gates', tone: 'teal' },
+    ],
+    footer: 'Time gate cartridge active // chronology aligned',
+    boidPreset: 'chronoWisps',
+    vars: {
+      shellTintA: 'rgba(185, 191, 251, 0.16)',
+      shellTintB: 'rgba(32, 214, 199, 0.12)',
+      shellTintC: 'rgba(188, 74, 155, 0.12)',
+      panelStart: 'rgba(185, 191, 251, 0.1)',
+      panelEnd: 'rgba(27, 27, 47, 0.94)',
+      accent: 'var(--aap-lavender)',
+      accentSoft: 'rgba(185, 191, 251, 0.18)',
+      accentAlt: 'var(--signal-teal)',
+      transitionPrimary: 'var(--aap-lavender)',
+      transitionSecondary: 'var(--signal-teal)',
+    },
+  },
+  arcade: {
+    id: 'arcade',
+    shellTitle: 'Block Craft Cartridge',
+    heroEyebrow: 'minecraft homage / public build board',
+    heroTitle: 'A playful little block world to build in and leave local messages',
+    heroDescription: 'A technical toy cartridge: place blocks, leave signs, and show off interaction design and persistence.',
+    badges: [
+      { label: 'voxel sparks', tone: 'green' },
+      { label: 'craft + build', tone: 'yellow' },
+    ],
+    footer: 'Block craft cartridge active // chunks loaded',
+    boidPreset: 'minecraftBits',
+    vars: {
+      shellTintA: 'rgba(89, 193, 53, 0.18)',
+      shellTintB: 'rgba(219, 164, 99, 0.12)',
+      shellTintC: 'rgba(40, 92, 196, 0.08)',
+      panelStart: 'rgba(89, 193, 53, 0.1)',
+      panelEnd: 'rgba(20, 16, 19, 0.94)',
+      accent: 'var(--signal-green)',
+      accentSoft: 'rgba(89, 193, 53, 0.2)',
+      accentAlt: 'var(--aap-tan)',
+      transitionPrimary: 'var(--signal-green)',
+      transitionSecondary: 'var(--aap-tan)',
+    },
+  },
   contact: {
     id: 'contact',
-    shellTitle: 'Signal Tower Cartridge',
-    heroEyebrow: 'co-op lobby / beacon tower',
-    heroTitle: 'A warm summoning world for messages, invites, and collaboration',
-    heroDescription: 'Lanterns, signal kites, and a brighter call-to-action driven cartridge.',
+    shellTitle: 'Link Center Cartridge',
+    heroEyebrow: 'pokemon homage / connect terminal',
+    heroTitle: 'A playful communication world for reaching out and making contact',
+    heroDescription: 'Trainer-card energy, link-center signals, and a brighter route for collaboration and outreach.',
     badges: [
-      { label: 'lantern wisps', tone: 'yellow' },
-      { label: 'signal tower', tone: 'red' },
+      { label: 'party orbs', tone: 'yellow' },
+      { label: 'link signals', tone: 'red' },
     ],
-    footer: 'Signal tower active // co-op lobby open',
-    boidPreset: 'lanterns',
+    footer: 'Link center active // communication channel open',
+    boidPreset: 'pokeOrbs',
     vars: {
       shellTintA: 'rgba(223, 62, 35, 0.14)',
       shellTintB: 'rgba(255, 213, 65, 0.12)',
@@ -196,40 +249,40 @@ export const cartridges: Record<CartridgeId, CartridgeDefinition> = {
   },
   mapper: {
     id: 'mapper',
-    shellTitle: 'Atlas Ruins Cartridge',
-    heroEyebrow: 'map world / atlas ruins',
-    heroTitle: 'A cartographic sky-world full of routes, memory, and media',
-    heroDescription: 'An atmospheric mini-cartridge shaped around maps, travel, and spatial browsing.',
+    shellTitle: 'Temple Map Cartridge',
+    heroEyebrow: 'zelda homage / cartographic dungeon',
+    heroTitle: 'A Zelda-inspired map world built around routes, relics, and hidden chambers',
+    heroDescription: 'Dungeon cartography, puzzle-like navigation, and an adventure tone for the flagship map project.',
     badges: [
-      { label: 'atlas gulls', tone: 'teal' },
-      { label: 'map relics', tone: 'blue' },
+      { label: 'fairy guides', tone: 'teal' },
+      { label: 'dungeon relics', tone: 'yellow' },
     ],
-    footer: 'Atlas ruins active // cartographic mode engaged',
+    footer: 'Temple map active // dungeon routes revealed',
     boidPreset: 'atlasBirds',
     vars: {
-      shellTintA: 'rgba(32, 214, 199, 0.12)',
-      shellTintB: 'rgba(40, 92, 196, 0.14)',
-      shellTintC: 'rgba(219, 164, 99, 0.08)',
-      panelStart: 'rgba(32, 214, 199, 0.1)',
+      shellTintA: 'rgba(255, 213, 65, 0.12)',
+      shellTintB: 'rgba(32, 214, 199, 0.1)',
+      shellTintC: 'rgba(113, 65, 59, 0.1)',
+      panelStart: 'rgba(255, 213, 65, 0.08)',
       panelEnd: 'rgba(20, 16, 19, 0.94)',
-      accent: 'var(--signal-teal)',
-      accentSoft: 'rgba(32, 214, 199, 0.18)',
-      accentAlt: 'var(--signal-blue)',
-      transitionPrimary: 'var(--signal-teal)',
-      transitionSecondary: 'var(--signal-blue)',
+      accent: 'var(--signal-yellow)',
+      accentSoft: 'rgba(255, 213, 65, 0.18)',
+      accentAlt: 'var(--signal-teal)',
+      transitionPrimary: 'var(--signal-yellow)',
+      transitionSecondary: 'var(--signal-teal)',
     },
   },
   personalweb: {
     id: 'personalweb',
-    shellTitle: 'Meta Cartridge',
-    heroEyebrow: 'signal temple / cartridge castle',
-    heroTitle: 'A cartridge about building the cartridge itself',
-    heroDescription: 'The most self-referential world in the set: UI systems, routing, and stylized shell design.',
+    shellTitle: 'Versus Cabinet Cartridge',
+    heroEyebrow: 'street fighter homage / versus shell',
+    heroTitle: 'An arcade cabinet tribute for the project building the whole system',
+    heroDescription: 'Bold framing, versus energy, and showmanship for the portfolio shell itself.',
     badges: [
-      { label: 'cartridge comets', tone: 'red' },
-      { label: 'signal temple', tone: 'yellow' },
+      { label: 'versus sparks', tone: 'red' },
+      { label: 'arcade shell', tone: 'yellow' },
     ],
-    footer: 'Meta cartridge active // shell within shell detected',
+    footer: 'Versus cabinet active // round one',
     boidPreset: 'cartridgeComets',
     vars: {
       shellTintA: 'rgba(188, 74, 155, 0.16)',
@@ -274,6 +327,8 @@ export const cartridges: Record<CartridgeId, CartridgeDefinition> = {
 export const getCartridgeIdFromPath = (pathname: string): CartridgeId => {
   if (pathname === '/') return 'home';
   if (pathname === '/work') return 'work';
+  if (pathname === '/story') return 'story';
+  if (pathname === '/arcade') return 'arcade';
   if (pathname === '/about') return 'about';
   if (pathname === '/contact') return 'contact';
   if (pathname === '/login') return 'login';
