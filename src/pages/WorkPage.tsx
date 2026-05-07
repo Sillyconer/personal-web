@@ -37,13 +37,13 @@ export const WorkPage = () => {
   }, [query, statusFilter, typeFilter]);
 
   return (
-    <div className="page-stack work">
+    <div className="page-stack work work--dungeon">
       <motion.section className="work__hero" initial="hidden" animate="show" variants={staggerGroup}>
         <motion.div className="work__hero-copy" variants={pixelReveal}>
           <p className="eyebrow">zelda homage / dungeon archive</p>
-          <h1>Enter the archive chambers.</h1>
+          <h1>Enter the project dungeon.</h1>
           <p className="muted">
-            Projects are treated like dungeon rooms: each one hides a different system, atmosphere, and set of design decisions. Use the stone filters to narrow the route.
+            Projects are chambers with maps, keys, and relic notes: each one opens a different system, atmosphere, and set of frontend decisions.
           </p>
           <div className="flex-row work__hero-tags">
             <span className="px-tag px-tag--yellow">maps</span>
@@ -56,9 +56,12 @@ export const WorkPage = () => {
           <div className="work__hero-scene-core" aria-hidden="true">
             <div className="work__torch work__torch--left" />
             <div className="work__torch work__torch--right" />
+            <div className="work__crest" />
             <div className="work__door work__door--1">mapper</div>
             <div className="work__door work__door--2">web</div>
             <div className="work__door work__door--3">next</div>
+            <div className="work__chest" />
+            <div className="work__key" />
             <div className="work__map-grid" />
           </div>
         </motion.div>
@@ -78,7 +81,7 @@ export const WorkPage = () => {
             <span className="t-header__dot t-header__dot--y" />
             <span className="t-header__dot t-header__dot--g" />
           </div>
-            <span>stone map table</span>
+            <span>dungeon map table</span>
         </div>
 
         <div className="work__filter-body">
@@ -87,7 +90,7 @@ export const WorkPage = () => {
             <input
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-               placeholder="search by project, role, or tag"
+              placeholder="search chambers, relics, roles, or tags"
               aria-label="Search projects"
             />
           </div>
@@ -127,7 +130,7 @@ export const WorkPage = () => {
       {/* ── Results ── */}
       <motion.section initial="hidden" whileInView="show" viewport={viewport} variants={staggerGroup}>
         <motion.div variants={pixelReveal}>
-          <p className="eyebrow">{filteredProjects.length} chambers revealed</p>
+          <p className="eyebrow">{filteredProjects.length} relic chambers revealed</p>
         </motion.div>
 
         {filteredProjects.length > 0 ? (

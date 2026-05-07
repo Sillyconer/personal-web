@@ -376,56 +376,96 @@
 
 /* ── Pokemon Custom Click Effect ── */
 .interaction-fx__burst--pokemon {
+  z-index: 140;
   mix-blend-mode: normal;
   pointer-events: none;
 }
 
-.pokeball-catch {
+.pokemon-click-burst,
+.pokemon-click-burst__core,
+.pokemon-click-burst__ring,
+.pokemon-click-burst__particles,
+.pokemon-click-burst__particles span {
   position: absolute;
-  inset: -16px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  pointer-events: none;
 }
 
-.pokeball-catch__flash {
-  position: absolute;
-  width: 32px;
-  height: 32px;
-  background: radial-gradient(circle, #fff6e2 20%, rgba(223, 62, 35, 0.8) 60%, transparent 80%);
+.pokemon-click-burst {
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  image-rendering: pixelated;
+}
+
+.pokemon-click-burst__core {
+  left: 0;
+  top: 0;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
-  animation: p-flash 0.3s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
+  background: radial-gradient(circle, #fff6e2 0 18%, #ff5b42 20% 52%, rgba(223, 62, 35, 0) 72%);
+  box-shadow: 0 0 18px rgba(223, 62, 35, 0.55);
+  transform: translate(-50%, -50%) scale(0.4);
+  animation: pokemonClickCore 0.34s steps(4, end) forwards;
 }
 
-.pokeball-catch__stars {
-  position: absolute;
-  inset: 0;
+.pokemon-click-burst__ring {
+  left: 0;
+  top: 0;
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(223, 62, 35, 0.92);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 2px rgba(255, 246, 226, 0.14),
+    0 0 14px rgba(223, 62, 35, 0.42);
+  transform: translate(-50%, -50%) scale(0.25);
+  animation: pokemonClickRing 0.62s steps(7, end) forwards;
 }
 
-.pokeball-catch__stars span {
-  position: absolute;
-  left: 16px;
-  top: 16px;
-  width: 6px;
-  height: 6px;
-  background: #ffd541;
-  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-  animation: p-star 0.6s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
+.pokemon-click-burst__particles {
+  left: 0;
+  top: 0;
 }
 
-@keyframes p-flash {
-  0% { transform: scale(0.2); opacity: 0; }
-  30% { transform: scale(1.5); opacity: 1; }
-  100% { transform: scale(0); opacity: 0; }
+.pokemon-click-burst__particles span {
+  left: 0;
+  top: 0;
+  width: var(--particle-size, 6px);
+  height: var(--particle-size, 6px);
+  background: var(--signal-red);
+  border: 1px solid rgba(255, 246, 226, 0.22);
+  box-shadow: 0 0 8px rgba(223, 62, 35, 0.62);
+  opacity: 0;
+  transform: translate(-50%, -50%) rotate(var(--particle-angle));
+  animation: pokemonClickParticle 0.66s steps(7, end) forwards;
+  animation-delay: var(--particle-delay, 0ms);
 }
 
-@keyframes p-star {
+@keyframes pokemonClickCore {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.15); }
+  28% { opacity: 1; transform: translate(-50%, -50%) scale(1.25); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(0.2); }
+}
+
+@keyframes pokemonClickRing {
+  0% { opacity: 0.98; transform: translate(-50%, -50%) scale(0.2); }
+  72% { opacity: 0.72; transform: translate(-50%, -50%) scale(3.1); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(3.8); }
+}
+
+@keyframes pokemonClickParticle {
   0% {
-    transform: translate(0, 0) scale(0) rotate(0deg);
     opacity: 1;
+    transform: translate(-50%, -50%) rotate(var(--particle-angle)) translateX(0) scale(1.15);
+  }
+  74% {
+    opacity: 0.78;
+    transform: translate(-50%, -50%) rotate(var(--particle-angle)) translateX(var(--particle-distance)) scale(0.95);
   }
   100% {
-    transform: translate(calc(var(--dir-x) * 36px), calc(var(--dir-y) * 36px)) scale(1.5) rotate(180deg);
     opacity: 0;
+    transform: translate(-50%, -50%) rotate(var(--particle-angle)) translateX(calc(var(--particle-distance) + 8px)) scale(0.12);
   }
 }

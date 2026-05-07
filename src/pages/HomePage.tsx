@@ -44,10 +44,10 @@ const worldCards = [
 
 export const HomePage = () => {
   return (
-    <div className="page-stack home-hub">
+    <div className="page-stack home-hub home-hub--dream">
       <motion.section className="home-hub__hero t-frame t-frame--glow" initial="hidden" animate="show" variants={staggerGroup}>
         <motion.div className="home-hub__copy" variants={pixelReveal}>
-          <p className="eyebrow">dream zone / cartridge hub</p>
+          <p className="eyebrow">dream cartridge / world select</p>
           <h1>{siteProfile.name} builds frontend worlds with strong atmosphere and real structure.</h1>
           <p className="home-hub__lead">{siteProfile.intro}</p>
           <p className="muted">{siteProfile.availability}</p>
@@ -71,6 +71,9 @@ export const HomePage = () => {
             <div className="home-hub__scene-moon" />
             <div className="home-hub__scene-stars" />
             <div className="home-hub__scene-hills" />
+            <div className="home-hub__scene-castle" />
+            <div className="home-hub__scene-cartridge home-hub__scene-cartridge--1" />
+            <div className="home-hub__scene-cartridge home-hub__scene-cartridge--2" />
             <div className="home-hub__scene-sign home-hub__scene-sign--1">work</div>
             <div className="home-hub__scene-sign home-hub__scene-sign--2">story</div>
             <div className="home-hub__scene-sign home-hub__scene-sign--3">arcade</div>
@@ -85,7 +88,7 @@ export const HomePage = () => {
             <p className="eyebrow">world select</p>
             <h2>Choose a cartridge</h2>
           </div>
-          <p className="muted">Each world is designed to feel like a different game entirely, with its own palette, interaction language, and scene logic.</p>
+          <p className="muted">Each route now plays as its own little cartridge: dungeon archive, time gate, block board, and link center.</p>
         </motion.div>
 
         <div className="home-hub__world-grid">

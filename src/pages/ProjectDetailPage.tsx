@@ -48,10 +48,12 @@ export const ProjectDetailPage = () => {
         <motion.div className="detail__world-card t-frame t-frame--raised" variants={cardReveal}>
           <p className="eyebrow">mini cartridge / {homageLabel}</p>
           <div className="detail__world-scene" aria-hidden="true">
+            <div className="detail__world-sky" />
             <div className="detail__world-layer detail__world-layer--1" />
             <div className="detail__world-layer detail__world-layer--2" />
             <div className="detail__world-marker detail__world-marker--1" />
             <div className="detail__world-marker detail__world-marker--2" />
+            <div className="detail__world-emblem" />
           </div>
           <h3>{project.tagline}</h3>
           <p className="muted">{project.summary}</p>

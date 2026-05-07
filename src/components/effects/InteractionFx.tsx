@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { getCartridgeByPath } from '../../config/cartridges';
@@ -8,6 +8,7 @@ interface Burst {
   id: number;
   x: number;
   y: number;
+  variant: 'default' | 'pokemon';
 }
 
 const TRAIL_COUNT = 14;
@@ -23,9 +24,25 @@ const PIXEL_COLORS = [
   'var(--aap-lavender)',
 ];
 
+type CssVars = CSSProperties & Record<`--${string}`, string | number>;
+
+const RED_BURST_PARTICLES: CssVars[] = [
+  { '--particle-angle': '0deg', '--particle-distance': '38px', '--particle-delay': '0ms', '--particle-size': '7px' },
+  { '--particle-angle': '30deg', '--particle-distance': '30px', '--particle-delay': '35ms', '--particle-size': '5px' },
+  { '--particle-angle': '62deg', '--particle-distance': '42px', '--particle-delay': '15ms', '--particle-size': '6px' },
+  { '--particle-angle': '96deg', '--particle-distance': '34px', '--particle-delay': '55ms', '--particle-size': '5px' },
+  { '--particle-angle': '132deg', '--particle-distance': '40px', '--particle-delay': '25ms', '--particle-size': '7px' },
+  { '--particle-angle': '168deg', '--particle-distance': '32px', '--particle-delay': '65ms', '--particle-size': '4px' },
+  { '--particle-angle': '204deg', '--particle-distance': '44px', '--particle-delay': '10ms', '--particle-size': '6px' },
+  { '--particle-angle': '238deg', '--particle-distance': '36px', '--particle-delay': '50ms', '--particle-size': '5px' },
+  { '--particle-angle': '274deg', '--particle-distance': '41px', '--particle-delay': '20ms', '--particle-size': '7px' },
+  { '--particle-angle': '312deg', '--particle-distance': '33px', '--particle-delay': '45ms', '--particle-size': '4px' },
+];
+
 export const InteractionFx = () => {
   const location = useLocation();
   const cartridge = getCartridgeByPath(location.pathname);
+  const isContact = cartridge.id === 'contact';
   const trailRefs = useRef<Array<HTMLSpanElement | null>>([]);
   const interactiveRef = useRef(false);
   const pointsRef = useRef(
@@ -49,7 +66,7 @@ export const InteractionFx = () => {
     const updateEnabledState = () => {
       const nextEnabled = finePointerQuery.matches && !reducedMotionQuery.matches;
       setEnabled(nextEnabled);
-      document.documentElement.dataset.pointerFx = nextEnabled ? 'active' : 'inactive';
+      document.documentElement.dataset.pointerFx = nextEnabled && !isContact ? 'active' : 'inactive';
       return nextEnabled;
     };
 
@@ -73,7 +90,15 @@ export const InteractionFx = () => {
 
       const id = Date.now() + Math.random();
 
-      setBursts((current) => [...current, { id, x: event.clientX, y: event.clientY }]);
+      setBursts((current) => [
+        ...current,
+        {
+          id,
+          x: event.clientX,
+          y: event.clientY,
+          variant: isContact ? 'pokemon' : 'default',
+        },
+      ]);
 
       window.setTimeout(() => {
         setBursts((current) => current.filter((burst) => burst.id !== id));
@@ -81,7 +106,7 @@ export const InteractionFx = () => {
     };
 
     const animateTrail = () => {
-      if (!isActive) {
+      if (!isActive || isContact) {
         return;
       }
 
@@ -116,7 +141,7 @@ export const InteractionFx = () => {
       frameRef.current = window.requestAnimationFrame(animateTrail);
     };
 
-    if (isActive) {
+    if (isActive && !isContact) {
       frameRef.current = window.requestAnimationFrame(animateTrail);
     }
 
@@ -127,12 +152,12 @@ export const InteractionFx = () => {
       const nextEnabled = updateEnabledState();
       isActive = nextEnabled;
 
-      if (!nextEnabled && frameRef.current) {
+      if ((!nextEnabled || isContact) && frameRef.current) {
         window.cancelAnimationFrame(frameRef.current);
         frameRef.current = null;
       }
 
-      if (nextEnabled && !frameRef.current) {
+      if (nextEnabled && !isContact && !frameRef.current) {
         frameRef.current = window.requestAnimationFrame(animateTrail);
       }
     };
@@ -152,22 +177,23 @@ export const InteractionFx = () => {
 
       delete document.documentElement.dataset.pointerFx;
     };
-  }, []);
+  }, [isContact]);
 
   if (!enabled) {
     return null;
   }
 
   return (
-    <>
-      {cartridge.id !== 'contact' && (
-        <div
-          className={`interaction-fx__trail ${interactive ? 'interaction-fx__trail--active' : ''}`}
-          aria-hidden="true"
-        >
+    <div
+      className={`interaction-fx interaction-fx--${cartridge.id} ${interactive ? 'is-interactive' : ''}`}
+      aria-hidden="true"
+    >
+      {!isContact && (
+        <>
           {trailIndexes.map((index) => (
             <span
               key={index}
+              className="interaction-fx__trail"
               ref={(element) => {
                 trailRefs.current[index] = element;
               }}
@@ -176,24 +202,23 @@ export const InteractionFx = () => {
               }}
             />
           ))}
-        </div>
+        </>
       )}
 
       {bursts.map((burst) => (
         <div
           key={burst.id}
-          className={`interaction-fx__burst ${cartridge.id === 'contact' ? 'interaction-fx__burst--pokemon' : ''}`}
+          className={`interaction-fx__burst ${burst.variant === 'pokemon' ? 'interaction-fx__burst--pokemon' : ''}`}
           style={{ left: burst.x, top: burst.y }}
-          aria-hidden="true"
         >
-          {cartridge.id === 'contact' ? (
-            <div className="pokeball-catch">
-              <div className="pokeball-catch__flash" />
-              <div className="pokeball-catch__stars">
-                <span style={{ '--dir-x': -1, '--dir-y': -1 } as any} />
-                <span style={{ '--dir-x': 1, '--dir-y': -1 } as any} />
-                <span style={{ '--dir-x': -1, '--dir-y': 1 } as any} />
-                <span style={{ '--dir-x': 1, '--dir-y': 1 } as any} />
+          {burst.variant === 'pokemon' ? (
+            <div className="pokemon-click-burst">
+              <span className="pokemon-click-burst__core" />
+              <span className="pokemon-click-burst__ring" />
+              <div className="pokemon-click-burst__particles">
+                {RED_BURST_PARTICLES.map((style, index) => (
+                  <span key={index} style={style} />
+                ))}
               </div>
             </div>
           ) : (
@@ -216,7 +241,7 @@ export const InteractionFx = () => {
                         '--burst-distance': `${22 + (index % 4) * 12}px`,
                         '--burst-delay': `${(index % 3) * 30}ms`,
                         '--burst-color': color,
-                      } as React.CSSProperties
+                      } as CssVars
                     }
                   />
                 );
@@ -225,6 +250,6 @@ export const InteractionFx = () => {
           )}
         </div>
       ))}
-    </>
+    </div>
   );
 };

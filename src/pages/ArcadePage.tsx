@@ -136,13 +136,13 @@ export const ArcadePage = () => {
   };
 
   return (
-    <div className="page-stack arcade-page">
+    <div className="page-stack arcade-page arcade-page--blockcraft">
       <motion.section className="arcade-hero" initial="hidden" animate="show" variants={staggerGroup}>
         <motion.div className="arcade-hero__copy arcade-panel" variants={pixelReveal}>
           <p className="eyebrow">block craft / public toy world</p>
-          <h1>Build a tiny scene, leave a note, and show off a little technical magic.</h1>
+          <h1>Build a pocket chunk, leave a sign, and test the local-save loop.</h1>
           <p className="arcade-hero__lead">
-            This world is a Minecraft-inspired toy cartridge. Blocks and notes are stored locally on this device for now, so the page doubles as a mini build tool and persistence demo.
+            This is the block-craft cartridge: a tiny build board, sign post, and persistence demo with the UI language pushed toward chunky tools instead of standard forms.
           </p>
           <div className="arcade-hero__chips">
             <span className="arcade-chip arcade-chip--green">chunk board</span>
@@ -157,6 +157,9 @@ export const ArcadePage = () => {
             <div className="arcade-scene__cloud arcade-scene__cloud--1" />
             <div className="arcade-scene__cloud arcade-scene__cloud--2" />
             <div className="arcade-scene__ground" />
+            <div className="arcade-scene__ore arcade-scene__ore--1" />
+            <div className="arcade-scene__ore arcade-scene__ore--2" />
+            <div className="arcade-scene__workbench" />
             <div className="arcade-scene__tree arcade-scene__tree--1" />
             <div className="arcade-scene__tree arcade-scene__tree--2" />
           </div>

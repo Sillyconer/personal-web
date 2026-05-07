@@ -6,6 +6,13 @@
   gap: var(--gap-lg);
 }
 
+.home-hub--dream .home-hub__hero {
+  border-color: rgba(255, 213, 65, 0.5);
+  background:
+    linear-gradient(180deg, rgba(255, 213, 65, 0.08), rgba(188, 74, 155, 0.1)),
+    rgba(27, 27, 47, 0.92);
+}
+
 .home-hub__hero {
   grid-template-columns: minmax(0, 1fr) minmax(220px, 0.6fr) minmax(320px, 0.9fr);
   align-items: stretch;
@@ -75,6 +82,8 @@
 .home-hub__scene-moon,
 .home-hub__scene-stars,
 .home-hub__scene-hills,
+.home-hub__scene-castle,
+.home-hub__scene-cartridge,
 .home-hub__scene-sign {
   position: absolute;
 }
@@ -110,6 +119,52 @@
     linear-gradient(180deg, transparent 0 52%, #73172d 52% 100%);
   clip-path: polygon(0 72%, 8% 58%, 16% 64%, 28% 44%, 38% 54%, 48% 34%, 58% 48%, 70% 28%, 80% 42%, 88% 32%, 100% 50%, 100% 100%, 0 100%);
 }
+
+.home-hub__scene-castle {
+  left: 50%;
+  bottom: 104px;
+  width: 86px;
+  height: 72px;
+  transform: translateX(-50%);
+  background:
+    linear-gradient(90deg, transparent 0 10px, #b9bffb 10px 24px, transparent 24px 62px, #b9bffb 62px 76px, transparent 76px),
+    linear-gradient(180deg, transparent 0 20px, #4a5462 20px 100%);
+  box-shadow: inset 0 -10px 0 rgba(45, 33, 60, 0.75);
+}
+
+.home-hub__scene-castle::before,
+.home-hub__scene-castle::after {
+  content: '';
+  position: absolute;
+  bottom: 54px;
+  border-left: 16px solid transparent;
+  border-right: 16px solid transparent;
+  border-bottom: 24px solid #ffd541;
+}
+
+.home-hub__scene-castle::before { left: 0; }
+.home-hub__scene-castle::after { right: 0; }
+
+.home-hub__scene-cartridge {
+  width: 36px;
+  height: 48px;
+  border: 3px solid rgba(254, 243, 192, 0.42);
+  background: linear-gradient(180deg, #793a80 0 28%, #2d213c 28% 100%);
+  box-shadow: 0 0 12px rgba(255, 213, 65, 0.12);
+}
+
+.home-hub__scene-cartridge::after {
+  content: '';
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
+  height: 8px;
+  background: rgba(32, 214, 199, 0.56);
+}
+
+.home-hub__scene-cartridge--1 { left: 34px; top: 34px; }
+.home-hub__scene-cartridge--2 { right: 136px; top: 116px; transform: rotate(6deg); }
 
 .home-hub__scene-sign {
   display: inline-flex;

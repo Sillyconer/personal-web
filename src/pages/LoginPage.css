@@ -5,6 +5,11 @@
   padding: var(--gap);
 }
 
+.login--save-room .login__card {
+  border-color: rgba(185, 191, 251, 0.36);
+  box-shadow: 0 0 24px rgba(40, 92, 196, 0.16);
+}
+
 .login__card {
   width: min(100%, 460px);
   padding: 0;
@@ -26,7 +31,9 @@
 }
 
 .login__scene-crystal,
-.login__scene-ring {
+.login__scene-ring,
+.login__scene-door,
+.login__scene-lantern {
   position: absolute;
 }
 
@@ -56,6 +63,48 @@
   height: 46px;
   border-color: rgba(255, 213, 65, 0.24);
 }
+
+.login__scene-door {
+  left: 50%;
+  bottom: 0;
+  width: 74px;
+  height: 64px;
+  transform: translateX(-50%);
+  border: 3px solid rgba(185, 191, 251, 0.28);
+  border-bottom: 0;
+  background: linear-gradient(180deg, rgba(40, 92, 196, 0.18), rgba(6, 6, 8, 0.76));
+}
+
+.login__scene-door::after {
+  content: '';
+  position: absolute;
+  right: 14px;
+  top: 34px;
+  width: 6px;
+  height: 6px;
+  background: var(--signal-yellow);
+}
+
+.login__scene-lantern {
+  bottom: 24px;
+  width: 12px;
+  height: 28px;
+  background: #4a5462;
+}
+
+.login__scene-lantern::before {
+  content: '';
+  position: absolute;
+  left: -3px;
+  top: -10px;
+  width: 18px;
+  height: 12px;
+  background: var(--aap-lavender);
+  box-shadow: 0 0 18px rgba(185, 191, 251, 0.5);
+}
+
+.login__scene-lantern--left { left: 44px; }
+.login__scene-lantern--right { right: 44px; }
 
 .login__body h2 {
   font-size: 20px;

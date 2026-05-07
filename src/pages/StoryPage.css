@@ -9,6 +9,12 @@
   gap: var(--gap-lg);
 }
 
+.story-page--chrono {
+  --chrono-lavender: #b9bffb;
+  --chrono-teal: #20d6c7;
+  --chrono-gold: #ffd541;
+}
+
 .story-panel,
 .story-card {
   position: relative;
@@ -16,6 +22,13 @@
   border: 3px solid rgba(185, 191, 251, 0.45);
   background: linear-gradient(180deg, rgba(24, 26, 48, 0.95), rgba(11, 16, 29, 0.96));
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.04) inset, 0 24px 44px rgba(0, 0, 0, 0.26);
+}
+
+.story-page--chrono .story-panel,
+.story-page--chrono .story-card {
+  background:
+    radial-gradient(circle at 50% 24%, rgba(185, 191, 251, 0.12), transparent 30%),
+    linear-gradient(180deg, rgba(24, 28, 58, 0.96), rgba(8, 14, 27, 0.98));
 }
 
 .story-panel::after,
@@ -88,7 +101,8 @@
 
 .story-timegate__ring,
 .story-timegate__core,
-.story-timegate__island {
+.story-timegate__island,
+.story-timegate__label {
   position: absolute;
   inset: 50%;
   transform: translate(-50%, -50%);
@@ -120,6 +134,19 @@
 .story-timegate__island--present { left: 50%; top: 18%; background: #285cc4; }
 .story-timegate__island--future { left: 82%; top: 62%; background: #20d6c7; }
 
+.story-timegate__label {
+  padding: 3px 6px;
+  border: 2px solid rgba(254, 243, 192, 0.24);
+  background: rgba(8, 11, 27, 0.78);
+  font-family: var(--font-accent);
+  font-size: 9px;
+  color: var(--chrono-gold);
+}
+
+.story-timegate__label--past { left: 16%; top: 78%; }
+.story-timegate__label--present { left: 50%; top: 8%; color: var(--chrono-lavender); }
+.story-timegate__label--future { left: 84%; top: 72%; color: var(--chrono-teal); }
+
 .story-acts {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
@@ -129,6 +156,18 @@
   display: grid;
   gap: 12px;
 }
+
+.story-card__glyph {
+  width: 28px;
+  height: 28px;
+  border: 3px solid currentColor;
+  transform: rotate(45deg);
+  opacity: 0.72;
+}
+
+.story-card--lavender .story-card__glyph { color: var(--chrono-lavender); }
+.story-card--teal .story-card__glyph { color: var(--chrono-teal); }
+.story-card--yellow .story-card__glyph { color: var(--chrono-gold); }
 
 .story-card h2 {
   font-size: 1.15rem;

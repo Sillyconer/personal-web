@@ -21,21 +21,24 @@ export const StudioPage = () => {
   const privateCount = projects.filter((project) => hasPrivateProjectSections(project)).length;
 
   return (
-    <div className="page-stack studio">
+    <div className="page-stack studio studio--debug">
       {/* ── Hero ── */}
       <motion.section className="studio__hero t-frame t-frame--raised" initial="hidden" animate="show" variants={staggerGroup}>
         <motion.div className="studio__hero-copy" variants={pixelReveal}>
-          <p className="eyebrow">maker room / backstage</p>
+          <p className="eyebrow">debug workshop / backstage cartridge</p>
           <h1>private workshop</h1>
-          <p className="muted">Maintenance notes, private surfaces, and world-building tools. Same universe, hidden door.</p>
+          <p className="muted">Maintenance notes, private surfaces, and content tooling sit here like a debug room behind the public cartridges.</p>
         </motion.div>
 
         <motion.div className="studio__hero-scene" variants={cardReveal}>
           <div className="studio__console studio__console--1" />
           <div className="studio__console studio__console--2" />
           <div className="studio__console studio__console--3" />
+          <div className="studio__monitor" />
           <div className="studio__wire studio__wire--1" />
           <div className="studio__wire studio__wire--2" />
+          <div className="studio__spark studio__spark--1" />
+          <div className="studio__spark studio__spark--2" />
         </motion.div>
 
         <motion.div className="studio__badges flex-row" variants={pixelReveal}>

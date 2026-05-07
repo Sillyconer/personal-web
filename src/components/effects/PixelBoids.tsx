@@ -174,13 +174,14 @@ export const PixelBoids = () => {
   const frameRef = useRef(0);
   const lastFrameRef = useRef(0);
   const cartridge = getCartridgeByPath(location.pathname);
+  const isContact = cartridge.id === 'contact';
   const profile = PROFILE_MAP[cartridge.boidPreset];
 
-  if (cartridge.id === 'contact') {
-    return null;
-  }
-
   useEffect(() => {
+    if (isContact) {
+      return undefined;
+    }
+
     const canvas = canvasRef.current;
 
     if (!canvas) {
@@ -412,7 +413,11 @@ export const PixelBoids = () => {
       window.removeEventListener('resize', resize);
       window.cancelAnimationFrame(frameRef.current);
     };
-  }, [profile]);
+  }, [isContact, profile]);
+
+  if (isContact) {
+    return null;
+  }
 
   return <canvas ref={canvasRef} className="pixel-boids" data-preset={cartridge.boidPreset} aria-hidden="true" />;
 };

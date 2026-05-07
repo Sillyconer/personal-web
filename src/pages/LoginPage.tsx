@@ -30,7 +30,7 @@ export const LoginPage = () => {
   };
 
   return (
-    <div className="login">
+    <div className="login login--save-room">
       <form className="login__card t-frame t-frame--raised" onSubmit={handleSubmit}>
         <div className="t-header">
           <div className="t-header__dots">
@@ -46,6 +46,9 @@ export const LoginPage = () => {
             <div className="login__scene-crystal" />
             <div className="login__scene-ring" />
             <div className="login__scene-ring login__scene-ring--two" />
+            <div className="login__scene-door" />
+            <div className="login__scene-lantern login__scene-lantern--left" />
+            <div className="login__scene-lantern login__scene-lantern--right" />
           </div>
 
           <p className="eyebrow">private room access</p>

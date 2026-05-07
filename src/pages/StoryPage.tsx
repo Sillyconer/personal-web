@@ -30,11 +30,11 @@ const storyActs = [
 
 export const StoryPage = () => {
   return (
-    <div className="page-stack story-page">
+    <div className="page-stack story-page story-page--chrono">
       <motion.section className="story-hero" initial="hidden" animate="show" variants={staggerGroup}>
         <motion.div className="story-hero__copy story-panel" variants={pixelReveal}>
           <p className="eyebrow">chrono archive / story cartridge</p>
-          <h1>A timeline of how the work got here, and where it is heading next.</h1>
+          <h1>A time-gate timeline of the work, the taste, and the next route.</h1>
           <p className="story-hero__lead">{siteProfile.mission}</p>
           <div className="story-hero__chips">
             <span className="story-chip story-chip--lavender">time gate</span>
@@ -52,6 +52,9 @@ export const StoryPage = () => {
             <div className="story-timegate__island story-timegate__island--past" />
             <div className="story-timegate__island story-timegate__island--present" />
             <div className="story-timegate__island story-timegate__island--future" />
+            <span className="story-timegate__label story-timegate__label--past">past</span>
+            <span className="story-timegate__label story-timegate__label--present">now</span>
+            <span className="story-timegate__label story-timegate__label--future">next</span>
           </div>
         </motion.div>
       </motion.section>
@@ -59,6 +62,7 @@ export const StoryPage = () => {
       <motion.section className="story-acts" initial="hidden" whileInView="show" viewport={viewport} variants={staggerGroup}>
         {storyActs.map((act) => (
           <motion.article key={act.era} className={`story-card story-card--${act.tone}`} variants={cardReveal}>
+            <span className="story-card__glyph" aria-hidden="true" />
             <p className="eyebrow">era: {act.era}</p>
             <h2>{act.title}</h2>
             <p>{act.copy}</p>

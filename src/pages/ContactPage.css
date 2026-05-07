@@ -4,10 +4,12 @@
    overworld sprites, trainer-card panels
    ══════════════════════════════════════════ */
 
-/* ── Pokeball cursor for entire page ── */
+/* ── Pokeball cursor for the contact route ── */
+html[data-cartridge='contact'],
+html[data-cartridge='contact'] *,
 .contact--pokemon,
 .contact--pokemon * {
-  cursor: url('/src/assets/pokemon/pokeball.cur'), auto;
+  cursor: url('../assets/pokemon/pokeball.cur'), auto;
 }
 
 /* ── World map section ── */
