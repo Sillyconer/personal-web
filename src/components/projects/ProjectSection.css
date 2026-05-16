@@ -61,3 +61,31 @@
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: var(--gap-sm);
 }
+
+.psec__code {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: rgba(6, 6, 8, 0.72);
+}
+
+.psec__code-head {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--gap-sm);
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  color: var(--ink-dim);
+  font-family: var(--font-accent);
+  font-size: 10px;
+  text-transform: lowercase;
+}
+
+.psec__code pre {
+  margin: 0;
+  padding: 16px;
+  overflow-x: auto;
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.65;
+}

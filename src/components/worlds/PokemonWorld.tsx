@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
+import type { MouseEvent } from 'react';
+import { createPortal } from 'react-dom';
 
 import overworldSheet from '../../assets/pokemon/overworld_sprites.png';
 import './PokemonWorld.css';
@@ -52,7 +54,7 @@ const SEASON_EDGE_DETAIL_TEXTURES: Record<SeasonName, string[]> = {
   winter: ['hana01_2.png', 'hana01_1.png', 'ue_grass00.png', 'ue_grass01.png'],
 };
 
-type Direction = 'down' | 'left' | 'right' | 'up';
+export type Direction = 'down' | 'left' | 'right' | 'up';
 type TileKind = 'grass' | 'path' | 'road' | 'forest';
 type DecorKind =
   | 'empty'
@@ -68,14 +70,17 @@ type DecorKind =
   | 'rock';
 type RoadStyle = 'none' | 'lane' | 'street';
 type AssetLoader = () => Promise<string>;
+const FOREST_MOVEMENT_MARGIN = 1;
 
-interface SpriteFrame {
+export interface SpriteFrame {
   x: number;
   y: number;
+  flipX?: boolean;
 }
 
-interface PokemonSprite {
+export interface PokemonSprite {
   name: string;
+  generation: PokemonGeneration;
   w: number;
   h: number;
   frames: Record<Direction, SpriteFrame[]>;
@@ -167,6 +172,7 @@ interface BuildingPlacement {
 }
 
 interface WalkingPokemon {
+  id: string;
   sprite: PokemonSprite;
   x: number;
   y: number;
@@ -181,6 +187,52 @@ interface WalkingPokemon {
   isIdle: boolean;
 }
 
+interface SelectedPokemon {
+  id: string;
+  sprite: PokemonSprite;
+  status: 'caught' | 'wild';
+  x: number;
+  y: number;
+  direction: Direction;
+  frameIndex: number;
+  caughtAt?: GridPoint;
+}
+
+interface CaughtPokemon {
+  id: string;
+  sprite: PokemonSprite;
+  x: number;
+  y: number;
+  direction: Direction;
+  frameIndex: number;
+  caughtAt: GridPoint;
+}
+
+interface ReleaseAnimation {
+  x: number;
+  y: number;
+  startedAt: number;
+}
+
+interface SpriteSheetPixels {
+  data: Uint8ClampedArray;
+  width: number;
+}
+
+interface PixelColor {
+  r: number;
+  g: number;
+  b: number;
+  a: number;
+}
+
+interface CollisionBox {
+  left: number;
+  top: number;
+  right: number;
+  bottom: number;
+}
+
 const TILE = 32;
 const MAP_COLS = 32;
 const MAP_ROWS = 20;
@@ -192,8 +244,15 @@ const MIN_WALK = 1600;
 const MAX_WALK = 4200;
 const MIN_IDLE = 900;
 const MAX_IDLE = 2800;
-const POKEMON_COUNT = 8;
+const POKEMON_COUNT = 16;
+const RANDOM_PATH_TILE_COUNT = 48;
+const RANDOM_GROUND_DETAIL_CHANCE = 0.18;
+const RELEASE_ANIMATION_DURATION = 820;
+export const SPRITE_SHEET_WIDTH = 1024;
+export const SPRITE_SHEET_HEIGHT = 5792;
+const FRAME_PREVIEW_SCALE = 2;
 const DIRECTIONS: Direction[] = ['down', 'left', 'right', 'up'];
+const DISPLAY_DIRECTIONS: Direction[] = ['up', 'down', 'left', 'right'];
 const CENTER_PLAZA = { x: 11, y: 7, w: 10, h: 6 };
 const ENABLE_SCENIC_BANDS = false;
 const ENABLE_PATH_NETWORK = false;
@@ -211,117 +270,206 @@ const DIRECTION_VELOCITY: Record<Direction, { vx: number; vy: number }> = {
   up: { vx: 0, vy: -WALK_SPEED },
 };
 
-const frame = (x: number, y: number): SpriteFrame => ({ x, y });
+export type PokemonGeneration = 1 | 2 | 3 | 4 | 5;
+type PokemonSpawnMode = 'clear' | 'random' | PokemonGeneration;
+type PokemonType =
+  | 'bug'
+  | 'dark'
+  | 'electric'
+  | 'fairy'
+  | 'fighting'
+  | 'fire'
+  | 'flying'
+  | 'ghost'
+  | 'grass'
+  | 'ground'
+  | 'normal'
+  | 'poison'
+  | 'psychic'
+  | 'rock'
+  | 'water';
+type PokemonStatName = 'attack' | 'defense' | 'hp' | 'spAttack' | 'spDefense' | 'speed';
 
-/* Explicit two-frame directional coordinates from the overworld sheet.
-   Row order on this sheet is up, down, left, right. Keeping every direction
-   listed manually prevents a walker from ever striding into another Pokemon. */
-const POKEMON_SPRITES: PokemonSprite[] = [
-  {
-    name: 'bulbasaur',
-    w: 32,
-    h: 32,
-    frames: {
-      up: [frame(0, 0), frame(32, 0)],
-      down: [frame(0, 32), frame(32, 32)],
-      left: [frame(0, 64), frame(32, 64)],
-      right: [frame(0, 96), frame(32, 96)],
-    },
-  },
-  {
-    name: 'charmander',
-    w: 32,
-    h: 32,
-    frames: {
-      up: [frame(256, 0), frame(288, 0)],
-      down: [frame(256, 32), frame(288, 32)],
-      left: [frame(256, 64), frame(288, 64)],
-      right: [frame(256, 96), frame(288, 96)],
-    },
-  },
-  {
-    name: 'charizard',
-    w: 32,
-    h: 32,
-    frames: {
-      up: [frame(384, 0), frame(416, 0)],
-      down: [frame(384, 32), frame(416, 32)],
-      left: [frame(384, 64), frame(416, 64)],
-      right: [frame(384, 96), frame(416, 96)],
-    },
-  },
-  {
-    name: 'squirtle',
-    w: 32,
-    h: 32,
-    frames: {
-      up: [frame(448, 0), frame(480, 0)],
-      down: [frame(448, 32), frame(480, 32)],
-      left: [frame(448, 64), frame(480, 64)],
-      right: [frame(448, 96), frame(480, 96)],
-    },
-  },
-  {
-    name: 'pikachu',
-    w: 32,
-    h: 32,
-    frames: {
-      up: [frame(576, 128), frame(608, 128)],
-      down: [frame(576, 160), frame(608, 160)],
-      left: [frame(576, 192), frame(608, 192)],
-      right: [frame(576, 224), frame(608, 224)],
-    },
-  },
-  {
-    name: 'jigglypuff',
-    w: 32,
-    h: 32,
-    frames: {
-      up: [frame(512, 256), frame(544, 256)],
-      down: [frame(512, 288), frame(544, 288)],
-      left: [frame(512, 320), frame(544, 320)],
-      right: [frame(512, 352), frame(544, 352)],
-    },
-  },
-  {
-    name: 'clefairy',
-    w: 32,
-    h: 32,
-    frames: {
-      up: [frame(576, 256), frame(608, 256)],
-      down: [frame(576, 288), frame(608, 288)],
-      left: [frame(576, 320), frame(608, 320)],
-      right: [frame(576, 352), frame(608, 352)],
-    },
-  },
-  {
-    name: 'oddish',
-    w: 32,
-    h: 32,
-    frames: {
-      up: [frame(768, 256), frame(800, 256)],
-      down: [frame(768, 288), frame(800, 288)],
-      left: [frame(768, 320), frame(800, 320)],
-      right: [frame(768, 352), frame(800, 352)],
-    },
-  },
-  {
-    name: 'meowth',
-    w: 32,
-    h: 32,
-    frames: {
-      up: [frame(384, 384), frame(416, 384)],
-      down: [frame(384, 416), frame(416, 416)],
-      left: [frame(384, 448), frame(416, 448)],
-      right: [frame(384, 480), frame(416, 480)],
-    },
-  },
+interface PokemonMetadata {
+  ability: string;
+  category: string;
+  types: PokemonType[];
+}
+
+const frame = (x: number, y: number, flipX = false): SpriteFrame => ({ x, y, ...(flipX ? { flipX } : {}) });
+
+// eslint-disable-next-line react-refresh/only-export-components
+export const POKEMON_GENERATIONS: PokemonGeneration[] = [1, 2, 3, 4, 5];
+const POKEMON_STAT_LABELS: Record<PokemonStatName, string> = {
+  attack: 'ATK',
+  defense: 'DEF',
+  hp: 'HP',
+  spAttack: 'SP.ATK',
+  spDefense: 'SP.DEF',
+  speed: 'SPD',
+};
+
+const POKEMON_METADATA: Record<string, PokemonMetadata> = {
+  audino: { ability: 'Healer', category: 'Hearing', types: ['normal'] },
+  azurill: { ability: 'Huge Power', category: 'Polka Dot', types: ['normal', 'fairy'] },
+  basculin: { ability: 'Adaptability', category: 'Hostile', types: ['water'] },
+  bidoof: { ability: 'Simple', category: 'Plump Mouse', types: ['normal'] },
+  budew: { ability: 'Natural Cure', category: 'Bud', types: ['grass', 'poison'] },
+  buizel: { ability: 'Swift Swim', category: 'Sea Weasel', types: ['water'] },
+  bulbasaur: { ability: 'Overgrow', category: 'Seed', types: ['grass', 'poison'] },
+  buneary: { ability: 'Run Away', category: 'Rabbit', types: ['normal'] },
+  caterpie: { ability: 'Shield Dust', category: 'Worm', types: ['bug'] },
+  charmander: { ability: 'Blaze', category: 'Lizard', types: ['fire'] },
+  charmeleon: { ability: 'Blaze', category: 'Flame', types: ['fire'] },
+  cherubi: { ability: 'Chlorophyll', category: 'Cherry', types: ['grass'] },
+  chinchou: { ability: 'Volt Absorb', category: 'Angler', types: ['water', 'electric'] },
+  clefairy: { ability: 'Cute Charm', category: 'Fairy', types: ['fairy'] },
+  cleffa: { ability: 'Cute Charm', category: 'Star Shape', types: ['fairy'] },
+  drifloon: { ability: 'Aftermath', category: 'Balloon', types: ['ghost', 'flying'] },
+  eevee: { ability: 'Run Away', category: 'Evolution', types: ['normal'] },
+  hoothoot: { ability: 'Insomnia', category: 'Owl', types: ['normal', 'flying'] },
+  igglybuff: { ability: 'Cute Charm', category: 'Balloon', types: ['normal', 'fairy'] },
+  ivysaur: { ability: 'Overgrow', category: 'Seed', types: ['grass', 'poison'] },
+  jigglypuff: { ability: 'Cute Charm', category: 'Balloon', types: ['normal', 'fairy'] },
+  kricketot: { ability: 'Shed Skin', category: 'Cricket', types: ['bug'] },
+  ledyba: { ability: 'Swarm', category: 'Five Star', types: ['bug', 'flying'] },
+  lotad: { ability: 'Swift Swim', category: 'Water Weed', types: ['water', 'grass'] },
+  machop: { ability: 'Guts', category: 'Superpower', types: ['fighting'] },
+  mareep: { ability: 'Static', category: 'Wool', types: ['electric'] },
+  marill: { ability: 'Huge Power', category: 'Aqua Mouse', types: ['water', 'fairy'] },
+  meowth: { ability: 'Pickup', category: 'Scratch Cat', types: ['normal'] },
+  minun: { ability: 'Minus', category: 'Cheering', types: ['electric'] },
+  mudkip: { ability: 'Torrent', category: 'Mud Fish', types: ['water'] },
+  natu: { ability: 'Synchronize', category: 'Tiny Bird', types: ['psychic', 'flying'] },
+  oddish: { ability: 'Chlorophyll', category: 'Weed', types: ['grass', 'poison'] },
+  pachirisu: { ability: 'Run Away', category: 'EleSquirrel', types: ['electric'] },
+  panpour: { ability: 'Gluttony', category: 'Spray', types: ['water'] },
+  pansage: { ability: 'Gluttony', category: 'Grass Monkey', types: ['grass'] },
+  pansear: { ability: 'Gluttony', category: 'High Temp', types: ['fire'] },
+  patrat: { ability: 'Keen Eye', category: 'Scout', types: ['normal'] },
+  petilil: { ability: 'Chlorophyll', category: 'Bulb', types: ['grass'] },
+  pichu: { ability: 'Static', category: 'Tiny Mouse', types: ['electric'] },
+  pikachu: { ability: 'Static', category: 'Mouse', types: ['electric'] },
+  piplup: { ability: 'Torrent', category: 'Penguin', types: ['water'] },
+  plusle: { ability: 'Plus', category: 'Cheering', types: ['electric'] },
+  poochyena: { ability: 'Run Away', category: 'Bite', types: ['dark'] },
+  purrloin: { ability: 'Limber', category: 'Devious', types: ['dark'] },
+  psyduck: { ability: 'Damp', category: 'Duck', types: ['water'] },
+  ralts: { ability: 'Synchronize', category: 'Feeling', types: ['psychic', 'fairy'] },
+  roggenrola: { ability: 'Sturdy', category: 'Mantle', types: ['rock'] },
+  sableye: { ability: 'Keen Eye', category: 'Darkness', types: ['dark', 'ghost'] },
+  sandile: { ability: 'Intimidate', category: 'Desert Croc', types: ['ground', 'dark'] },
+  seedot: { ability: 'Chlorophyll', category: 'Acorn', types: ['grass'] },
+  sentret: { ability: 'Run Away', category: 'Scout', types: ['normal'] },
+  sewaddle: { ability: 'Swarm', category: 'Sewing', types: ['bug', 'grass'] },
+  shinx: { ability: 'Rivalry', category: 'Flash', types: ['electric'] },
+  skitty: { ability: 'Cute Charm', category: 'Kitten', types: ['normal'] },
+  slakoth: { ability: 'Truant', category: 'Slacker', types: ['normal'] },
+  spinarak: { ability: 'Swarm', category: 'String Spit', types: ['bug', 'poison'] },
+  squirtle: { ability: 'Torrent', category: 'Tiny Turtle', types: ['water'] },
+  taillow: { ability: 'Guts', category: 'Tiny Swallow', types: ['normal', 'flying'] },
+  timburr: { ability: 'Guts', category: 'Muscular', types: ['fighting'] },
+  torchic: { ability: 'Blaze', category: 'Chick', types: ['fire'] },
+  togepi: { ability: 'Hustle', category: 'Spike Ball', types: ['fairy'] },
+  treecko: { ability: 'Overgrow', category: 'Wood Gecko', types: ['grass'] },
+  turtwig: { ability: 'Overgrow', category: 'Tiny Leaf', types: ['grass'] },
+  tympole: { ability: 'Swift Swim', category: 'Tadpole', types: ['water'] },
+  venipede: { ability: 'Poison Point', category: 'Centipede', types: ['bug', 'poison'] },
+  wartortle: { ability: 'Torrent', category: 'Turtle', types: ['water'] },
+  weedle: { ability: 'Shield Dust', category: 'Hairy Bug', types: ['bug', 'poison'] },
+  wingull: { ability: 'Keen Eye', category: 'Seagull', types: ['water', 'flying'] },
+  wooper: { ability: 'Damp', category: 'Water Fish', types: ['water', 'ground'] },
+  zigzagoon: { ability: 'Pickup', category: 'Zigzag', types: ['normal'] },
+};
+// eslint-disable-next-line react-refresh/only-export-components
+export const POKEMON_SPRITES: PokemonSprite[] = [
+  { name: 'bulbasaur', generation: 1, w: 32, h: 32, frames: { up: [frame(0, 0), frame(32, 0)], down: [frame(0, 32), frame(32, 32)], left: [frame(0, 64), frame(32, 64)], right: [frame(0, 96), frame(32, 96)] } },
+  { name: 'ivysaur', generation: 1, w: 32, h: 32, frames: { up: [frame(64, 0), frame(96, 0)], down: [frame(64, 32), frame(96, 32)], left: [frame(64, 64), frame(96, 64)], right: [frame(64, 96), frame(96, 96)] } },
+  { name: 'charmander', generation: 1, w: 32, h: 32, frames: { up: [frame(192, 0), frame(224, 0)], down: [frame(192, 32), frame(224, 32)], left: [frame(192, 64), frame(224, 64)], right: [frame(192, 96), frame(224, 96)] } },
+  { name: 'charmeleon', generation: 1, w: 32, h: 32, frames: { up: [frame(256, 0), frame(288, 0)], down: [frame(256, 32), frame(288, 32)], left: [frame(256, 64), frame(288, 64)], right: [frame(256, 96), frame(288, 96)] } },
+  { name: 'squirtle', generation: 1, w: 32, h: 32, frames: { up: [frame(384, 0), frame(416, 0)], down: [frame(384, 32), frame(416, 32)], left: [frame(384, 64), frame(416, 64)], right: [frame(384, 96), frame(416, 96)] } },
+  { name: 'wartortle', generation: 1, w: 32, h: 32, frames: { up: [frame(448, 0), frame(480, 0)], down: [frame(448, 32), frame(480, 32)], left: [frame(448, 64), frame(480, 64)], right: [frame(448, 96), frame(480, 96)] } },
+  { name: 'caterpie', generation: 1, w: 32, h: 32, frames: { up: [frame(576, 0), frame(608, 0)], down: [frame(576, 32), frame(608, 32)], left: [frame(576, 64), frame(608, 64)], right: [frame(576, 96), frame(608, 96)] } },
+  { name: 'weedle', generation: 1, w: 32, h: 32, frames: { up: [frame(768, 0), frame(800, 0)], down: [frame(768, 32), frame(800, 32)], left: [frame(768, 64), frame(800, 64)], right: [frame(768, 96), frame(800, 96)] } },
+  { name: 'pikachu', generation: 1, w: 32, h: 32, frames: { up: [frame(512, 128), frame(544, 128)], down: [frame(512, 160), frame(544, 160)], left: [frame(512, 192), frame(544, 192)], right: [frame(512, 224), frame(544, 224)] } },
+  { name: 'clefairy', generation: 1, w: 32, h: 32, frames: { up: [frame(128, 256), frame(160, 256)], down: [frame(128, 288), frame(160, 288)], left: [frame(128, 320), frame(160, 320)], right: [frame(128, 352), frame(160, 352)] } },
+  { name: 'jigglypuff', generation: 1, w: 32, h: 32, frames: { up: [frame(384, 256), frame(416, 256)], down: [frame(384, 288), frame(416, 288)], left: [frame(384, 320), frame(416, 320)], right: [frame(384, 352), frame(416, 352)] } },
+  { name: 'oddish', generation: 1, w: 32, h: 32, frames: { up: [frame(640, 256), frame(672, 256)], down: [frame(640, 288), frame(672, 288)], left: [frame(640, 320), frame(672, 320)], right: [frame(640, 352), frame(672, 352)] } },
+  { name: 'meowth', generation: 1, w: 32, h: 32, frames: { up: [frame(192, 384), frame(224, 384)], down: [frame(192, 416), frame(224, 416)], left: [frame(192, 448), frame(224, 448)], right: [frame(192, 480), frame(224, 480)] } },
+  { name: 'psyduck', generation: 1, w: 32, h: 32, frames: { up: [frame(320, 384), frame(352, 384)], down: [frame(320, 416), frame(352, 416)], left: [frame(320, 448), frame(352, 448)], right: [frame(320, 480), frame(352, 480)] } },
+  { name: 'machop', generation: 1, w: 32, h: 32, frames: { up: [frame(64, 512), frame(96, 512)], down: [frame(64, 544), frame(96, 544)], left: [frame(64, 576), frame(96, 576)], right: [frame(64, 608), frame(96, 608)] } },
+  { name: 'eevee', generation: 1, w: 32, h: 32, frames: { up: [frame(256, 1024), frame(288, 1024)], down: [frame(256, 1056), frame(288, 1056)], left: [frame(256, 1088), frame(288, 1088)], right: [frame(256, 1120), frame(288, 1120)] } },
+  { name: 'sentret', generation: 2, w: 32, h: 32, frames: { up: [frame(0, 1280), frame(32, 1280)], down: [frame(0, 1312), frame(32, 1312)], left: [frame(0, 1344), frame(32, 1344)], right: [frame(0, 1376), frame(32, 1376)] } },
+  { name: 'hoothoot', generation: 2, w: 32, h: 32, frames: { up: [frame(128, 1280), frame(160, 1280)], down: [frame(128, 1312), frame(160, 1312)], left: [frame(128, 1344), frame(160, 1344)], right: [frame(128, 1376), frame(160, 1376)] } },
+  { name: 'ledyba', generation: 2, w: 32, h: 32, frames: { up: [frame(256, 1280), frame(288, 1280)], down: [frame(256, 1312), frame(288, 1312)], left: [frame(256, 1344), frame(288, 1344)], right: [frame(256, 1376), frame(288, 1376)] } },
+  { name: 'spinarak', generation: 2, w: 32, h: 32, frames: { up: [frame(384, 1280), frame(416, 1280)], down: [frame(384, 1312), frame(416, 1312)], left: [frame(384, 1344), frame(416, 1344)], right: [frame(384, 1376), frame(416, 1376)] } },
+  { name: 'chinchou', generation: 2, w: 32, h: 32, frames: { up: [frame(576, 1280), frame(608, 1280)], down: [frame(576, 1312), frame(608, 1312)], left: [frame(576, 1344), frame(608, 1344)], right: [frame(576, 1376), frame(608, 1376)] } },
+  { name: 'pichu', generation: 2, w: 32, h: 32, frames: { up: [frame(704, 1280), frame(736, 1280)], down: [frame(704, 1312), frame(736, 1312)], left: [frame(704, 1344), frame(736, 1344)], right: [frame(704, 1376), frame(736, 1376)] } },
+  { name: 'cleffa', generation: 2, w: 32, h: 32, frames: { up: [frame(768, 1280), frame(800, 1280)], down: [frame(768, 1312), frame(800, 1312)], left: [frame(768, 1344), frame(800, 1344)], right: [frame(768, 1376), frame(800, 1376)] } },
+  { name: 'igglybuff', generation: 2, w: 32, h: 32, frames: { up: [frame(832, 1280), frame(864, 1280)], down: [frame(832, 1312), frame(864, 1312)], left: [frame(832, 1344), frame(864, 1344)], right: [frame(832, 1376), frame(864, 1376)] } },
+  { name: 'togepi', generation: 2, w: 32, h: 32, frames: { up: [frame(896, 1280), frame(928, 1280)], down: [frame(896, 1312), frame(928, 1312)], left: [frame(896, 1344), frame(928, 1344)], right: [frame(896, 1376), frame(928, 1376)] } },
+  { name: 'natu', generation: 2, w: 32, h: 32, frames: { up: [frame(0, 1408), frame(32, 1408)], down: [frame(0, 1440), frame(32, 1440)], left: [frame(0, 1472), frame(32, 1472)], right: [frame(0, 1504), frame(32, 1504)] } },
+  { name: 'mareep', generation: 2, w: 32, h: 32, frames: { up: [frame(128, 1408), frame(160, 1408)], down: [frame(128, 1440), frame(160, 1440)], left: [frame(128, 1472), frame(160, 1472)], right: [frame(128, 1504), frame(160, 1504)] } },
+  { name: 'marill', generation: 2, w: 32, h: 32, frames: { up: [frame(384, 1408), frame(416, 1408)], down: [frame(384, 1440), frame(416, 1440)], left: [frame(384, 1472), frame(416, 1472)], right: [frame(384, 1504), frame(416, 1504)] } },
+  { name: 'wooper', generation: 2, w: 32, h: 32, frames: { up: [frame(64, 1536), frame(96, 1536)], down: [frame(64, 1568), frame(96, 1568)], left: [frame(64, 1600), frame(96, 1600)], right: [frame(64, 1632), frame(96, 1632)] } },
+  { name: 'treecko', generation: 3, w: 32, h: 32, frames: { up: [frame(128, 2304), frame(160, 2304)], down: [frame(128, 2336), frame(160, 2336)], left: [frame(128, 2368), frame(160, 2368)], right: [frame(128, 2400), frame(160, 2400)] } },
+  { name: 'torchic', generation: 3, w: 32, h: 32, frames: { up: [frame(320, 2304), frame(352, 2304)], down: [frame(320, 2336), frame(352, 2336)], left: [frame(320, 2368), frame(352, 2368)], right: [frame(320, 2400), frame(352, 2400)] } },
+  { name: 'mudkip', generation: 3, w: 32, h: 32, frames: { up: [frame(512, 2304), frame(544, 2304)], down: [frame(512, 2336), frame(544, 2336)], left: [frame(512, 2368), frame(544, 2368)], right: [frame(512, 2400), frame(544, 2400)] } },
+  { name: 'poochyena', generation: 3, w: 32, h: 32, frames: { up: [frame(704, 2304), frame(736, 2304)], down: [frame(704, 2336), frame(736, 2336)], left: [frame(704, 2368), frame(736, 2368)], right: [frame(704, 2400), frame(736, 2400)] } },
+  { name: 'zigzagoon', generation: 3, w: 32, h: 32, frames: { up: [frame(832, 2304), frame(864, 2304)], down: [frame(832, 2336), frame(864, 2336)], left: [frame(832, 2368), frame(864, 2368)], right: [frame(832, 2400), frame(864, 2400)] } },
+  { name: 'lotad', generation: 3, w: 32, h: 32, frames: { up: [frame(256, 2432), frame(288, 2432)], down: [frame(256, 2464), frame(288, 2464)], left: [frame(256, 2496), frame(288, 2496)], right: [frame(256, 2528), frame(288, 2528)] } },
+  { name: 'seedot', generation: 3, w: 32, h: 32, frames: { up: [frame(448, 2432), frame(480, 2432)], down: [frame(448, 2464), frame(480, 2464)], left: [frame(448, 2496), frame(480, 2496)], right: [frame(448, 2528), frame(480, 2528)] } },
+  { name: 'taillow', generation: 3, w: 32, h: 32, frames: { up: [frame(640, 2432), frame(672, 2432)], down: [frame(640, 2464), frame(672, 2464)], left: [frame(640, 2496), frame(672, 2496)], right: [frame(640, 2528), frame(672, 2528)] } },
+  { name: 'wingull', generation: 3, w: 32, h: 32, frames: { up: [frame(768, 2432), frame(800, 2432)], down: [frame(768, 2464), frame(800, 2464)], left: [frame(768, 2496), frame(800, 2496)], right: [frame(768, 2528), frame(800, 2528)] } },
+  { name: 'ralts', generation: 3, w: 32, h: 32, frames: { up: [frame(896, 2432), frame(928, 2432)], down: [frame(896, 2464), frame(928, 2464)], left: [frame(896, 2496), frame(928, 2496)], right: [frame(896, 2528), frame(928, 2528)] } },
+  { name: 'slakoth', generation: 3, w: 32, h: 32, frames: { up: [frame(320, 2560), frame(352, 2560)], down: [frame(320, 2592), frame(352, 2592)], left: [frame(320, 2624), frame(352, 2624)], right: [frame(320, 2656), frame(352, 2656)] } },
+  { name: 'azurill', generation: 3, w: 32, h: 32, frames: { up: [frame(0, 2688), frame(32, 2688)], down: [frame(0, 2720), frame(32, 2720)], left: [frame(0, 2752), frame(32, 2752)], right: [frame(0, 2784), frame(32, 2784)] } },
+  { name: 'skitty', generation: 3, w: 32, h: 32, frames: { up: [frame(128, 2688), frame(160, 2688)], down: [frame(128, 2720), frame(160, 2720)], left: [frame(128, 2752), frame(160, 2752)], right: [frame(128, 2784), frame(160, 2784)] } },
+  { name: 'sableye', generation: 3, w: 32, h: 32, frames: { up: [frame(256, 2688), frame(288, 2688)], down: [frame(256, 2720), frame(288, 2720)], left: [frame(256, 2752), frame(288, 2752)], right: [frame(256, 2784), frame(288, 2784)] } },
+  { name: 'plusle', generation: 3, w: 32, h: 32, frames: { up: [frame(832, 2688), frame(864, 2688)], down: [frame(832, 2720), frame(864, 2720)], left: [frame(832, 2752), frame(864, 2752)], right: [frame(832, 2784), frame(864, 2784)] } },
+  { name: 'minun', generation: 3, w: 32, h: 32, frames: { up: [frame(896, 2688), frame(928, 2688)], down: [frame(896, 2720), frame(928, 2720)], left: [frame(896, 2752), frame(928, 2752)], right: [frame(896, 2784), frame(928, 2784)] } },
+  { name: 'turtwig', generation: 4, w: 32, h: 32, frames: { up: [frame(512, 3712), frame(544, 3712)], down: [frame(512, 3744), frame(544, 3744)], left: [frame(512, 3776), frame(544, 3776)], right: [frame(512, 3808), frame(544, 3808)] } },
+  { name: 'chimchar', generation: 4, w: 32, h: 32, frames: { up: [frame(768, 3712), frame(800, 3712)], down: [frame(768, 3744), frame(800, 3744)], left: [frame(768, 3776), frame(800, 3776)], right: [frame(768, 3808), frame(800, 3808)] } },
+  { name: 'piplup', generation: 4, w: 32, h: 32, frames: { up: [frame(960, 3712), frame(992, 3712)], down: [frame(960, 3744), frame(992, 3744)], left: [frame(960, 3776), frame(992, 3776)], right: [frame(960, 3808), frame(992, 3808)] } },
+  { name: 'bidoof', generation: 4, w: 32, h: 32, frames: { up: [frame(320, 3840), frame(352, 3840)], down: [frame(320, 3872), frame(352, 3872)], left: [frame(320, 3904), frame(352, 3904)], right: [frame(320, 3936), frame(352, 3936)] } },
+  { name: 'kricketot', generation: 4, w: 32, h: 32, frames: { up: [frame(448, 3840), frame(480, 3840)], down: [frame(448, 3872), frame(480, 3872)], left: [frame(448, 3904), frame(480, 3904)], right: [frame(448, 3936), frame(480, 3936)] } },
+  { name: 'shinx', generation: 4, w: 32, h: 32, frames: { up: [frame(512, 3840), frame(544, 3840)], down: [frame(512, 3872), frame(544, 3872)], left: [frame(512, 3904), frame(544, 3904)], right: [frame(512, 3936), frame(544, 3936)] } },
+  { name: 'budew', generation: 4, w: 32, h: 32, frames: { up: [frame(768, 3840), frame(800, 3840)], down: [frame(768, 3872), frame(800, 3872)], left: [frame(768, 3904), frame(800, 3904)], right: [frame(768, 3936), frame(800, 3936)] } },
+  { name: 'pachirisu', generation: 4, w: 32, h: 32, frames: { up: [frame(384, 3968), frame(416, 3968)], down: [frame(384, 4000), frame(416, 4000)], left: [frame(384, 4032), frame(416, 4032)], right: [frame(384, 4064), frame(416, 4064)] } },
+  { name: 'buizel', generation: 4, w: 32, h: 32, frames: { up: [frame(512, 3968), frame(544, 3968)], down: [frame(512, 4000), frame(544, 4000)], left: [frame(512, 4032), frame(544, 4032)], right: [frame(512, 4064), frame(544, 4064)] } },
+  { name: 'cherubi', generation: 4, w: 32, h: 32, frames: { up: [frame(640, 3968), frame(672, 3968)], down: [frame(640, 4000), frame(672, 4000)], left: [frame(640, 4032), frame(672, 4032)], right: [frame(640, 4064), frame(672, 4064)] } },
+  { name: 'drifloon', generation: 4, w: 32, h: 32, frames: { up: [frame(896, 3968), frame(928, 3968)], down: [frame(896, 4000), frame(928, 4000)], left: [frame(896, 4032), frame(928, 4032)], right: [frame(896, 4064), frame(928, 4064)] } },
+  { name: 'buneary', generation: 4, w: 32, h: 32, frames: { up: [frame(0, 4096), frame(32, 4096)], down: [frame(0, 4128), frame(32, 4128)], left: [frame(0, 4160), frame(32, 4160)], right: [frame(0, 4192), frame(32, 4192)] } },
+  { name: 'patrat', generation: 5, w: 32, h: 32, frames: { up: [frame(64, 5248), frame(96, 5248)], down: [frame(64, 5280), frame(96, 5280)], left: [frame(64, 5312), frame(96, 5312)], right: [frame(64, 5344), frame(96, 5344)] } },
+  { name: 'purrloin', generation: 5, w: 32, h: 32, frames: { up: [frame(128, 5248), frame(160, 5248)], down: [frame(128, 5280), frame(160, 5280)], left: [frame(128, 5312), frame(160, 5312)], right: [frame(128, 5344), frame(160, 5344)] } },
+  { name: 'pansage', generation: 5, w: 32, h: 32, frames: { up: [frame(192, 5248), frame(224, 5248)], down: [frame(192, 5280), frame(224, 5280)], left: [frame(192, 5312), frame(224, 5312)], right: [frame(192, 5344), frame(224, 5344)] } },
+  { name: 'pansear', generation: 5, w: 32, h: 32, frames: { up: [frame(256, 5248), frame(288, 5248)], down: [frame(256, 5280), frame(288, 5280)], left: [frame(256, 5312), frame(288, 5312)], right: [frame(256, 5344), frame(288, 5344)] } },
+  { name: 'panpour', generation: 5, w: 32, h: 32, frames: { up: [frame(320, 5248), frame(352, 5248)], down: [frame(320, 5280), frame(352, 5280)], left: [frame(320, 5312), frame(352, 5312)], right: [frame(320, 5344), frame(352, 5344)] } },
+  { name: 'roggenrola', generation: 5, w: 32, h: 32, frames: { up: [frame(576, 5376), frame(608, 5376)], down: [frame(576, 5408), frame(608, 5408)], left: [frame(576, 5440), frame(608, 5440)], right: [frame(576, 5472), frame(608, 5472)] } },
+  { name: 'audino', generation: 5, w: 32, h: 32, frames: { up: [frame(640, 5376), frame(672, 5376)], down: [frame(640, 5408), frame(672, 5408)], left: [frame(640, 5440), frame(672, 5440)], right: [frame(640, 5472), frame(672, 5472)] } },
+  { name: 'timburr', generation: 5, w: 32, h: 32, frames: { up: [frame(704, 5376), frame(736, 5376)], down: [frame(704, 5408), frame(736, 5408)], left: [frame(704, 5440), frame(736, 5440)], right: [frame(704, 5472), frame(736, 5472)] } },
+  { name: 'tympole', generation: 5, w: 32, h: 32, frames: { up: [frame(768, 5376), frame(800, 5376)], down: [frame(768, 5408), frame(800, 5408)], left: [frame(768, 5440), frame(800, 5440)], right: [frame(768, 5472), frame(800, 5472)] } },
+  { name: 'sewaddle', generation: 5, w: 32, h: 32, frames: { up: [frame(960, 5376), frame(992, 5376)], down: [frame(960, 5408), frame(992, 5408)], left: [frame(960, 5440), frame(992, 5440)], right: [frame(960, 5472), frame(992, 5472)] } },
+  { name: 'venipede', generation: 5, w: 32, h: 32, frames: { up: [frame(0, 5504), frame(32, 5504)], down: [frame(0, 5536), frame(32, 5536)], left: [frame(0, 5568), frame(32, 5568)], right: [frame(0, 5600), frame(32, 5600)] } },
+  { name: 'petilil', generation: 5, w: 32, h: 32, frames: { up: [frame(192, 5504), frame(224, 5504)], down: [frame(192, 5536), frame(224, 5536)], left: [frame(192, 5568), frame(224, 5568)], right: [frame(192, 5600), frame(224, 5600)] } },
+  { name: 'basculin', generation: 5, w: 32, h: 32, frames: { up: [frame(256, 5504), frame(288, 5504)], down: [frame(256, 5536), frame(288, 5536)], left: [frame(256, 5568), frame(288, 5568)], right: [frame(256, 5600), frame(288, 5600)] } },
+  { name: 'sandile', generation: 5, w: 32, h: 32, frames: { up: [frame(512, 5504), frame(544, 5504)], down: [frame(512, 5536), frame(544, 5536)], left: [frame(512, 5568), frame(544, 5568)], right: [frame(512, 5600), frame(544, 5600)] } },
 ];
 
 const randomRange = (min: number, max: number) => min + Math.random() * (max - min);
 const randomInt = (min: number, max: number) => Math.floor(randomRange(min, max + 1));
 const randomDirection = () => DIRECTIONS[Math.floor(Math.random() * DIRECTIONS.length)];
 const pick = <T,>(items: T[]) => items[Math.floor(Math.random() * items.length)];
+const shuffle = <T,>(items: T[]) => {
+  const shuffled = [...items];
+
+  for (let i = shuffled.length - 1; i > 0; i -= 1) {
+    const j = randomInt(0, i);
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+
+  return shuffled;
+};
 const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
 
 const createGrid = <T,>(value: T) => Array.from({ length: MAP_ROWS }, () => Array.from({ length: MAP_COLS }, () => value));
@@ -804,6 +952,20 @@ const drawImageCenteredInTile = (
   );
 };
 
+const drawImageRandomInTile = (
+  ctx: CanvasRenderingContext2D,
+  image: HTMLImageElement,
+  cellX: number,
+  cellY: number,
+) => {
+  const maxOffsetX = Math.max(0, TILE - image.width);
+  const maxOffsetY = Math.max(0, TILE - image.height);
+  const offsetX = maxOffsetX > 0 ? randomInt(0, maxOffsetX) : Math.floor(maxOffsetX / 2);
+  const offsetY = maxOffsetY > 0 ? randomInt(0, maxOffsetY) : Math.floor(maxOffsetY / 2);
+
+  ctx.drawImage(image, cellX * TILE + offsetX, cellY * TILE + offsetY);
+};
+
 const drawImageTiledInTile = (ctx: CanvasRenderingContext2D, image: HTMLImageElement, cellX: number, cellY: number) => {
   const tileX = cellX * TILE;
   const tileY = cellY * TILE;
@@ -867,6 +1029,86 @@ const applyForestBoundary = (terrain: TileKind[][], walkable: boolean[][]) => {
   }
 };
 
+const scatterPathTiles = (terrain: TileKind[][], walkable: boolean[][]) => {
+  let placed = 0;
+  let attempts = 0;
+
+  while (placed < RANDOM_PATH_TILE_COUNT && attempts < RANDOM_PATH_TILE_COUNT * 12) {
+    attempts += 1;
+    const x = randomInt(3, MAP_COLS - 4);
+    const y = randomInt(4, MAP_ROWS - 5);
+
+    if (terrain[y][x] !== 'grass' || isForestNear(terrain, x, y)) continue;
+
+    terrain[y][x] = 'path';
+    walkable[y][x] = true;
+    placed += 1;
+
+    if (Math.random() > 0.62) {
+      continue;
+    }
+
+    const direction = pick([
+      { x: 1, y: 0 },
+      { x: -1, y: 0 },
+      { x: 0, y: 1 },
+      { x: 0, y: -1 },
+    ]);
+    const nx = x + direction.x;
+    const ny = y + direction.y;
+
+    if (terrain[ny]?.[nx] === 'grass' && !isForestNear(terrain, nx, ny)) {
+      terrain[ny][nx] = 'path';
+      walkable[ny][nx] = true;
+      placed += 1;
+    }
+  }
+};
+
+const applyForestMovementBuffer = (terrain: TileKind[][], walkable: boolean[][]) => {
+  const blocked = createGrid(false);
+
+  for (let y = 0; y < MAP_ROWS; y += 1) {
+    for (let x = 0; x < MAP_COLS; x += 1) {
+      if (terrain[y][x] !== 'forest') continue;
+
+      for (let by = y - FOREST_MOVEMENT_MARGIN; by <= y + FOREST_MOVEMENT_MARGIN; by += 1) {
+        for (let bx = x - FOREST_MOVEMENT_MARGIN; bx <= x + FOREST_MOVEMENT_MARGIN; bx += 1) {
+          if (blocked[by]?.[bx] !== undefined) blocked[by][bx] = true;
+        }
+      }
+    }
+  }
+
+  for (let y = 0; y < MAP_ROWS; y += 1) {
+    for (let x = 0; x < MAP_COLS; x += 1) {
+      if (blocked[y][x]) walkable[y][x] = false;
+    }
+  }
+};
+
+const applyTallGrassMovementBlock = (walkable: boolean[][], tallGrassPatches: TallGrassPatchGrid) => {
+  for (let y = 0; y < MAP_ROWS; y += 1) {
+    for (let x = 0; x < MAP_COLS; x += 1) {
+      if (tallGrassPatches[y][x] !== null) walkable[y][x] = false;
+    }
+  }
+};
+
+const collectSpawnCells = (walkable: boolean[][]) => {
+  const spawnCells: GridPoint[] = [];
+
+  for (let y = 0; y < MAP_ROWS; y += 1) {
+    for (let x = 0; x < MAP_COLS; x += 1) {
+      if (walkable[y][x] && x > 2 && x < MAP_COLS - 3 && y > 3 && y < MAP_ROWS - 4) {
+        spawnCells.push({ x, y });
+      }
+    }
+  }
+
+  return spawnCells;
+};
+
 const generateTerrain = (profile: MapProfile) => {
   const terrain = createGrid<TileKind>('grass');
   const walkable = createGrid(false);
@@ -875,8 +1117,14 @@ const generateTerrain = (profile: MapProfile) => {
     y: CENTER_PLAZA.y + Math.floor(CENTER_PLAZA.h / 2),
   };
 
+  for (let y = 0; y < MAP_ROWS; y += 1) {
+    for (let x = 0; x < MAP_COLS; x += 1) {
+      walkable[y][x] = isPlayableCell(x, y);
+    }
+  }
+
   applyForestBoundary(terrain, walkable);
-  carveRect(terrain, walkable, CENTER_PLAZA.x, CENTER_PLAZA.y, CENTER_PLAZA.w, CENTER_PLAZA.h);
+  scatterPathTiles(terrain, walkable);
 
   const endpoints: GridPoint[] = profile.hasPathNetwork
     ? [
@@ -926,17 +1174,9 @@ const generateTerrain = (profile: MapProfile) => {
     addRoadNetwork(terrain, walkable, profile, center);
   }
 
-  const spawnCells: GridPoint[] = [];
+  applyForestMovementBuffer(terrain, walkable);
 
-  for (let y = 0; y < MAP_ROWS; y += 1) {
-    for (let x = 0; x < MAP_COLS; x += 1) {
-      if (walkable[y][x] && x > 2 && x < MAP_COLS - 3 && y > 3 && y < MAP_ROWS - 4) {
-        spawnCells.push({ x, y });
-      }
-    }
-  }
-
-  return { terrain, walkable, spawnCells };
+  return { terrain, walkable };
 };
 
 const createDecorGrid = (
@@ -1050,40 +1290,37 @@ const isForestNear = (terrain: TileKind[][], cellX: number, cellY: number) =>
 
 const createTallGrassPatches = (terrain: TileKind[][], reserved: boolean[][], patchTypeCount: number): TallGrassPatchGrid => {
   const patches = createGrid<number | null>(null);
-  const targetTiles = randomInt(70, 120);
+  const targetTiles = randomInt(54, 86);
   let patchTiles = 0;
   let attempts = 0;
   const typeCount = Math.max(1, patchTypeCount);
 
-  while (patchTiles < targetTiles && attempts < 18) {
+  while (patchTiles < targetTiles && attempts < 90) {
     attempts += 1;
     const patchType = randomInt(0, typeCount - 1);
     const center = {
       x: randomInt(4, MAP_COLS - 5),
       y: randomInt(4, MAP_ROWS - 5),
     };
-    const radiusX = randomInt(3, 6);
-    const radiusY = randomInt(3, 5);
-
-    if (isInCenterPlaza(center.x, center.y, 2)) continue;
+    const radiusX = randomInt(0, 2);
+    const radiusY = randomInt(0, 2);
 
     for (let y = center.y - radiusY; y <= center.y + radiusY; y += 1) {
       for (let x = center.x - radiusX; x <= center.x + radiusX; x += 1) {
         if (
           terrain[y]?.[x] !== 'grass' ||
           reserved[y]?.[x] ||
-          isInCenterPlaza(x, y, 1) ||
           isForestNear(terrain, x, y)
         ) {
           continue;
         }
 
-        const nx = (x - center.x) / radiusX;
-        const ny = (y - center.y) / radiusY;
+        const nx = radiusX === 0 ? 0 : (x - center.x) / radiusX;
+        const ny = radiusY === 0 ? 0 : (y - center.y) / radiusY;
         const distance = nx * nx + ny * ny;
-        const raggedEdge = Math.sin(x * 1.7 + y * 0.9) * 0.16 + Math.random() * 0.26;
+        const raggedEdge = Math.sin(x * 1.7 + y * 0.9) * 0.1 + Math.random() * 0.18;
 
-        if (distance < 0.95 + raggedEdge && patches[y][x] === null) {
+        if ((radiusX === 0 && radiusY === 0 ? true : distance < 0.9 + raggedEdge) && patches[y][x] === null) {
           patches[y][x] = patchType;
           patchTiles += 1;
         }
@@ -1154,7 +1391,7 @@ const drawTallGrassPatches = (
   }
 };
 
-const drawForestEdgeDetails = (
+const drawGroundDetails = (
   ctx: CanvasRenderingContext2D,
   assets: SeasonalMapAssets,
   terrain: TileKind[][],
@@ -1166,20 +1403,20 @@ const drawForestEdgeDetails = (
     for (let x = 1; x < MAP_COLS - 1; x += 1) {
       if (
         terrain[y][x] !== 'grass' ||
-        tallGrassPatches[y][x] !== null ||
-        isInCenterPlaza(x, y, 1)
+        tallGrassPatches[y][x] !== null
       ) {
         continue;
       }
 
       const forestNeighbors = countTerrainNeighbors(terrain, x, y, ['forest']);
-      if (forestNeighbors === 0) continue;
+      const detailChance = forestNeighbors > 0
+        ? Math.min(0.76, 0.28 + forestNeighbors * 0.12)
+        : RANDOM_GROUND_DETAIL_CHANCE;
 
-      const edgeChance = Math.min(0.76, 0.28 + forestNeighbors * 0.12);
-      if (Math.random() > edgeChance) continue;
+      if (Math.random() > detailChance) continue;
 
       ctx.globalAlpha = forestNeighbors >= 3 ? 0.84 : 0.68;
-      drawImageCenteredInTile(ctx, pick(assets.edgeDetails), x, y);
+      drawImageRandomInTile(ctx, pick(assets.edgeDetails), x, y);
       ctx.globalAlpha = 1;
     }
   }
@@ -1354,11 +1591,13 @@ const drawMapDecorations = (
 
 const generateProceduralMap = (assets: SeasonalMapAssets): GeneratedMap => {
   const profile = createMapProfile();
-  const { terrain, walkable, spawnCells } = generateTerrain(profile);
+  const { terrain, walkable } = generateTerrain(profile);
   const { buildings, reserved } = createBuildingPlacements(terrain, profile);
   const tallGrassPatches = ENABLE_TALL_GRASS_PATCHES
     ? createTallGrassPatches(terrain, reserved, assets.tallGrassPatches.length)
     : createGrid<number | null>(null);
+  applyTallGrassMovementBlock(walkable, tallGrassPatches);
+  const spawnCells = collectSpawnCells(walkable);
   const decor = createDecorGrid(terrain, walkable, profile, reserved);
   const canvas = document.createElement('canvas');
   canvas.width = MAP_W;
@@ -1389,6 +1628,9 @@ const generateProceduralMap = (assets: SeasonalMapAssets): GeneratedMap => {
     for (let x = 0; x < MAP_COLS; x += 1) {
       if (terrain[y][x] === 'path') {
         ctx.drawImage(Math.random() > 0.32 ? assets.path : assets.pathAlt, x * TILE, y * TILE);
+        if (Math.random() > 0.72) {
+          drawImageCenteredInTile(ctx, Math.random() > 0.5 ? assets.pathStone : assets.pathCrack, x, y);
+        }
       } else if (terrain[y][x] === 'road') {
         drawOptionalTile(ctx, assets.roads, assets.pathAlt, x, y);
       }
@@ -1402,7 +1644,7 @@ const generateProceduralMap = (assets: SeasonalMapAssets): GeneratedMap => {
     drawBuildings(ctx, buildings);
   }
   drawTallGrassPatches(ctx, assets, tallGrassPatches);
-  drawForestEdgeDetails(ctx, assets, terrain, tallGrassPatches);
+  drawGroundDetails(ctx, assets, terrain, tallGrassPatches);
   drawForestTerrain(ctx, assets, terrain);
   drawForestShade(ctx, terrain);
 
@@ -1420,16 +1662,67 @@ const getCurrentFrame = (pokemon: WalkingPokemon) => {
   return frames[pokemon.frameIndex % frames.length];
 };
 
+const formatPokemonName = (name: string) => name.replace(/-/g, ' ');
+
+const getPokemonMetadata = (sprite: PokemonSprite): PokemonMetadata =>
+  POKEMON_METADATA[sprite.name] ?? {
+    ability: 'Unknown',
+    category: 'Field',
+    types: ['normal'],
+  };
+
+const getPokemonStats = (sprite: PokemonSprite): Record<PokemonStatName, number> => {
+  const seed = [...sprite.name].reduce((sum, char, index) => sum + char.charCodeAt(0) * (index + 1), sprite.generation * 41);
+
+  return {
+    attack: 35 + ((seed * 5) % 82),
+    defense: 35 + ((seed * 7) % 82),
+    hp: 38 + ((seed * 3) % 84),
+    spAttack: 35 + ((seed * 11) % 82),
+    spDefense: 35 + ((seed * 13) % 82),
+    speed: 35 + ((seed * 17) % 82),
+  };
+};
+
+const toSelectedPokemon = (pokemon: WalkingPokemon, status: 'caught' | 'wild', caughtAt?: GridPoint): SelectedPokemon => ({
+  id: pokemon.id,
+  sprite: pokemon.sprite,
+  status,
+  x: pokemon.x,
+  y: pokemon.y,
+  direction: pokemon.direction,
+  frameIndex: pokemon.frameIndex,
+  caughtAt,
+});
+
+const toSelectedCaughtPokemon = (pokemon: CaughtPokemon): SelectedPokemon => ({
+  id: pokemon.id,
+  sprite: pokemon.sprite,
+  status: 'caught',
+  x: pokemon.x,
+  y: pokemon.y,
+  direction: pokemon.direction,
+  frameIndex: pokemon.frameIndex,
+  caughtAt: pokemon.caughtAt,
+});
+
 const setDirection = (pokemon: WalkingPokemon, direction: Direction) => {
   pokemon.direction = direction;
   pokemon.vx = DIRECTION_VELOCITY[direction].vx;
   pokemon.vy = DIRECTION_VELOCITY[direction].vy;
 };
 
-const pickDirection = (pokemon: WalkingPokemon, map: GeneratedMap) => {
+const pickDirection = (pokemon: WalkingPokemon, map: GeneratedMap, walkers: WalkingPokemon[]) => {
   const allowedDirections = DIRECTIONS.filter((direction) => {
     const velocity = DIRECTION_VELOCITY[direction];
-    return canOccupy(map, pokemon.sprite, pokemon.x + velocity.vx * TILE * 0.5, pokemon.y + velocity.vy * TILE * 0.5);
+    return canOccupyPosition(
+      map,
+      pokemon.sprite,
+      pokemon.x + velocity.vx * TILE * 0.5,
+      pokemon.y + velocity.vy * TILE * 0.5,
+      walkers,
+      pokemon,
+    );
   });
 
   if (allowedDirections.length === 0) {
@@ -1443,6 +1736,81 @@ const pickDirection = (pokemon: WalkingPokemon, map: GeneratedMap) => {
   pokemon.frameIndex = 0;
   pokemon.frameTimer = 0;
 };
+
+const getSpriteSheetPixels = (img: HTMLImageElement): SpriteSheetPixels | null => {
+  const canvas = document.createElement('canvas');
+  canvas.width = img.width;
+  canvas.height = img.height;
+
+  const spriteCtx = canvas.getContext('2d', { willReadFrequently: true });
+  if (!spriteCtx) return null;
+
+  spriteCtx.drawImage(img, 0, 0);
+  return {
+    data: spriteCtx.getImageData(0, 0, img.width, img.height).data,
+    width: img.width,
+  };
+};
+
+const getPixelColor = (pixels: SpriteSheetPixels, x: number, y: number): PixelColor => {
+  const index = (y * pixels.width + x) * 4;
+  return {
+    r: pixels.data[index],
+    g: pixels.data[index + 1],
+    b: pixels.data[index + 2],
+    a: pixels.data[index + 3],
+  };
+};
+
+const colorKey = (color: PixelColor) => `${color.r}:${color.g}:${color.b}:${color.a}`;
+
+const getFrameBackgroundColor = (
+  pixels: SpriteSheetPixels,
+  sprite: PokemonSprite,
+  spriteFrame: SpriteFrame,
+) => {
+  const counts = new Map<string, { color: PixelColor; count: number }>();
+
+  for (let y = 0; y < sprite.h; y += 1) {
+    for (let x = 0; x < sprite.w; x += 1) {
+      const color = getPixelColor(pixels, spriteFrame.x + x, spriteFrame.y + y);
+      const key = colorKey(color);
+      const existing = counts.get(key);
+      counts.set(key, { color, count: existing ? existing.count + 1 : 1 });
+    }
+  }
+
+  const best = [...counts.values()].sort((a, b) => b.count - a.count)[0];
+  return best && best.count > sprite.w * sprite.h * 0.24 ? best.color : null;
+};
+
+const isBasicSpriteFrame = (
+  pixels: SpriteSheetPixels,
+  sprite: PokemonSprite,
+  spriteFrame: SpriteFrame,
+) => {
+  const background = getFrameBackgroundColor(pixels, sprite, spriteFrame);
+  if (!background) return false;
+
+  let paintedPixels = 0;
+  const backgroundKey = colorKey(background);
+
+  for (let y = 0; y < sprite.h; y += 1) {
+    for (let x = 0; x < sprite.w; x += 1) {
+      const color = getPixelColor(pixels, spriteFrame.x + x, spriteFrame.y + y);
+      if (colorKey(color) === backgroundKey) continue;
+
+      paintedPixels += 1;
+    }
+  }
+
+  return paintedPixels >= 24 && paintedPixels <= 760;
+};
+
+const isBasicSprite = (sprite: PokemonSprite, pixels: SpriteSheetPixels) =>
+  DIRECTIONS.every((direction) =>
+    sprite.frames[direction].every((spriteFrame) => isBasicSpriteFrame(pixels, sprite, spriteFrame)),
+  );
 
 const isSpriteInBounds = (sprite: PokemonSprite, img: HTMLImageElement) =>
   DIRECTIONS.every((direction) =>
@@ -1474,15 +1842,18 @@ const processSprites = (img: HTMLImageElement, sprites: PokemonSprite[]) => {
         if (processedFrames.has(key)) continue;
         processedFrames.add(key);
 
-        const bgIndex = (spriteFrame.y * offscreen.width + spriteFrame.x) * 4;
-        const bgR = data[bgIndex];
-        const bgG = data[bgIndex + 1];
-        const bgB = data[bgIndex + 2];
+        const background = getFrameBackgroundColor({ data, width: offscreen.width }, sprite, spriteFrame);
+        if (!background) continue;
 
         for (let y = spriteFrame.y; y < spriteFrame.y + sprite.h; y += 1) {
           for (let x = spriteFrame.x; x < spriteFrame.x + sprite.w; x += 1) {
             const i = (y * offscreen.width + x) * 4;
-            if (data[i] === bgR && data[i + 1] === bgG && data[i + 2] === bgB) {
+            if (
+              data[i] === background.r &&
+              data[i + 1] === background.g &&
+              data[i + 2] === background.b &&
+              data[i + 3] === background.a
+            ) {
               data[i + 3] = 0;
             }
           }
@@ -1512,13 +1883,65 @@ const canOccupy = (map: GeneratedMap, sprite: PokemonSprite, x: number, y: numbe
   return true;
 };
 
-const createWalker = (sprite: PokemonSprite, map: GeneratedMap): WalkingPokemon => {
-  const spawn = pick(map.spawnCells);
+const getPokemonCollisionBox = (sprite: PokemonSprite, x: number, y: number): CollisionBox => ({
+  left: x + 4,
+  top: y + 6,
+  right: x + sprite.w - 4,
+  bottom: y + sprite.h - 2,
+});
+
+const boxesOverlap = (a: CollisionBox, b: CollisionBox, margin = 2) =>
+  a.left < b.right + margin &&
+  a.right + margin > b.left &&
+  a.top < b.bottom + margin &&
+  a.bottom + margin > b.top;
+
+const canOccupyPosition = (
+  map: GeneratedMap,
+  sprite: PokemonSprite,
+  x: number,
+  y: number,
+  walkers: WalkingPokemon[],
+  self?: WalkingPokemon,
+) => {
+  if (!canOccupy(map, sprite, x, y)) return false;
+
+  const nextBox = getPokemonCollisionBox(sprite, x, y);
+  return walkers.every((walker) => {
+    if (walker === self) return true;
+    return !boxesOverlap(nextBox, getPokemonCollisionBox(walker.sprite, walker.x, walker.y));
+  });
+};
+
+const getPokemonHitBox = (pokemon: WalkingPokemon): CollisionBox => ({
+  left: pokemon.x,
+  top: pokemon.y,
+  right: pokemon.x + pokemon.sprite.w,
+  bottom: pokemon.y + pokemon.sprite.h,
+});
+
+const isPointInBox = (x: number, y: number, box: CollisionBox) =>
+  x >= box.left && x <= box.right && y >= box.top && y <= box.bottom;
+
+const findPokemonAtPoint = (walkers: WalkingPokemon[], x: number, y: number) =>
+  [...walkers]
+    .sort((a, b) => b.y - a.y)
+    .find((pokemon) => isPointInBox(x, y, getPokemonHitBox(pokemon))) ?? null;
+
+const createWalkerId = (sprite: PokemonSprite) => `${sprite.name}-${Math.random().toString(36).slice(2, 9)}`;
+
+const createWalkerFromSprite = (
+  sprite: PokemonSprite,
+  x: number,
+  y: number,
+  id = createWalkerId(sprite),
+): WalkingPokemon => {
   const direction = randomDirection();
   const walker: WalkingPokemon = {
+    id,
     sprite,
-    x: spawn.x * TILE,
-    y: spawn.y * TILE,
+    x,
+    y,
     vx: 0,
     vy: 0,
     frameIndex: 0,
@@ -1531,18 +1954,187 @@ const createWalker = (sprite: PokemonSprite, map: GeneratedMap): WalkingPokemon 
   };
 
   setDirection(walker, direction);
-  if (!canOccupy(map, sprite, walker.x, walker.y)) {
-    const fallback = map.spawnCells.find((cell) => canOccupy(map, sprite, cell.x * TILE, cell.y * TILE)) ?? spawn;
-    walker.x = fallback.x * TILE;
-    walker.y = fallback.y * TILE;
+  return walker;
+};
+
+const pickWalkerSprites = (sprites: PokemonSprite[], count: number) => {
+  if (sprites.length === 0 || count <= 0) return [];
+
+  const selected: PokemonSprite[] = [];
+  const selectedNames = new Set<string>();
+  const addSprite = (sprite: PokemonSprite) => {
+    if (selected.length >= count || selectedNames.has(sprite.name)) return;
+    selected.push(sprite);
+    selectedNames.add(sprite.name);
+  };
+
+  POKEMON_GENERATIONS.forEach((generation) => {
+    const generationSprites = sprites.filter((sprite) => sprite.generation === generation);
+    if (generationSprites.length > 0) addSprite(pick(generationSprites));
+  });
+
+  for (const sprite of shuffle(sprites)) {
+    addSprite(sprite);
+    if (selected.length >= count) break;
   }
+
+  return shuffle(selected);
+};
+
+const getSpawnSprites = (
+  sprites: PokemonSprite[],
+  spawnMode: PokemonSpawnMode,
+  spawnCellCount: number,
+) => {
+  if (spawnMode === 'clear') return [];
+
+  if (spawnMode === 'random') {
+    return pickWalkerSprites(sprites, Math.min(POKEMON_COUNT, sprites.length, spawnCellCount));
+  }
+
+  return shuffle(sprites.filter((sprite) => sprite.generation === spawnMode));
+};
+
+const createWalker = (
+  sprite: PokemonSprite,
+  map: GeneratedMap,
+  existingWalkers: WalkingPokemon[],
+): WalkingPokemon | null => {
+  const spawn = shuffle(map.spawnCells).find((cell) =>
+    canOccupyPosition(map, sprite, cell.x * TILE, cell.y * TILE, existingWalkers),
+  );
+  if (!spawn) return null;
+
+  const walker = createWalkerFromSprite(sprite, spawn.x * TILE, spawn.y * TILE);
+  pickDirection(walker, map, existingWalkers);
 
   return walker;
 };
 
+const findReleaseSpot = (
+  map: GeneratedMap,
+  sprite: PokemonSprite,
+  x: number,
+  y: number,
+  walkers: WalkingPokemon[],
+) => {
+  const targetCell = {
+    x: clamp(Math.floor(x / TILE), 0, MAP_COLS - 1),
+    y: clamp(Math.floor(y / TILE), 0, MAP_ROWS - 1),
+  };
+  const candidates = [...map.spawnCells].sort((a, b) => {
+    const distanceA = Math.abs(a.x - targetCell.x) + Math.abs(a.y - targetCell.y);
+    const distanceB = Math.abs(b.x - targetCell.x) + Math.abs(b.y - targetCell.y);
+    return distanceA - distanceB;
+  });
+
+  return candidates.find((cell) => canOccupyPosition(map, sprite, cell.x * TILE, cell.y * TILE, walkers)) ?? null;
+};
+
 export const PokemonWorld = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const walkersRef = useRef<WalkingPokemon[]>([]);
+  const generatedMapRef = useRef<GeneratedMap | null>(null);
+  const processedSpriteCanvasRef = useRef<HTMLCanvasElement | null>(null);
+  const caughtPokemonRef = useRef<CaughtPokemon[]>([]);
+  const selectedPokemonRef = useRef<SelectedPokemon | null>(null);
+  const releaseAnimationsRef = useRef<ReleaseAnimation[]>([]);
   const [season] = useState<SeasonName>(() => pick([...SEASON_NAMES]));
+  const [spawnMode, setSpawnMode] = useState<PokemonSpawnMode>('random');
+  const [selectedPokemon, setSelectedPokemon] = useState<SelectedPokemon | null>(null);
+  const [caughtPokemon, setCaughtPokemon] = useState<CaughtPokemon[]>([]);
+
+  const selectPokemon = (pokemon: SelectedPokemon | null) => {
+    selectedPokemonRef.current = pokemon;
+    setSelectedPokemon(pokemon);
+  };
+
+  const setCaughtRoster = (pokemon: CaughtPokemon[]) => {
+    caughtPokemonRef.current = pokemon;
+    setCaughtPokemon(pokemon);
+  };
+
+  const catchSelectedPokemon = () => {
+    const selected = selectedPokemonRef.current;
+    if (!selected || selected.status !== 'wild') return;
+
+    const walker = walkersRef.current.find((pokemon) => pokemon.id === selected.id);
+    if (!walker) return;
+
+    walkersRef.current = walkersRef.current.filter((pokemon) => pokemon.id !== walker.id);
+    const caught: CaughtPokemon = {
+      id: walker.id,
+      sprite: walker.sprite,
+      x: walker.x,
+      y: walker.y,
+      direction: walker.direction,
+      frameIndex: walker.frameIndex,
+      caughtAt: {
+        x: Math.floor(walker.x / TILE),
+        y: Math.floor(walker.y / TILE),
+      },
+    };
+
+    setCaughtRoster([...caughtPokemonRef.current, caught]);
+    selectPokemon(toSelectedCaughtPokemon(caught));
+  };
+
+  const releaseCaughtPokemon = (id: string, x?: number, y?: number) => {
+    const map = generatedMapRef.current;
+    const caught = caughtPokemonRef.current.find((pokemon) => pokemon.id === id);
+    if (!map || !caught) return false;
+
+    const releasePoint = {
+      x: x ?? caught.caughtAt.x * TILE + TILE / 2,
+      y: y ?? caught.caughtAt.y * TILE + TILE / 2,
+    };
+    const releaseCell = findReleaseSpot(map, caught.sprite, releasePoint.x, releasePoint.y, walkersRef.current);
+    if (!releaseCell) return false;
+
+    const walker = createWalkerFromSprite(caught.sprite, releaseCell.x * TILE, releaseCell.y * TILE, caught.id);
+    walker.direction = caught.direction;
+    walker.frameIndex = caught.frameIndex;
+    setDirection(walker, caught.direction);
+    pickDirection(walker, map, walkersRef.current);
+    walkersRef.current = [...walkersRef.current, walker];
+    setCaughtRoster(caughtPokemonRef.current.filter((pokemon) => pokemon.id !== id));
+    releaseAnimationsRef.current.push({
+      x: walker.x + walker.sprite.w / 2,
+      y: walker.y + walker.sprite.h / 2,
+      startedAt: performance.now(),
+    });
+    selectPokemon(toSelectedPokemon(walker, 'wild'));
+    return true;
+  };
+
+  const handleCanvasClick = (event: MouseEvent<HTMLCanvasElement>) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const rect = canvas.getBoundingClientRect();
+    const x = (event.clientX - rect.left) * (canvas.width / rect.width);
+    const y = (event.clientY - rect.top) * (canvas.height / rect.height);
+    const clickedPokemon = findPokemonAtPoint(walkersRef.current, x, y);
+
+    if (clickedPokemon) {
+      selectPokemon(toSelectedPokemon(clickedPokemon, 'wild'));
+      return;
+    }
+
+    const selected = selectedPokemonRef.current;
+    if (selected?.status === 'caught') {
+      releaseCaughtPokemon(selected.id, x, y);
+    }
+  };
+
+  const getFramePreviewStyle = (spriteFrame: SpriteFrame, sprite: PokemonSprite) => ({
+    width: `${sprite.w * FRAME_PREVIEW_SCALE}px`,
+    height: `${sprite.h * FRAME_PREVIEW_SCALE}px`,
+    backgroundImage: `url(${overworldSheet})`,
+    backgroundPosition: `-${spriteFrame.x * FRAME_PREVIEW_SCALE}px -${spriteFrame.y * FRAME_PREVIEW_SCALE}px`,
+    backgroundSize: `${SPRITE_SHEET_WIDTH * FRAME_PREVIEW_SCALE}px ${SPRITE_SHEET_HEIGHT * FRAME_PREVIEW_SCALE}px`,
+    transform: spriteFrame.flipX ? 'scaleX(-1)' : undefined,
+  });
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -1555,16 +2147,13 @@ export const PokemonWorld = () => {
     let animId = 0;
     let lastTime = 0;
     let cancelled = false;
-    let processedSpriteCanvas: HTMLCanvasElement | null = null;
-    let generatedMap: GeneratedMap | null = null;
-    let walkers: WalkingPokemon[] = [];
 
     canvas.width = MAP_W;
     canvas.height = MAP_H;
     ctx.imageSmoothingEnabled = false;
 
     const drawWalker = (pokemon: WalkingPokemon) => {
-      if (!processedSpriteCanvas) return;
+      if (!processedSpriteCanvasRef.current) return;
 
       const spriteFrame = getCurrentFrame(pokemon);
       const drawX = Math.round(pokemon.x);
@@ -1585,32 +2174,74 @@ export const PokemonWorld = () => {
       ctx.fill();
       ctx.globalAlpha = 1;
 
-      ctx.drawImage(
-        processedSpriteCanvas,
-        spriteFrame.x,
-        spriteFrame.y,
-        pokemon.sprite.w,
-        pokemon.sprite.h,
-        drawX,
-        drawY,
-        pokemon.sprite.w,
-        pokemon.sprite.h,
-      );
+      if (spriteFrame.flipX) {
+        ctx.save();
+        ctx.scale(-1, 1);
+        ctx.drawImage(
+          processedSpriteCanvasRef.current,
+          spriteFrame.x,
+          spriteFrame.y,
+          pokemon.sprite.w,
+          pokemon.sprite.h,
+          -drawX - pokemon.sprite.w,
+          drawY,
+          pokemon.sprite.w,
+          pokemon.sprite.h,
+        );
+        ctx.restore();
+      } else {
+        ctx.drawImage(
+          processedSpriteCanvasRef.current,
+          spriteFrame.x,
+          spriteFrame.y,
+          pokemon.sprite.w,
+          pokemon.sprite.h,
+          drawX,
+          drawY,
+          pokemon.sprite.w,
+          pokemon.sprite.h,
+        );
+      }
+    };
+
+    const drawReleaseAnimations = () => {
+      const now = performance.now();
+      releaseAnimationsRef.current = releaseAnimationsRef.current.filter((animation) => {
+        const progress = (now - animation.startedAt) / RELEASE_ANIMATION_DURATION;
+        if (progress >= 1) return false;
+
+        const eased = 1 - (1 - progress) * (1 - progress);
+        ctx.save();
+        ctx.globalAlpha = 1 - progress;
+        ctx.strokeStyle = '#e53935';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(animation.x, animation.y, 7 + eased * 34, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.globalAlpha = Math.max(0, 0.52 - progress * 0.42);
+        ctx.lineWidth = 5;
+        ctx.beginPath();
+        ctx.arc(animation.x, animation.y, 12 + eased * 24, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.restore();
+        return true;
+      });
     };
 
     const drawScene = () => {
-      if (!generatedMap) return;
+      if (!generatedMapRef.current) return;
 
       ctx.clearRect(0, 0, MAP_W, MAP_H);
-      ctx.drawImage(generatedMap.canvas, 0, 0);
+      ctx.drawImage(generatedMapRef.current.canvas, 0, 0);
+      drawReleaseAnimations();
 
-      for (const pokemon of [...walkers].sort((a, b) => a.y - b.y)) {
+      for (const pokemon of [...walkersRef.current].sort((a, b) => a.y - b.y)) {
         drawWalker(pokemon);
       }
     };
 
     const updateWalker = (pokemon: WalkingPokemon, dt: number) => {
-      if (!generatedMap) return;
+      if (!generatedMapRef.current) return;
 
       pokemon.stateTimer += dt;
 
@@ -1623,7 +2254,7 @@ export const PokemonWorld = () => {
           pokemon.isIdle = false;
           pokemon.stateTimer = 0;
           pokemon.walkDuration = randomRange(MIN_WALK, MAX_WALK);
-          pickDirection(pokemon, generatedMap);
+          pickDirection(pokemon, generatedMapRef.current, walkersRef.current);
         }
 
         return;
@@ -1638,12 +2269,12 @@ export const PokemonWorld = () => {
       const nextX = pokemon.x + pokemon.vx;
       const nextY = pokemon.y + pokemon.vy;
 
-      if (canOccupy(generatedMap, pokemon.sprite, nextX, nextY)) {
+      if (canOccupyPosition(generatedMapRef.current, pokemon.sprite, nextX, nextY, walkersRef.current, pokemon)) {
         pokemon.x = nextX;
         pokemon.y = nextY;
       } else {
         pokemon.stateTimer = 0;
-        pickDirection(pokemon, generatedMap);
+        pickDirection(pokemon, generatedMapRef.current, walkersRef.current);
       }
 
       if (pokemon.stateTimer >= pokemon.walkDuration) {
@@ -1663,28 +2294,33 @@ export const PokemonWorld = () => {
 
         if (cancelled) return;
 
+        const spritePixels = getSpriteSheetPixels(spriteImg);
         const usableSprites = POKEMON_SPRITES.filter((sprite) => {
-          const isUsable = isSpriteInBounds(sprite, spriteImg);
+          const isUsable = isSpriteInBounds(sprite, spriteImg) && (!spritePixels || isBasicSprite(sprite, spritePixels));
           if (!isUsable) {
-            console.warn(`Skipping ${sprite.name}: sprite frame is outside the sheet bounds.`);
+            console.warn(`Skipping ${sprite.name}: sprite frame is not a safe 32x32 overworld sprite.`);
           }
           return isUsable;
         });
 
         const map = generateProceduralMap(mapAssets);
-        generatedMap = map;
-        processedSpriteCanvas = processSprites(spriteImg, usableSprites);
-        walkers = [...usableSprites]
-          .sort(() => Math.random() - 0.5)
-          .slice(0, Math.min(POKEMON_COUNT, map.spawnCells.length))
-          .map((sprite) => createWalker(sprite, map));
+        generatedMapRef.current = map;
+        processedSpriteCanvasRef.current = processSprites(spriteImg, usableSprites);
+        walkersRef.current = [];
+        releaseAnimationsRef.current = [];
+        setCaughtRoster([]);
+        selectPokemon(null);
+        for (const sprite of getSpawnSprites(usableSprites, spawnMode, map.spawnCells.length)) {
+          const walker = createWalker(sprite, map, walkersRef.current);
+          if (walker) walkersRef.current.push(walker);
+        }
 
         const tick = (time: number) => {
           const dt = lastTime ? time - lastTime : 16;
           lastTime = time;
 
           if (!reducedMotion) {
-            for (const pokemon of walkers) {
+            for (const pokemon of walkersRef.current) {
               updateWalker(pokemon, dt);
             }
           }
@@ -1706,17 +2342,151 @@ export const PokemonWorld = () => {
       cancelled = true;
       cancelAnimationFrame(animId);
     };
-  }, [season]);
+  }, [season, spawnMode]);
+
+  const selectedMetadata = selectedPokemon ? getPokemonMetadata(selectedPokemon.sprite) : null;
+  const selectedStats = selectedPokemon ? getPokemonStats(selectedPokemon.sprite) : null;
 
   return (
     <div className="pokemon-world" data-season={season}>
       <canvas
         ref={canvasRef}
         className="pokemon-world__canvas"
-        aria-hidden="true"
+        aria-label="Interactive Pokemon map"
+        onClick={handleCanvasClick}
       />
       <div className="pokemon-world__season-badge">
         <span>{season}</span>
+      </div>
+      {selectedPokemon && selectedMetadata && selectedStats
+        ? createPortal(
+          <div
+            className="pokemon-world__modal-backdrop"
+            role="presentation"
+            onClick={() => selectPokemon(null)}
+          >
+            <section
+              className="pokemon-world__modal"
+              aria-label={`${selectedPokemon.sprite.name} details`}
+              aria-modal="true"
+              role="dialog"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <div className="pokemon-world__modal-topbar">
+                <span>Pokemon data</span>
+                <button type="button" onClick={() => selectPokemon(null)} aria-label="Close Pokemon details">
+                  x
+                </button>
+              </div>
+              <div className="pokemon-world__modal-screen">
+                <div className="pokemon-world__identity">
+                  <div>
+                    <span className="pokemon-world__info-kicker">No. {selectedPokemon.sprite.generation}-{selectedPokemon.sprite.name.length}</span>
+                    <h2>{formatPokemonName(selectedPokemon.sprite.name)}</h2>
+                    <p>{selectedMetadata.category} Pokemon</p>
+                  </div>
+                  <div className="pokemon-world__modal-sprite">
+                    <div
+                      className="pokemon-world__frame-preview"
+                      style={getFramePreviewStyle(
+                        selectedPokemon.sprite.frames[selectedPokemon.direction][selectedPokemon.frameIndex % 2],
+                        selectedPokemon.sprite,
+                      )}
+                    />
+                  </div>
+                </div>
+                <div className="pokemon-world__type-list">
+                  {selectedMetadata.types.map((type) => (
+                    <span key={type} data-type={type}>{type}</span>
+                  ))}
+                </div>
+                <div className="pokemon-world__info-stats">
+                  <span>{selectedPokemon.status}</span>
+                  <span>{selectedMetadata.ability}</span>
+                  <span>{selectedPokemon.direction}</span>
+                  <span>{Math.floor(selectedPokemon.x / TILE)}, {Math.floor(selectedPokemon.y / TILE)}</span>
+                </div>
+                <div className="pokemon-world__stat-list">
+                  {(Object.keys(POKEMON_STAT_LABELS) as PokemonStatName[]).map((stat) => (
+                    <div key={stat} className="pokemon-world__stat-row">
+                      <span>{POKEMON_STAT_LABELS[stat]}</span>
+                      <div>
+                        <i style={{ width: `${Math.min(100, selectedStats[stat])}%` }} />
+                      </div>
+                      <strong>{selectedStats[stat]}</strong>
+                    </div>
+                  ))}
+                </div>
+                <div className="pokemon-world__frame-list">
+                  {DISPLAY_DIRECTIONS.map((direction) => (
+                    <div key={direction} className="pokemon-world__frame-row">
+                      <span>{direction}</span>
+                      <div className="pokemon-world__frame-pair">
+                        {selectedPokemon.sprite.frames[direction].map((spriteFrame, index) => (
+                          <figure key={`${direction}-${spriteFrame.x}-${spriteFrame.y}`}>
+                            <div
+                              className="pokemon-world__frame-preview"
+                              style={getFramePreviewStyle(spriteFrame, selectedPokemon.sprite)}
+                            />
+                            <figcaption>{index + 1}: {spriteFrame.x},{spriteFrame.y}</figcaption>
+                          </figure>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="pokemon-world__info-actions">
+                {selectedPokemon.status === 'wild' ? (
+                  <button type="button" onClick={catchSelectedPokemon}>Catch</button>
+                ) : (
+                  <button type="button" onClick={() => releaseCaughtPokemon(selectedPokemon.id)}>Release</button>
+                )}
+              </div>
+            </section>
+          </div>,
+          document.body,
+        )
+        : null}
+      {caughtPokemon.length > 0 ? (
+        <div className="pokemon-world__caught-tray" aria-label="Caught Pokemon">
+          {caughtPokemon.map((pokemon) => (
+            <button
+              key={pokemon.id}
+              type="button"
+              className={selectedPokemon?.id === pokemon.id ? 'is-active' : ''}
+              onClick={() => selectPokemon(toSelectedCaughtPokemon(pokemon))}
+            >
+              {formatPokemonName(pokemon.sprite.name)}
+            </button>
+          ))}
+        </div>
+      ) : null}
+      <div className="pokemon-world__test-controls" aria-label="Pokemon test controls">
+        <button
+          type="button"
+          className={spawnMode === 'clear' ? 'is-active' : ''}
+          onClick={() => setSpawnMode('clear')}
+        >
+          Clear
+        </button>
+        <button
+          type="button"
+          className={spawnMode === 'random' ? 'is-active' : ''}
+          onClick={() => setSpawnMode('random')}
+        >
+          Random
+        </button>
+        {POKEMON_GENERATIONS.map((generation) => (
+          <button
+            key={generation}
+            type="button"
+            className={spawnMode === generation ? 'is-active' : ''}
+            onClick={() => setSpawnMode(generation)}
+          >
+            Gen {generation}
+          </button>
+        ))}
       </div>
     </div>
   );

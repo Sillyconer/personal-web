@@ -18,13 +18,6 @@ export const ProjectDetailPage = () => {
   }
 
   const visibleLinks = project.links.filter((link) => !link.ownerOnly || isAuthenticated);
-  const homageLabel =
-    project.slug === 'mapper'
-      ? 'zelda tribute'
-      : project.slug === 'personalweb'
-        ? 'street fighter tribute'
-        : 'side quest tribute';
-
   return (
     <div className={`page-stack detail detail--${project.slug}`}>
       {/* ── Hero ── */}
@@ -46,7 +39,7 @@ export const ProjectDetailPage = () => {
         </motion.div>
 
         <motion.div className="detail__world-card t-frame t-frame--raised" variants={cardReveal}>
-          <p className="eyebrow">mini cartridge / {homageLabel}</p>
+          <p className="eyebrow">case study surface / {project.slug}</p>
           <div className="detail__world-scene" aria-hidden="true">
             <div className="detail__world-sky" />
             <div className="detail__world-layer detail__world-layer--1" />

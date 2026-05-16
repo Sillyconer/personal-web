@@ -1,0 +1,106 @@
+.pworld,
+.pworld__hero,
+.pworld__actions {
+  display: grid;
+  gap: var(--gap);
+}
+
+.pworld__hero {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  background: linear-gradient(180deg, rgba(185, 191, 251, 0.06), rgba(20, 16, 19, 0.95));
+}
+
+.pworld__hero h1 {
+  max-width: 18ch;
+  font-size: clamp(1.65rem, 3vw, 2.5rem);
+  text-transform: none;
+}
+
+.pworld__hero p {
+  max-width: 76ch;
+}
+
+.pworld__actions {
+  justify-items: end;
+}
+
+.pworld__stage {
+  position: relative;
+  min-height: 72vh;
+  overflow: hidden;
+  border: 3px solid var(--border);
+  background: var(--crt-black);
+}
+
+.pworld__stage--pokemon {
+  min-height: 680px;
+}
+
+.pworld__stage--pokemon .pokemon-world {
+  min-height: 680px;
+}
+
+.pworld__stage--zelda {
+  min-height: 720px;
+}
+
+.pworld__stage--zelda .zelda-dungeon-world {
+  position: absolute;
+  inset: 0;
+}
+
+.pworld__chrono-stage {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.72fr) minmax(0, 1fr);
+  gap: var(--gap-lg);
+  align-items: center;
+  min-height: 560px;
+  background:
+    radial-gradient(circle at 30% 50%, rgba(185, 191, 251, 0.2), transparent 30%),
+    linear-gradient(180deg, rgba(24, 28, 58, 0.95), rgba(8, 14, 27, 0.98));
+}
+
+.pworld__timegate {
+  position: relative;
+  aspect-ratio: 1;
+  min-height: 260px;
+}
+
+.pworld__timegate span,
+.pworld__timegate i {
+  position: absolute;
+  inset: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.pworld__timegate span {
+  border-radius: 50%;
+  border: 3px solid rgba(185, 191, 251, 0.5);
+}
+
+.pworld__timegate span:nth-child(1) { width: 86%; height: 86%; }
+.pworld__timegate span:nth-child(2) { width: 62%; height: 62%; border-color: rgba(32, 214, 199, 0.5); }
+.pworld__timegate span:nth-child(3) { width: 38%; height: 38%; border-color: rgba(255, 213, 65, 0.55); }
+
+.pworld__timegate i {
+  width: 18%;
+  height: 18%;
+  background: radial-gradient(circle, #ffd541, #b9bffb 64%, transparent 68%);
+}
+
+.pworld__era-grid {
+  display: grid;
+  gap: var(--gap);
+}
+
+@media (max-width: 860px) {
+  .pworld__hero,
+  .pworld__chrono-stage {
+    grid-template-columns: 1fr;
+  }
+
+  .pworld__actions {
+    justify-items: start;
+  }
+}

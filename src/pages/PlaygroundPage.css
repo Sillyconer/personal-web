@@ -1,0 +1,138 @@
+.playground-page {
+  display: grid;
+  gap: var(--gap-lg);
+}
+
+.playground-hero {
+  min-height: 240px;
+  display: grid;
+  align-items: end;
+  background:
+    radial-gradient(circle at 18% 26%, rgba(255, 213, 65, 0.12), transparent 24%),
+    radial-gradient(circle at 78% 22%, rgba(188, 74, 155, 0.12), transparent 22%),
+    linear-gradient(180deg, rgba(27, 27, 47, 0.94), rgba(20, 16, 19, 0.96));
+}
+
+.playground-hero h1 {
+  max-width: 18ch;
+  font-size: clamp(1.8rem, 3vw, 2.7rem);
+  text-transform: none;
+}
+
+.playground-hero p {
+  max-width: 72ch;
+}
+
+.playground-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--gap-lg);
+}
+
+.playground-card {
+  min-height: 360px;
+  display: grid;
+  align-content: space-between;
+  gap: var(--gap);
+  padding: 20px;
+  border: 4px solid var(--border);
+  color: var(--ink);
+  text-decoration: none;
+  overflow: hidden;
+  position: relative;
+  background: var(--crt-panel);
+}
+
+.playground-card:hover {
+  text-decoration: none;
+  border-color: var(--signal-teal);
+  box-shadow: var(--glow-teal);
+}
+
+.playground-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(0deg, transparent 0 4px, rgba(255, 255, 255, 0.03) 4px 5px);
+  opacity: 0.45;
+}
+
+.playground-card__head,
+.playground-card__preview,
+.playground-card p {
+  position: relative;
+  z-index: 1;
+}
+
+.playground-card__head {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--gap);
+  align-items: start;
+}
+
+.playground-card__preview {
+  min-height: 150px;
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+}
+
+.playground-card__preview span {
+  position: absolute;
+  display: block;
+}
+
+.is-pokemon {
+  background: linear-gradient(180deg, rgba(223, 62, 35, 0.72), rgba(40, 92, 196, 0.72));
+}
+
+.is-pokemon .playground-card__preview {
+  background: linear-gradient(180deg, #8bdc69 0 54%, #4f9239 54% 100%);
+}
+
+.is-pokemon .playground-card__preview span:nth-child(1) { width: 40px; height: 40px; left: 26px; top: 24px; background: #df3e23; border-radius: 50%; }
+.is-pokemon .playground-card__preview span:nth-child(2) { width: 40px; height: 18px; left: 26px; top: 46px; background: #fef3c0; border-radius: 0 0 20px 20px; }
+.is-pokemon .playground-card__preview span:nth-child(3) { width: 86px; height: 40px; right: 28px; bottom: 28px; background: #dba463; }
+
+.is-zelda {
+  background: linear-gradient(180deg, rgba(113, 65, 59, 0.86), rgba(20, 16, 19, 0.98));
+}
+
+.is-zelda .playground-card__preview {
+  background: radial-gradient(circle at center, rgba(255, 213, 65, 0.22), transparent 36%), #14100b;
+}
+
+.is-zelda .playground-card__preview span:nth-child(1) { inset: 28px 34px; border: 4px solid rgba(255, 213, 65, 0.32); }
+.is-zelda .playground-card__preview span:nth-child(2) { width: 50px; height: 50px; left: calc(50% - 25px); top: calc(50% - 25px); background: #4a5462; }
+.is-zelda .playground-card__preview span:nth-child(3) { width: 28px; height: 28px; right: 42px; bottom: 34px; background: #ffd541; clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+
+.is-chrono {
+  background: linear-gradient(180deg, rgba(185, 191, 251, 0.42), rgba(27, 27, 47, 0.96));
+}
+
+.is-chrono .playground-card__preview {
+  background: radial-gradient(circle at center, rgba(185, 191, 251, 0.28), rgba(8, 14, 27, 0.98));
+}
+
+.is-chrono .playground-card__preview span { border: 3px solid rgba(32, 214, 199, 0.55); border-radius: 50%; inset: 26px; }
+.is-chrono .playground-card__preview span:nth-child(2) { inset: 48px; border-color: rgba(255, 213, 65, 0.55); }
+.is-chrono .playground-card__preview span:nth-child(3) { inset: 70px; border-color: rgba(185, 191, 251, 0.7); }
+
+.is-minecraft {
+  background: linear-gradient(180deg, rgba(89, 193, 53, 0.74), rgba(45, 33, 60, 0.95));
+}
+
+.is-minecraft .playground-card__preview {
+  background: linear-gradient(180deg, #7ed6ff 0 52%, #59c135 52% 72%, #71413b 72% 100%);
+}
+
+.is-minecraft .playground-card__preview span:nth-child(1) { width: 54px; height: 34px; left: 44px; bottom: 42px; background: #71413b; }
+.is-minecraft .playground-card__preview span:nth-child(2) { width: 54px; height: 30px; left: 44px; bottom: 76px; background: #59c135; }
+.is-minecraft .playground-card__preview span:nth-child(3) { width: 62px; height: 22px; right: 36px; top: 28px; background: rgba(255, 255, 255, 0.82); }
+
+@media (max-width: 860px) {
+  .playground-grid {
+    grid-template-columns: 1fr;
+  }
+}

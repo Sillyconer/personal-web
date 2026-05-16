@@ -3,6 +3,7 @@ import { useMemo, useState } from 'react';
 import { Search } from 'lucide-react';
 import { motion } from 'framer-motion';
 
+import { EcosystemGraph } from '../components/graph/EcosystemGraph';
 import { GitHubWidget } from '../components/github/GitHubWidget';
 import { ProjectCard } from '../components/projects/ProjectCard';
 import { projects } from '../data/projects';
@@ -37,32 +38,28 @@ export const WorkPage = () => {
   }, [query, statusFilter, typeFilter]);
 
   return (
-    <div className="page-stack work work--dungeon">
+    <div className="page-stack work work--terminal">
       <motion.section className="work__hero" initial="hidden" animate="show" variants={staggerGroup}>
         <motion.div className="work__hero-copy" variants={pixelReveal}>
-          <p className="eyebrow">zelda homage / dungeon archive</p>
-          <h1>Enter the project dungeon.</h1>
+          <p className="eyebrow">work / portfolio evidence</p>
+          <h1>Project work, live surfaces, code, and systems.</h1>
           <p className="muted">
-            Projects are chambers with maps, keys, and relic notes: each one opens a different system, atmosphere, and set of frontend decisions.
+            A calmer portfolio route for case studies and technical proof. The heavier homage worlds now live in Playground.
           </p>
           <div className="flex-row work__hero-tags">
-            <span className="px-tag px-tag--yellow">maps</span>
+            <span className="px-tag px-tag--yellow">embeds</span>
             <span className="px-tag px-tag--teal">keys</span>
-            <span className="px-tag px-tag--blue">relics</span>
+            <span className="px-tag px-tag--blue">graphs</span>
           </div>
         </motion.div>
 
-        <motion.div className="work__hero-scene" variants={cardReveal}>
-          <div className="work__hero-scene-core" aria-hidden="true">
-            <div className="work__torch work__torch--left" />
-            <div className="work__torch work__torch--right" />
-            <div className="work__crest" />
-            <div className="work__door work__door--1">mapper</div>
-            <div className="work__door work__door--2">web</div>
-            <div className="work__door work__door--3">next</div>
-            <div className="work__chest" />
-            <div className="work__key" />
-            <div className="work__map-grid" />
+        <motion.div className="work__proof-panel t-frame t-frame--sunken" variants={cardReveal}>
+          <p className="eyebrow">portfolio priorities</p>
+          <div className="work__proof-grid">
+            <span>live embed surfaces</span>
+            <span>case-study outcomes</span>
+            <span>code/system excerpts</span>
+            <span>graphs + visualisations</span>
           </div>
         </motion.div>
       </motion.section>
@@ -145,6 +142,8 @@ export const WorkPage = () => {
           </div>
         )}
       </motion.section>
+
+      <EcosystemGraph />
 
       {/* ── GitHub ── */}
       <GitHubWidget />

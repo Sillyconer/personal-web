@@ -1,32 +1,19 @@
 import { Mail } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-import { PokemonWorld } from '../components/worlds/PokemonWorld';
 import { clientFitPoints, contactChannels, engagementModes, siteProfile } from '../data/site';
 import { cardReveal, pixelReveal, staggerGroup, viewport } from '../utils/motion';
 import './ContactPage.css';
 
 export const ContactPage = () => {
   return (
-    <div className="page-stack contact contact--pokemon">
-      {/* ── Pokemon World Map ── */}
-      <motion.section
-        className="contact__world-section"
-        initial="hidden"
-        animate="show"
-        variants={staggerGroup}
-      >
-        <motion.div variants={pixelReveal}>
-          <PokemonWorld />
-        </motion.div>
-      </motion.section>
-
+    <div className="page-stack contact contact--terminal">
       {/* ── Hero ── */}
-      <motion.section className="contact__hero t-frame t-frame--raised" initial="hidden" animate="show" variants={staggerGroup}>
+      <motion.section className="contact__hero t-frame" initial="hidden" animate="show" variants={staggerGroup}>
         <motion.div className="contact__hero-copy" variants={pixelReveal}>
-          <p className="eyebrow">pokémon homage / link center</p>
+          <p className="eyebrow">contact / collaboration channel</p>
           <h1>need a frontend partner for a product that deserves a stronger surface?</h1>
-          <p className="muted">This world plays like a trainer link hub: clean, bright, and built for making contact without losing personality.</p>
+          <p className="muted">A direct route for project briefs, role outreach, and collaboration enquiries.</p>
         </motion.div>
 
         <motion.div className="contact__actions" variants={pixelReveal}>
@@ -77,7 +64,7 @@ export const ContactPage = () => {
             <span className="t-header__dot t-header__dot--y" />
             <span className="t-header__dot t-header__dot--g" />
           </div>
-          <span>party menu / ways to work together</span>
+          <span>ways to work together</span>
         </div>
         <div className="contact__mode-list">
           {engagementModes.map((mode) => (
@@ -97,7 +84,7 @@ export const ContactPage = () => {
         variants={staggerGroup}
       >
         <motion.div variants={pixelReveal}>
-          <p className="eyebrow">best fit quests</p>
+          <p className="eyebrow">best fit</p>
           <h2>projects that benefit from structure and atmosphere together</h2>
         </motion.div>
         <div className="grid-auto">

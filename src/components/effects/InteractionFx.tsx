@@ -43,6 +43,7 @@ export const InteractionFx = () => {
   const location = useLocation();
   const cartridge = getCartridgeByPath(location.pathname);
   const isContact = cartridge.id === 'contact';
+  const isWork = cartridge.id === 'work';
   const trailRefs = useRef<Array<HTMLSpanElement | null>>([]);
   const interactiveRef = useRef(false);
   const pointsRef = useRef(
@@ -66,7 +67,7 @@ export const InteractionFx = () => {
     const updateEnabledState = () => {
       const nextEnabled = finePointerQuery.matches && !reducedMotionQuery.matches;
       setEnabled(nextEnabled);
-      document.documentElement.dataset.pointerFx = nextEnabled && !isContact ? 'active' : 'inactive';
+      document.documentElement.dataset.pointerFx = nextEnabled && !isContact && !isWork ? 'active' : 'inactive';
       return nextEnabled;
     };
 
@@ -106,7 +107,7 @@ export const InteractionFx = () => {
     };
 
     const animateTrail = () => {
-      if (!isActive || isContact) {
+      if (!isActive || isContact || isWork) {
         return;
       }
 
@@ -141,7 +142,7 @@ export const InteractionFx = () => {
       frameRef.current = window.requestAnimationFrame(animateTrail);
     };
 
-    if (isActive && !isContact) {
+    if (isActive && !isContact && !isWork) {
       frameRef.current = window.requestAnimationFrame(animateTrail);
     }
 
@@ -152,12 +153,12 @@ export const InteractionFx = () => {
       const nextEnabled = updateEnabledState();
       isActive = nextEnabled;
 
-      if ((!nextEnabled || isContact) && frameRef.current) {
+      if ((!nextEnabled || isContact || isWork) && frameRef.current) {
         window.cancelAnimationFrame(frameRef.current);
         frameRef.current = null;
       }
 
-      if (nextEnabled && !isContact && !frameRef.current) {
+      if (nextEnabled && !isContact && !isWork && !frameRef.current) {
         frameRef.current = window.requestAnimationFrame(animateTrail);
       }
     };
@@ -177,9 +178,9 @@ export const InteractionFx = () => {
 
       delete document.documentElement.dataset.pointerFx;
     };
-  }, [isContact]);
+  }, [isContact, isWork]);
 
-  if (!enabled) {
+  if (!enabled || isWork) {
     return null;
   }
 

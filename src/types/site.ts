@@ -89,12 +89,27 @@ export interface EmbedProjectSection extends BaseProjectSection {
   ctaLabel?: string;
 }
 
+export interface CodeProjectSection extends BaseProjectSection {
+  type: 'code';
+  filename: string;
+  language: string;
+  code: string;
+  notes?: string[];
+}
+
+export interface GraphProjectSection extends BaseProjectSection {
+  type: 'graph';
+  graphId: 'ecosystem';
+}
+
 export type ProjectSection =
   | NarrativeProjectSection
   | BulletProjectSection
   | MetricsProjectSection
   | GalleryProjectSection
-  | EmbedProjectSection;
+  | EmbedProjectSection
+  | CodeProjectSection
+  | GraphProjectSection;
 
 export interface ProjectDefinition {
   slug: string;

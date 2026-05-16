@@ -9,34 +9,34 @@ import './HomePage.css';
 
 const worldCards = [
   {
+    to: '/cv',
+    title: 'CV',
+    homage: 'clean CRT profile',
+    copy: 'A calmer professional route for background, capability, fit, and current direction.',
+    className: 'is-work',
+    badges: ['profile', 'skills', 'fit'],
+  },
+  {
     to: '/work',
     title: 'Work',
-    homage: 'Zelda dungeon',
-    copy: 'Torchlit archive of project chambers, relic doors, and explorable case studies.',
-    className: 'is-work',
-    badges: ['keys', 'maps', 'treasure'],
-  },
-  {
-    to: '/story',
-    title: 'Story',
-    homage: 'Chrono Trigger',
-    copy: 'A time-gate narrative world for your background, direction, and how the work evolved.',
+    homage: 'portfolio terminal',
+    copy: 'Case studies, live embeds, code excerpts, graphs, and technical proof surfaces.',
     className: 'is-story',
-    badges: ['past', 'present', 'future'],
+    badges: ['embeds', 'code', 'graphs'],
   },
   {
-    to: '/arcade',
-    title: 'Arcade',
-    homage: 'Minecraft toy world',
-    copy: 'A playable build board with local persistence, little experiments, and interactive demos.',
+    to: '/playground',
+    title: 'Playground',
+    homage: 'world select',
+    copy: 'Pokemon, Zelda, Chrono, Minecraft, and other custom worlds separated from the CV.',
     className: 'is-arcade',
-    badges: ['blocks', 'craft', 'save'],
+    badges: ['worlds', 'sprites', 'toys'],
   },
   {
     to: '/contact',
     title: 'Contact',
-    homage: 'Pokemon link center',
-    copy: 'A bright communication world for collaboration, enquiries, and reaching out.',
+    homage: 'contact terminal',
+    copy: 'A direct communication route for briefs, roles, and collaboration enquiries.',
     className: 'is-contact',
     badges: ['signal', 'connect', 'trainer'],
   },
@@ -74,9 +74,9 @@ export const HomePage = () => {
             <div className="home-hub__scene-castle" />
             <div className="home-hub__scene-cartridge home-hub__scene-cartridge--1" />
             <div className="home-hub__scene-cartridge home-hub__scene-cartridge--2" />
-            <div className="home-hub__scene-sign home-hub__scene-sign--1">work</div>
-            <div className="home-hub__scene-sign home-hub__scene-sign--2">story</div>
-            <div className="home-hub__scene-sign home-hub__scene-sign--3">arcade</div>
+            <div className="home-hub__scene-sign home-hub__scene-sign--1">cv</div>
+            <div className="home-hub__scene-sign home-hub__scene-sign--2">work</div>
+            <div className="home-hub__scene-sign home-hub__scene-sign--3">play</div>
             <div className="home-hub__scene-sign home-hub__scene-sign--4">contact</div>
           </div>
         </motion.div>
@@ -88,7 +88,7 @@ export const HomePage = () => {
             <p className="eyebrow">world select</p>
             <h2>Choose a cartridge</h2>
           </div>
-          <p className="muted">Each route now plays as its own little cartridge: dungeon archive, time gate, block board, and link center.</p>
+          <p className="muted">The professional routes stay calmer; the custom homage worlds live together in Playground.</p>
         </motion.div>
 
         <div className="home-hub__world-grid">

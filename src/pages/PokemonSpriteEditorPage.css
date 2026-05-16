@@ -1,0 +1,332 @@
+.pokemon-editor {
+  display: grid;
+  gap: var(--gap);
+}
+
+.pokemon-editor__header,
+.pokemon-editor__header-actions,
+.pokemon-editor__selected,
+.pokemon-editor__output-header {
+  display: flex;
+  align-items: center;
+}
+
+.pokemon-editor__header {
+  justify-content: space-between;
+  gap: var(--gap);
+  padding: var(--gap);
+  border: 2px solid var(--border);
+  background:
+    linear-gradient(90deg, rgba(40, 92, 196, 0.16), rgba(223, 62, 35, 0.08)),
+    var(--crt-panel);
+}
+
+.pokemon-editor__header-actions {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.pokemon-editor button,
+.pokemon-editor select {
+  min-height: 32px;
+  border: 2px solid var(--border);
+  background: rgba(27, 27, 47, 0.9);
+  color: var(--ink);
+  font-family: var(--font-accent);
+  font-size: 10px;
+  text-transform: lowercase;
+}
+
+.pokemon-editor button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px 10px;
+}
+
+.pokemon-editor button:hover,
+.pokemon-editor button.is-active {
+  border-color: var(--signal-teal);
+  background: rgba(32, 214, 199, 0.16);
+  color: var(--signal-teal);
+}
+
+.pokemon-editor__layout {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: var(--gap);
+  align-items: start;
+}
+
+.pokemon-editor__roster,
+.pokemon-editor__panel,
+.pokemon-editor__sheet-panel {
+  border: 2px solid var(--border);
+  background:
+    linear-gradient(180deg, rgba(185, 191, 251, 0.06), transparent 120px),
+    rgba(27, 27, 47, 0.92);
+}
+
+.pokemon-editor__roster {
+  position: sticky;
+  top: var(--gap);
+  display: grid;
+  gap: 8px;
+  max-height: calc(100vh - 48px);
+  padding: 8px;
+}
+
+.pokemon-editor__filters {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.pokemon-editor__filters input,
+.pokemon-editor__filters select,
+.pokemon-editor__frame-row input {
+  width: 100%;
+}
+
+.pokemon-editor__sprite-list {
+  display: grid;
+  gap: 4px;
+  overflow: auto;
+  padding-right: 2px;
+}
+
+.pokemon-editor__sprite-list button {
+  justify-content: space-between;
+  min-height: 38px;
+  text-align: left;
+}
+
+.pokemon-editor__sprite-list small {
+  color: var(--ink-dim);
+  font-size: 9px;
+}
+
+.pokemon-editor__workbench {
+  display: grid;
+  gap: var(--gap);
+  min-width: 0;
+}
+
+.pokemon-editor__inspector {
+  display: grid;
+  gap: var(--gap);
+  padding: var(--gap);
+}
+
+.pokemon-editor__selected {
+  gap: var(--gap);
+  justify-content: space-between;
+}
+
+.pokemon-editor__selected h2 {
+  margin-top: 2px;
+  color: var(--signal-yellow);
+}
+
+.pokemon-editor__selected p {
+  color: var(--ink-dim);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.pokemon-editor__large-preview,
+.pokemon-editor__mini-preview {
+  flex: none;
+  border: 1px solid rgba(254, 243, 192, 0.28);
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.pokemon-editor__large-preview {
+  border-width: 2px;
+  background-color: rgba(6, 6, 8, 0.46);
+}
+
+.pokemon-editor__frame-table {
+  display: grid;
+  gap: 8px;
+}
+
+.pokemon-editor__frame-row {
+  display: grid;
+  grid-template-columns: 64px repeat(2, minmax(210px, 1fr));
+  gap: 8px;
+  align-items: stretch;
+}
+
+.pokemon-editor__frame-row > strong {
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--border);
+  color: var(--signal-teal);
+  font-family: var(--font-accent);
+  font-size: 11px;
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
+.pokemon-editor__frame-row > div {
+  display: grid;
+  grid-template-columns: auto minmax(64px, 1fr) minmax(64px, 1fr) auto auto;
+  gap: 6px;
+  align-items: center;
+  padding: 6px;
+  border: 1px solid rgba(185, 191, 251, 0.18);
+  background: rgba(6, 6, 8, 0.24);
+}
+
+.pokemon-editor__frame-row > div.is-active {
+  border-color: var(--signal-yellow);
+  box-shadow: inset 0 0 0 1px rgba(255, 213, 65, 0.24);
+}
+
+.pokemon-editor__frame-row label {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 4px;
+  align-items: center;
+  color: var(--ink-dim);
+  font-family: var(--font-accent);
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.pokemon-editor__frame-row .pokemon-editor__flip-toggle {
+  grid-template-columns: auto auto;
+}
+
+.pokemon-editor__flip-toggle input {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  padding: 0;
+  accent-color: var(--signal-yellow);
+}
+
+.pokemon-editor__sheet-panel {
+  min-height: 640px;
+  overflow: hidden;
+}
+
+.pokemon-editor__sheet-scroll {
+  width: 100%;
+  height: min(72vh, 760px);
+  overflow: auto;
+  background:
+    linear-gradient(90deg, rgba(32, 214, 199, 0.08) 1px, transparent 1px),
+    linear-gradient(rgba(32, 214, 199, 0.08) 1px, transparent 1px),
+    #101220;
+  background-size: 32px 32px;
+}
+
+.pokemon-editor__sheet {
+  position: relative;
+  cursor: crosshair;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.pokemon-editor__sheet::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(255, 213, 65, 0.22) 1px, transparent 1px),
+    linear-gradient(rgba(255, 213, 65, 0.22) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.pokemon-editor__sheet img {
+  width: 1024px;
+  height: 5792px;
+  max-width: none;
+  user-select: none;
+}
+
+.pokemon-editor__marker {
+  position: absolute;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  border: 2px solid var(--signal-red);
+  background: rgba(223, 62, 35, 0.18);
+  color: #fff;
+  font-family: var(--font-accent);
+  font-size: 9px;
+  text-shadow: 0 1px 0 #000;
+  pointer-events: none;
+}
+
+.pokemon-editor__marker.is-active {
+  border-color: var(--signal-yellow);
+  background: rgba(255, 213, 65, 0.24);
+  color: var(--signal-yellow);
+}
+
+.pokemon-editor__marker.is-flipped {
+  border-style: dashed;
+}
+
+.pokemon-editor__output {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--gap);
+  padding: var(--gap);
+}
+
+.pokemon-editor__output-column {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+.pokemon-editor__output-header {
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.pokemon-editor__output textarea {
+  min-height: 240px;
+  resize: vertical;
+  color: var(--aap-lime);
+  background: rgba(6, 6, 8, 0.72);
+  white-space: pre;
+}
+
+.pokemon-editor__copied {
+  position: absolute;
+  right: var(--gap);
+  bottom: var(--gap);
+  padding: 4px 8px;
+  border: 1px solid rgba(32, 214, 199, 0.42);
+  background: rgba(6, 6, 8, 0.92);
+  color: var(--signal-teal);
+  font-family: var(--font-accent);
+  font-size: 10px;
+}
+
+@media (max-width: 980px) {
+  .pokemon-editor__layout,
+  .pokemon-editor__output {
+    grid-template-columns: 1fr;
+  }
+
+  .pokemon-editor__roster {
+    position: static;
+    max-height: 320px;
+  }
+
+  .pokemon-editor__frame-row {
+    grid-template-columns: 1fr;
+  }
+}

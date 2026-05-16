@@ -1,32 +1,4 @@
-/* ══════════════════════════════════════════
-   CONTACT PAGE — Pokémon World Theme
-   Pokeball cursor, Accumula Town map,
-   overworld sprites, trainer-card panels
-   ══════════════════════════════════════════ */
-
-/* ── Pokeball cursor for the contact route ── */
-html[data-cartridge='contact'],
-html[data-cartridge='contact'] *,
-.contact--pokemon,
-.contact--pokemon * {
-  cursor: url('../assets/pokemon/pokeball.cur'), auto;
-}
-
-/* ── World map section ── */
-.contact__world-section {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-}
-
-/* Ensure content sits above the fixed background map */
-.contact--pokemon > *:not(.contact__world-section) {
-  position: relative;
-  z-index: 10;
-}
-
-/* ── Hero ── */
+.contact,
 .contact__hero,
 .contact__hero-copy,
 .contact__channels,
@@ -36,84 +8,25 @@ html[data-cartridge='contact'] *,
 }
 
 .contact__hero {
-  grid-template-columns: 1fr;
-}
-
-/* Pokémon-themed panel styling — trainer card feel */
-.contact--pokemon .contact__hero,
-.contact--pokemon .contact__channel,
-.contact--pokemon .contact__modes,
-.contact--pokemon .contact__fit .t-frame {
-  border-color: rgba(223, 62, 35, 0.28);
-  background: linear-gradient(
-    180deg,
-    rgba(249, 246, 229, 0.96),
-    rgba(194, 224, 255, 0.96)
-  );
-  color: #2d213c;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-}
-
-/* Pokéball-red accents */
-.contact--pokemon .contact__hero::after,
-.contact--pokemon .contact__channel::after,
-.contact--pokemon .contact__modes::after,
-.contact--pokemon .contact__fit .t-frame::after {
-  background: repeating-linear-gradient(
-    0deg,
-    transparent 0 5px,
-    rgba(223, 62, 35, 0.04) 5px 6px
-  );
-}
-
-.contact--pokemon h1,
-.contact--pokemon h2,
-.contact--pokemon h3 {
-  color: #2d213c;
-}
-
-.contact--pokemon .eyebrow {
-  color: #df3e23;
+  background:
+    linear-gradient(90deg, rgba(32, 214, 199, 0.035) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(255, 213, 65, 0.025) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(27, 27, 47, 0.92), rgba(20, 16, 19, 0.96));
+  background-size: 44px 44px, 44px 44px, auto;
 }
 
 .contact__hero h1 {
   max-width: 28ch;
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  text-transform: none;
 }
 
-.contact--pokemon .muted,
-.contact--pokemon .contact__mode-item,
-.contact--pokemon .contact__fit .t-frame p {
-  color: #4a5462;
-}
-
-/* ── Actions ── */
 .contact__actions {
   display: flex;
   flex-wrap: wrap;
   gap: var(--gap-sm);
 }
 
-.contact--pokemon .contact__actions .px-btn {
-  border-color: rgba(223, 62, 35, 0.36);
-  background: linear-gradient(
-    180deg,
-    rgba(223, 62, 35, 0.92),
-    rgba(141, 31, 27, 0.96)
-  );
-  color: #fff6e2;
-  box-shadow: 0 2px 8px rgba(223, 62, 35, 0.25);
-}
-
-.contact--pokemon .contact__actions .px-btn:hover {
-  background: linear-gradient(
-    180deg,
-    rgba(250, 106, 10, 0.96),
-    rgba(223, 62, 35, 0.98)
-  );
-  box-shadow: 0 4px 16px rgba(223, 62, 35, 0.35);
-}
-
-/* ── Channels ── */
 .contact__channel {
   display: grid;
   gap: 4px;
@@ -121,45 +34,28 @@ html[data-cartridge='contact'] *,
   transition: border-color 80ms steps(2), box-shadow 80ms steps(2);
 }
 
-.contact--pokemon .contact__channel:hover {
-  border-color: rgba(223, 62, 35, 0.42);
-  box-shadow: 0 4px 20px rgba(223, 62, 35, 0.15);
+.contact__channel:hover {
+  border-color: var(--signal-teal);
+  box-shadow: var(--glow-teal);
   text-decoration: none;
 }
 
-/* ── Modes ── */
 .contact__modes {
   padding: 0;
   overflow: hidden;
 }
 
-.contact--pokemon .contact__modes .t-header {
-  background: linear-gradient(
-    90deg,
-    rgba(223, 62, 35, 0.14),
-    rgba(40, 92, 196, 0.18)
-  );
-  color: #4a5462;
-}
-
 .contact__mode-list {
   display: grid;
-  gap: 0;
 }
 
 .contact__mode-item {
   padding: 8px 16px;
-  border-bottom: 1px solid rgba(45, 33, 60, 0.12);
+  border-bottom: 1px dashed var(--border);
+  color: var(--ink-dim);
   font-size: 13px;
 }
 
 .contact__mode-item:last-child {
   border-bottom: none;
-}
-
-/* ── Responsive ── */
-@media (max-width: 960px) {
-  .contact__hero {
-    grid-template-columns: 1fr;
-  }
 }

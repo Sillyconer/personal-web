@@ -1,6 +1,7 @@
 import { LockKeyhole } from 'lucide-react';
 import { motion } from 'framer-motion';
 
+import { EcosystemGraph } from '../graph/EcosystemGraph';
 import type { ProjectSection as ProjectSectionDefinition } from '../../types/site';
 import { cardReveal, viewport } from '../../utils/motion';
 import { ProjectEmbed } from './ProjectEmbed';
@@ -48,6 +49,14 @@ export const ProjectSection = ({ section, isAuthenticated, index }: ProjectSecti
           height={section.embedHeight}
           ctaLabel={section.ctaLabel}
         />
+      </motion.div>
+    );
+  }
+
+  if (section.type === 'graph') {
+    return (
+      <motion.div initial="hidden" whileInView="show" viewport={viewport} variants={cardReveal}>
+        <EcosystemGraph />
       </motion.div>
     );
   }
@@ -105,6 +114,27 @@ export const ProjectSection = ({ section, isAuthenticated, index }: ProjectSecti
               <p className="muted">{item.description}</p>
             </div>
           ))}
+        </div>
+      ) : null}
+
+      {section.type === 'code' ? (
+        <div className="psec__code">
+          <div className="psec__code-head">
+            <span>{section.filename}</span>
+            <span>{section.language}</span>
+          </div>
+          <pre>
+            <code>{section.code}</code>
+          </pre>
+          {section.notes?.length ? (
+            <div className="psec__items">
+              {section.notes.map((note) => (
+                <div key={note} className="psec__item">
+                  <span className="text-teal">*</span> {note}
+                </div>
+              ))}
+            </div>
+          ) : null}
         </div>
       ) : null}
     </motion.section>

@@ -42,10 +42,32 @@ export const personalwebProject: ProjectDefinition = {
       title: 'Upgrade themes implemented in v2',
       description: 'The redesign is not just visual; it changes how the site grows.',
       items: [
-        'Reworked routing around Home, Work, About, Contact, and Studio.',
+        'Reworked routing around Home, CV, Work, Playground, Contact, and Studio.',
         'Replaced the flat project tabs model with richer case-study sections.',
         'Split project content into per-project files to streamline new additions.',
-        'Reduced persistent chrome so the work itself carries more of the experience.',
+        'Separated professional proof from the louder homage worlds.',
+      ],
+    },
+    {
+      id: 'route-split',
+      type: 'code',
+      title: 'Route split example',
+      description: 'The public IA now separates professional pages from Playground routes.',
+      filename: 'src/App.tsx',
+      language: 'tsx',
+      code: [
+        '<Route path="cv" element={<CVPage />} />',
+        '<Route path="work" element={<WorkPage />} />',
+        '<Route path="playground" element={<PlaygroundPage />} />',
+        '<Route path="playground/pokemon" element={<PokemonPlaygroundPage />} />',
+        '<Route path="playground/zelda" element={<ZeldaPlaygroundPage />} />',
+        '<Route path="playground/chrono" element={<ChronoPlaygroundPage />} />',
+        '<Route path="playground/minecraft" element={<ArcadePage />} />',
+      ].join('\n'),
+      notes: [
+        'CV and Work stay readable and professional.',
+        'Homage worlds keep their own route family.',
+        'The transition wrapper stays unchanged.',
       ],
     },
     {
@@ -70,6 +92,13 @@ export const personalwebProject: ProjectDefinition = {
           description: 'The authenticated area can expand into real content operations without cluttering the portfolio.',
         },
       ],
+    },
+    {
+      id: 'ecosystem-graph',
+      type: 'graph',
+      graphId: 'ecosystem',
+      title: 'Ecosystem graph',
+      description: 'A reusable visualisation block showing how the portfolio, products, collaborators, and signals connect.',
     },
     {
       id: 'roadmap-signals',

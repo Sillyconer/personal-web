@@ -1,0 +1,164 @@
+/* ── Zelda Dungeon World ── */
+
+.zelda-dungeon-world {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: #060608;
+}
+
+.zelda-dungeon-world::before,
+.zelda-dungeon-world::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.zelda-dungeon-world::before {
+  z-index: 1;
+  background:
+    linear-gradient(90deg, rgba(6, 6, 8, 0.18), transparent 8%, transparent 92%, rgba(6, 6, 8, 0.22)),
+    linear-gradient(180deg, rgba(6, 6, 8, 0.54), transparent 28%, rgba(6, 6, 8, 0.58));
+}
+
+.zelda-dungeon-world::after {
+  z-index: 2;
+  opacity: 0.24;
+  background:
+    repeating-linear-gradient(0deg, transparent 0 3px, rgba(255, 213, 65, 0.035) 3px 4px),
+    radial-gradient(circle at 50% 46%, rgba(255, 213, 65, 0.14), transparent 34%);
+  mix-blend-mode: screen;
+}
+
+.zelda-dungeon-world__canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.zelda-dungeon-world__click-burst,
+.zelda-dungeon-world__click-triforce,
+.zelda-dungeon-world__click-triangle,
+.zelda-dungeon-world__click-ring,
+.zelda-dungeon-world__click-ray {
+  position: fixed;
+  pointer-events: none;
+}
+
+.zelda-dungeon-world__click-burst {
+  z-index: 126;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  transform: translate(-50%, -50%);
+  image-rendering: pixelated;
+}
+
+.zelda-dungeon-world__click-triforce {
+  left: 0;
+  top: 0;
+  width: 30px;
+  height: 24px;
+  transform: translate(-50%, -50%) scale(0.55);
+  animation: zeldaClickTriforce 620ms steps(7, end) forwards;
+}
+
+.zelda-dungeon-world__click-triangle {
+  position: absolute;
+  width: 14px;
+  height: 12px;
+  background: #ffd541;
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  box-shadow: 0 0 12px rgba(255, 213, 65, 0.76);
+}
+
+.zelda-dungeon-world__click-triangle--top {
+  left: 8px;
+  top: 0;
+}
+
+.zelda-dungeon-world__click-triangle--left {
+  left: 0;
+  top: 12px;
+}
+
+.zelda-dungeon-world__click-triangle--right {
+  left: 16px;
+  top: 12px;
+}
+
+.zelda-dungeon-world__click-ring {
+  left: 0;
+  top: 0;
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 213, 65, 0.9);
+  box-shadow: 0 0 14px rgba(255, 213, 65, 0.54);
+  transform: translate(-50%, -50%) scale(0.4);
+  animation: zeldaClickRing 680ms steps(7, end) forwards;
+}
+
+.zelda-dungeon-world__click-ray {
+  left: 0;
+  top: 0;
+  width: 16px;
+  height: 4px;
+  background: #fef3c0;
+  box-shadow: 0 0 10px rgba(255, 213, 65, 0.7);
+  transform-origin: 0 50%;
+  animation: zeldaClickRay 700ms steps(7, end) forwards;
+}
+
+.zelda-dungeon-world__click-ray--1 { --ray-angle: 0deg; }
+.zelda-dungeon-world__click-ray--2 { --ray-angle: 60deg; }
+.zelda-dungeon-world__click-ray--3 { --ray-angle: 120deg; }
+.zelda-dungeon-world__click-ray--4 { --ray-angle: 180deg; }
+.zelda-dungeon-world__click-ray--5 { --ray-angle: 240deg; }
+.zelda-dungeon-world__click-ray--6 { --ray-angle: 300deg; }
+
+@keyframes zeldaClickTriforce {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.28); }
+  24% { opacity: 1; transform: translate(-50%, -50%) scale(0.95); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.46); }
+}
+
+@keyframes zeldaClickRing {
+  0% { opacity: 1; transform: translate(-50%, -50%) scale(0.2); }
+  72% { opacity: 0.68; transform: translate(-50%, -50%) scale(3.2); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(4.2); }
+}
+
+@keyframes zeldaClickRay {
+  0% {
+    opacity: 1;
+    transform: rotate(var(--ray-angle)) translateX(8px) scaleX(0.4);
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(var(--ray-angle)) translateX(58px) scaleX(0.1);
+  }
+}
+
+@media (pointer: fine) {
+  html[data-cartridge='work'],
+  html[data-cartridge='work'] * {
+    cursor: url('../../../zeldasprite/Master Sword.cur'), auto !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .zelda-dungeon-world__click-burst,
+  .zelda-dungeon-world__click-burst *,
+  .zelda-dungeon-world::after {
+    animation: none !important;
+  }
+}

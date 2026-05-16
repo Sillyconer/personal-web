@@ -26,7 +26,7 @@ export const siteProfile = {
 export const homeHeroLinks: HeroLink[] = [
   { label: 'View work', href: '/work', emphasis: 'primary' },
   { label: 'Start a conversation', href: '/contact', emphasis: 'secondary' },
-  { label: 'Read about the approach', href: '/about', emphasis: 'secondary' },
+  { label: 'Read the CV', href: '/cv', emphasis: 'secondary' },
   { label: 'Open GitHub', href: siteProfile.githubUrl, external: true, emphasis: 'secondary' },
 ];
 
@@ -149,7 +149,7 @@ export const contactChannels: ContactChannel[] = [
   {
     label: 'Location',
     value: siteProfile.location,
-    href: '/about',
+    href: '/cv',
     note: 'Remote-friendly and comfortable working across product, design, and engineering conversations.',
   },
   {
@@ -238,6 +238,7 @@ export const ecosystemGraph: EcosystemGraphDefinition = {
       y: 12,
       description: 'The web-native presentation layer: badges, motion, maps, and a more memorable surface than a standard product portfolio.',
       accent: 'red',
+      href: '/playground',
     },
   ],
   edges: [

@@ -59,16 +59,16 @@ interface VisualProfile {
 }
 
 const PROFILE_MAP: Record<BoidPresetId, VisualProfile> = {
-  starbirds: { scale: 0.48, starCount: 180, flockCount: 20, driftCount: 180, flockerKind: 'starbird', drifterKind: 'quest' },
+  starbirds: { scale: 0.44, starCount: 90, flockCount: 8, driftCount: 70, flockerKind: 'starbird', drifterKind: 'quest' },
   zeldaFairies: { scale: 0.46, starCount: 120, flockCount: 18, driftCount: 132, flockerKind: 'fairy', drifterKind: 'quest' },
   chronoWisps: { scale: 0.44, starCount: 116, flockCount: 14, driftCount: 138, flockerKind: 'chrono', drifterKind: 'chrono' },
   minecraftBits: { scale: 0.46, starCount: 74, flockCount: 10, driftCount: 164, flockerKind: 'blockbit', drifterKind: 'blockbit' },
   pokeOrbs: { scale: 0.44, starCount: 96, flockCount: 12, driftCount: 128, flockerKind: 'pokeorb', drifterKind: 'pokeorb' },
-  saveRoom: { scale: 0.4, starCount: 80, flockCount: 8, driftCount: 70, flockerKind: 'crystal', drifterKind: 'quest' },
+  saveRoom: { scale: 0.36, starCount: 42, flockCount: 4, driftCount: 32, flockerKind: 'crystal', drifterKind: 'quest' },
   debugSprites: { scale: 0.4, starCount: 88, flockCount: 10, driftCount: 90, flockerKind: 'debug', drifterKind: 'debug' },
   atlasBirds: { scale: 0.45, starCount: 130, flockCount: 18, driftCount: 130, flockerKind: 'atlas', drifterKind: 'quest' },
   cartridgeComets: { scale: 0.44, starCount: 122, flockCount: 16, driftCount: 126, flockerKind: 'comet', drifterKind: 'comet' },
-  questMotes: { scale: 0.43, starCount: 102, flockCount: 12, driftCount: 110, flockerKind: 'quest', drifterKind: 'quest' },
+  questMotes: { scale: 0.36, starCount: 54, flockCount: 5, driftCount: 42, flockerKind: 'quest', drifterKind: 'quest' },
 };
 
 const MAX_SPEED = 1.06;

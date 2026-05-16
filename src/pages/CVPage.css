@@ -1,0 +1,89 @@
+.cv-page,
+.cv-section,
+.cv-hero__copy,
+.cv-card {
+  display: grid;
+  gap: var(--gap);
+}
+
+.cv-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(260px, 0.55fr);
+  gap: var(--gap-lg);
+  background:
+    linear-gradient(90deg, rgba(32, 214, 199, 0.035) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(255, 213, 65, 0.025) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(27, 27, 47, 0.92), rgba(20, 16, 19, 0.96));
+  background-size: 42px 42px, 42px 42px, auto;
+}
+
+.cv-hero h1 {
+  max-width: 22ch;
+  font-size: clamp(1.75rem, 3vw, 2.6rem);
+  text-transform: none;
+}
+
+.cv-hero__lead {
+  max-width: 72ch;
+  color: var(--ink-dim);
+}
+
+.cv-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-sm);
+}
+
+.cv-hero__card {
+  align-content: start;
+}
+
+.cv-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--gap);
+}
+
+.cv-card {
+  align-content: start;
+}
+
+.cv-card--compact {
+  min-height: 120px;
+}
+
+.cv-table {
+  display: grid;
+  padding: 0;
+  overflow: hidden;
+}
+
+.cv-table__row {
+  display: grid;
+  grid-template-columns: 160px minmax(0, 1fr);
+  gap: var(--gap);
+  padding: 14px 16px;
+  border-bottom: 1px dashed var(--border);
+}
+
+.cv-table__row:last-child {
+  border-bottom: 0;
+}
+
+.cv-table__row strong {
+  color: var(--signal-teal);
+  font-family: var(--font-accent);
+  font-size: 11px;
+  text-transform: lowercase;
+}
+
+.cv-table__row span {
+  color: var(--ink-dim);
+}
+
+@media (max-width: 860px) {
+  .cv-hero,
+  .cv-table__row {
+    grid-template-columns: 1fr;
+  }
+}
